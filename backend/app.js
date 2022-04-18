@@ -11,7 +11,9 @@ app.use(cookieParser());
 
 // Route Imports
 const product = require("./routes/productRoute");
+const category = require("./routes/categoryRoute");
 
 app.use("/api/v1", product);
+app.use("/api/v1", category);
 
 module.exports = app;
