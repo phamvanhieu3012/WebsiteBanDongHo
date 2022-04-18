@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
@@ -11,6 +12,7 @@ require("dotenv").config({ path: "./config/config.env" });
 app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 // Route Imports
 const product = require("./routes/productRoute");
