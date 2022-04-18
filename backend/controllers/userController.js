@@ -27,3 +27,41 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 
   sendToken(user, 201, res);
 });
+
+// Login User
+exports.loginUser = catchAsyncErrors(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  // Kiểm tra xem user có nhập email và password không
+
+  if (!email || !password) {
+    return next(new ErrorHander("Hãy nhập email và mật khẩu", 400));
+  }
+
+  const user = await User.findOne({ email }).select("+password");
+
+  if (!user) {
+    return next(new ErrorHander("Email hoặc mật khẩu sai", 401));
+  }
+
+  const isPasswordMatched = await user.comparePassword(password);
+
+  if (!isPasswordMatched) {
+    return next(new ErrorHander("Email hoặc mật khẩu sai", 401));
+  }
+
+  sendToken(user, 200, res);
+});
+
+// Logout User
+exports.logout = catchAsyncErrors(async (req, res, next) => {
+  res.cookie("token", null, {
+    expires: new Date(Date.now()),
+    httpOnly: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "Bạn đã đăng xuất",
+  });
+});
