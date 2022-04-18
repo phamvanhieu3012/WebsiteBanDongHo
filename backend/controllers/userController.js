@@ -13,7 +13,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   //   crop: "scale",
   // });
 
-  const { name, email, password } = req.body;
+  const { name, email, password, shippingInfo } = req.body;
 
   const user = await User.create({
     name,
@@ -25,6 +25,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
       public_id: "this is a sample id",
       url: "https://res.cloudinary.com/phuockaito/image/upload/v1617902959/user/1_gxwhfk.jpg",
     },
+    shippingInfo,
   });
 
   sendToken(user, 201, res);
@@ -203,6 +204,25 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
     runValidators: true,
     useFindAndModify: false,
   });
+
+  res.status(200).json({
+    success: true,
+  });
+});
+
+// update User shipping info
+exports.updateShippingInfo = catchAsyncErrors(async (req, res, next) => {
+  const newUserData = {
+    shippingInfo: req.body.shippingInfo,
+  };
+
+  const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+
+  await user.save();
 
   res.status(200).json({
     success: true,
