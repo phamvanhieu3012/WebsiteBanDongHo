@@ -16,10 +16,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const product = require("./routes/productRoute");
 const category = require("./routes/categoryRoute");
 const user = require("./routes/userRoute");
+const cart = require("./routes/cartRoute");
 
 app.use("/api/v1", product);
 app.use("/api/v1", category);
 app.use("/api/v1", user);
+app.use("/api/v1", cart);
 
 // Middleware for Errors
 app.use(errorMiddleware);
