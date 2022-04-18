@@ -272,6 +272,6 @@ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    message: "Xóa thành công người dùng",
+    message: "Xóa thành công người dùng!",
   });
 });
