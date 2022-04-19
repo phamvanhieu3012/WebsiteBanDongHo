@@ -19,11 +19,13 @@ const product = require("./routes/productRoute");
 const category = require("./routes/categoryRoute");
 const user = require("./routes/userRoute");
 const cart = require("./routes/cartRoute");
+const order = require("./routes/orderRoute");
 
 app.use("/api/v1", product);
 app.use("/api/v1", category);
 app.use("/api/v1", user);
 app.use("/api/v1", cart);
+app.use("/api/v1", order);
 
 // Middleware for Errors
 app.use(errorMiddleware);
