@@ -1,6 +1,64 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import {
+  clearErrors,
+  loadUser,
+  login,
+  register,
+} from "../../actions/userAction";
 
 function Login() {
+  const dispatch = useDispatch();
+  let history = useHistory();
+
+  const { error, loading, isAuthenticated } = useSelector(
+    (state) => state.user
+  );
+
+  const userInfo = useSelector((state) => state.user);
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const { name, email, password } = user;
+
+  const loginSubmit = (e) => {
+    e.preventDefault();
+    dispatch(login(loginEmail, loginPassword));
+  };
+
+  const registerSubmit = (e) => {
+    e.preventDefault();
+
+    const myForm = {
+      name,
+      email,
+      password,
+    };
+
+    dispatch(register(myForm));
+  };
+
+  const registerDataChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  useEffect(() => {
+    if (error) {
+      alert(error);
+      dispatch(clearErrors());
+    }
+    if (isAuthenticated) {
+      // hop le
+      dispatch(loadUser());
+      history.push("/");
+    }
+  }, [dispatch, error, history, isAuthenticated]);
+
   return (
     <main className="main">
       <nav aria-label="breadcrumb" className="breadcrumb-nav border-0 mb-0">
@@ -71,15 +129,17 @@ function Login() {
                   role="tabpanel"
                   aria-labelledby="signin-tab-2"
                 >
-                  <form action="#">
+                  <form onSubmit={loginSubmit}>
                     <div className="form-group">
                       <label htmlFor="singin-email-2">Email của bạn *</label>
                       <input
-                        type="text"
+                        type="email"
                         className="form-control"
                         id="singin-email-2"
                         name="singin-email"
                         required
+                        value={loginEmail}
+                        onChange={(e) => setLoginEmail(e.target.value)}
                       />
                     </div>
 
@@ -91,6 +151,8 @@ function Login() {
                         id="singin-password-2"
                         name="singin-password"
                         required
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
                       />
                     </div>
 

@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { loadUser } from "../../actions/userAction";
+import store from "../../store";
 
 function HomePage() {
   return (

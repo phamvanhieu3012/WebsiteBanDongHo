@@ -61,7 +61,7 @@ function Header() {
                   <a href="#">Links</a>
                   <ul>
                     <li>
-                      <a href="#signin-modal" data-toggle="modal">
+                      <a href="/login">
                         <i className="icon-user"></i>Login
                       </a>
                     </li>

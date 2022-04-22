@@ -13,10 +13,21 @@ import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 import MyAccount from "./pages/MyAccount";
 import Checkout from "./pages/Checkout";
+import axios from "axios";
+import store from "./store";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { loadUser } from "./actions/userAction";
 
 function App() {
+  const { isAuthenticated, user } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
+
   return (
     <div className="App">
       <Router>
