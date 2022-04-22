@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 
 exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
-  const { token } = req.cookies;
+  const token = req.header("Authorization").split(" ")[1];
 
   if (!token) {
     return next(new ErrorHander("Hãy đăng nhập trước khi vào trang này", 401));
