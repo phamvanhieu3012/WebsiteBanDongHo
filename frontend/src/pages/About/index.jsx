@@ -13,7 +13,7 @@ function About() {
               <a href="#">Pages</a>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              About us
+              Về chúng tôi
             </li>
           </ol>
         </div>
@@ -24,7 +24,7 @@ function About() {
           style={{ backgroundImage: "url('assets/images/about-header-bg.jpg'" }}
         >
           <h1 className="page-title text-white">
-            About us<span className="text-white">Who we are</span>
+            About us<span className="text-white">Chúng tôi là ai</span>
           </h1>
         </div>
       </div>
@@ -33,7 +33,7 @@ function About() {
         <div className="container">
           <div className="row">
             <div className="col-lg-6 mb-3 mb-lg-0">
-              <h2 className="title">Our Vision</h2>
+              <h2 className="title">Tầm nhìn</h2>
               <p>
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
                 Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In nisi
@@ -44,7 +44,7 @@ function About() {
             </div>
 
             <div className="col-lg-6">
-              <h2 className="title">Our Mission</h2>
+              <h2 className="title">Sứ mệnh</h2>
               <p>
                 Sed egestas, ante et vulputate volutpat, eros pede semper est,
                 vitae luctus metus libero eu augue. Morbi purus libero, faucibus
@@ -61,7 +61,7 @@ function About() {
           <div className="container">
             <div className="row">
               <div className="col-lg-5 mb-3 mb-lg-0">
-                <h2 className="title">Who We Are</h2>
+                <h2 className="title">Chúng tôi là ai</h2>
                 <p className="lead text-primary mb-3">
                   Pellentesque odio nisi, euismod pharetra a ultricies <br />
                   in diam. Sed arcu. Cras consequat
@@ -77,7 +77,7 @@ function About() {
                   href="blog.html"
                   className="btn btn-sm btn-minwidth btn-outline-primary-2"
                 >
-                  <span>VIEW OUR NEWS</span>
+                  <span>XEM TIN TỨC</span>
                   <i className="icon-long-arrow-right"></i>
                 </a>
               </div>
@@ -105,7 +105,7 @@ function About() {
             <div className="col-lg-5">
               <div className="brands-text">
                 <h2 className="title">
-                  The world's premium design brands in one destination.
+                  CÁC THƯƠNG HIỆU ĐỒNG HỒ HÀNG ĐẦU TRÊN THẾ GIỚI.
                 </h2>
                 <p>
                   Phasellus hendrerit. Pellentesque aliquet nibh nec urna. In
@@ -118,47 +118,68 @@ function About() {
                 <div className="row justify-content-center">
                   <div className="col-6 col-sm-4">
                     <a href="#" className="brand">
-                      <img src="assets/images/brands/1.png" alt="Brand Name" />
+                      <img
+                        src="assets/images/logo/brand-seiko.png"
+                        alt="Brand Name"
+                      />
                     </a>
                   </div>
                   <div className="col-6 col-sm-4">
                     <a href="#" className="brand">
-                      <img src="assets/images/brands/2.png" alt="Brand Name" />
+                      <img
+                        src="assets/images/logo/brand-orient.png"
+                        alt="Orient"
+                      />
                     </a>
                   </div>
                   <div className="col-6 col-sm-4">
                     <a href="#" className="brand">
-                      <img src="assets/images/brands/3.png" alt="Brand Name" />
+                      <img
+                        src="assets/images/logo/brand-bently.png"
+                        alt="Bently"
+                      />
                     </a>
                   </div>
                   <div className="col-6 col-sm-4">
                     <a href="#" className="brand">
-                      <img src="assets/images/brands/4.png" alt="Brand Name" />
+                      <img
+                        src="assets/images/logo/brand-citizen.png"
+                        alt="citizen"
+                      />
                     </a>
                   </div>
                   <div className="col-6 col-sm-4">
                     <a href="#" className="brand">
-                      <img src="assets/images/brands/5.png" alt="Brand Name" />
+                      <img src="assets/images/logo/brand-1.png" alt="OJ" />
                     </a>
                   </div>
                   <div className="col-6 col-sm-4">
                     <a href="#" className="brand">
-                      <img src="assets/images/brands/6.png" alt="Brand Name" />
+                      <img
+                        src="assets/images/logo/brand-bulova.png"
+                        alt="Bulova"
+                      />
                     </a>
                   </div>
                   <div className="col-6 col-sm-4">
                     <a href="#" className="brand">
-                      <img src="assets/images/brands/7.png" alt="Brand Name" />
+                      <img
+                        src="assets/images/logo/brand-freelook.png"
+                        alt="Freelock"
+                      />
                     </a>
                   </div>
                   <div className="col-6 col-sm-4">
                     <a href="#" className="brand">
-                      <img src="assets/images/brands/8.png" alt="Brand Name" />
+                      <img
+                        src="assets/images/logo/brand-ogival.png"
+                        alt="Ogival"
+                      />
                     </a>
                   </div>
                   <div className="col-6 col-sm-4">
                     <a href="#" className="brand">
-                      <img src="assets/images/brands/9.png" alt="Brand Name" />
+                      <img src="assets/images/logo/brand-sr.png" alt="SR" />
                     </a>
                   </div>
                 </div>

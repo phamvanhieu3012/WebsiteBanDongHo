@@ -118,7 +118,8 @@ function Header() {
             <div className="header-center">
               <a href="/" className="logo">
                 <img
-                  src="assets/images/demos/demo-6/logo.png"
+                  // src="assets/images/demos/demo-6/logo.png"
+                  src="/logo.png"
                   alt="Molla Logo"
                   width="82"
                   height="20"
@@ -446,13 +447,13 @@ function Header() {
                     </a>
                     <ul>
                       <li>
-                        <a href="about.html">About</a>
+                        <a href="/about">About</a>
                       </li>
                       <li>
-                        <a href="contact.html">Contact</a>
+                        <a href="/contact">Contact</a>
                       </li>
                       <li>
-                        <a href="faq.html">FAQs</a>
+                        <a href="/faq">FAQs</a>
                       </li>
                       <li>
                         <a href="404.html">Error 404</a>
@@ -472,6 +473,11 @@ function Header() {
                   <li>
                     <a href="/contact" className="">
                       Contact
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/faq" className="">
+                      F.A.Q
                     </a>
                   </li>
                 </ul>

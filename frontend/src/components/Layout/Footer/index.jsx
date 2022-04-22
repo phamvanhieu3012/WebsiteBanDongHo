@@ -8,10 +8,10 @@ function Footer() {
           <div className="row">
             <div className="col-sm-6 col-lg-3">
               <div className="widget widget-about">
-                <h4 className="widget-title">about molla</h4>
+                <h4 className="widget-title">about PVH</h4>
                 <p>
-                  Praesent dapibus, neque id cursus ucibus, tortor neque egestas
-                  augue, eu vulputate magna eros eu erat.{" "}
+                  PVH là Hệ thống phân phối đồng hồ chính hãng UY TÍN, thuộc TOP
+                  3 thương hiệu đồng hồ lớn nhất tại Việt Nam.{" "}
                 </p>
 
                 <div className="social-icons">
@@ -53,23 +53,23 @@ function Footer() {
 
             <div className="col-sm-6 col-lg-3">
               <div className="widget">
-                <h4 className="widget-title">Useful Links</h4>
+                <h4 className="widget-title">Chăm sóc khách hàng</h4>
 
                 <ul className="widget-list">
                   <li>
-                    <a href="about.html">About Molla</a>
+                    <a href="/faq">Hướng dẫn mua hàng</a>
                   </li>
                   <li>
-                    <a href="#">How to shop on Molla</a>
+                    <a href="/faq">Chính sách đổi trả</a>
                   </li>
                   <li>
-                    <a href="#">FAQ</a>
+                    <a href="/faq">FAQ</a>
                   </li>
                   <li>
-                    <a href="contact.html">Contact us</a>
+                    <a href="/faq">Chính sách bảo hành</a>
                   </li>
                   <li>
-                    <a href="login.html">Log in</a>
+                    <a href="/faq">Vận chuyển và giao nhận</a>
                   </li>
                 </ul>
               </div>
@@ -77,26 +77,20 @@ function Footer() {
 
             <div className="col-sm-6 col-lg-3">
               <div className="widget">
-                <h4 className="widget-title">Customer Service</h4>
+                <h4 className="widget-title">Về PVH</h4>
 
                 <ul className="widget-list">
                   <li>
-                    <a href="#">Payment Methods</a>
+                    <a href="/about">About</a>
                   </li>
                   <li>
-                    <a href="#">Money-back guarantee!</a>
+                    <a href="/about">Triết lý kinh doanh</a>
                   </li>
                   <li>
-                    <a href="#">Returns</a>
+                    <a href="/about">Giấy chứng nhận và giải thưởng</a>
                   </li>
                   <li>
-                    <a href="#">Shipping</a>
-                  </li>
-                  <li>
-                    <a href="#">Terms and conditions</a>
-                  </li>
-                  <li>
-                    <a href="#">Privacy Policy</a>
+                    <a href="/about">Khách hàng nói gì về chúng tôi</a>
                   </li>
                 </ul>
               </div>
@@ -104,23 +98,17 @@ function Footer() {
 
             <div className="col-sm-6 col-lg-3">
               <div className="widget">
-                <h4 className="widget-title">My Account</h4>
+                <h4 className="widget-title">Tham khảo</h4>
 
                 <ul className="widget-list">
                   <li>
-                    <a href="#">Sign In</a>
+                    <a href="/blog">Thông báo mới</a>
                   </li>
                   <li>
-                    <a href="cart.html">View Cart</a>
+                    <a href="/faq">Bảo mật thông tin</a>
                   </li>
                   <li>
-                    <a href="#">My Wishlist</a>
-                  </li>
-                  <li>
-                    <a href="#">Track My Order</a>
-                  </li>
-                  <li>
-                    <a href="#">Help</a>
+                    <a href="/contact">Hỏi đáp - Góp ý</a>
                   </li>
                 </ul>
               </div>
@@ -131,16 +119,9 @@ function Footer() {
 
       <div className="footer-bottom">
         <div className="container">
-          <figure className="footer-payments">
-            <img
-              src="assets/images/payments.png"
-              alt="Payment methods"
-              width="272"
-              height="20"
-            />
-          </figure>
           <img
-            src="assets/images/demos/demo-6/logo-footer.png"
+            // src="assets/images/demos/demo-6/logo-footer.png"
+            src="/logo.png"
             alt="Molla Logo"
             width="82"
             height="25"
