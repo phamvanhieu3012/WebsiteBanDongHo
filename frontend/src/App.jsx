@@ -20,6 +20,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { loadUser } from "./actions/userAction";
+import PublicRoute from "./components/Route/PublicRoute";
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -31,22 +32,21 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Header />
         <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route exact path="/product/:id" component={ProductDetail} />
-          <Route exact path="/products" component={Product} />
-          <Route path="/products/:keyword" component={Product} />
+          <PublicRoute exact path="/" component={HomePage} />
+          <PublicRoute exact path="/product/:id" component={ProductDetail} />
+          <PublicRoute exact path="/products" component={Product} />
+          <PublicRoute path="/products/:keyword" component={Product} />
 
-          <Route exact path="/about" component={About} />
-          <Route exact path="/faq" component={FAQ} />
-          <Route exact path="/contact" component={Contact} />
+          <PublicRoute exact path="/about" component={About} />
+          <PublicRoute exact path="/faq" component={FAQ} />
+          <PublicRoute exact path="/contact" component={Contact} />
 
-          <Route exact path="/blog" component={Blog} />
+          <PublicRoute exact path="/blog" component={Blog} />
 
-          <Route exact path="/login" component={Login} />
+          <PublicRoute exact path="/login" component={Login} />
 
-          <Route component={NotFound} />
+          <PublicRoute component={NotFound} />
         </Switch>
         {/* <Login /> */}
         {/* <About /> */}
@@ -60,7 +60,6 @@ function App() {
         {/* <Cart /> */}
         {/* <MyAccount /> */}
         {/* <Checkout /> */}
-        <Footer />
       </Router>
     </div>
   );
