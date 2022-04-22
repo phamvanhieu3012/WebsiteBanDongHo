@@ -28,7 +28,7 @@ function HomePage() {
               <h3 className="intro-subtitle text-white">You're Looking Good</h3>
               <h1 className="intro-title text-white">New Lookbook</h1>
 
-              <a href="category.html" className="btn btn-outline-white-4">
+              <a href="/products" className="btn btn-outline-white-4">
                 <span>Discover More</span>
               </a>
             </div>
@@ -45,7 +45,7 @@ function HomePage() {
               <h3 className="intro-subtitle text-white">Don’t Miss</h3>
               <h1 className="intro-title text-white">Mysrety Deals</h1>
 
-              <a href="category.html" className="btn btn-outline-white-4">
+              <a href="/products" className="btn btn-outline-white-4">
                 <span>Discover More</span>
               </a>
             </div>

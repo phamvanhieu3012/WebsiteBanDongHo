@@ -70,20 +70,6 @@ function Header() {
               </ul>
 
               <div className="header-dropdown">
-                <a href="#">USD</a>
-                <div className="header-menu">
-                  <ul>
-                    <li>
-                      <a href="#">Eur</a>
-                    </li>
-                    <li>
-                      <a href="#">Usd</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="header-dropdown">
                 <a href="#">Eng</a>
                 <div className="header-menu">
                   <ul>
@@ -130,7 +116,7 @@ function Header() {
               </div>
             </div>
             <div className="header-center">
-              <a href="index.html" className="logo">
+              <a href="/" className="logo">
                 <img
                   src="assets/images/demos/demo-6/logo.png"
                   alt="Molla Logo"
@@ -247,7 +233,7 @@ function Header() {
               <nav className="main-nav">
                 <ul className="menu sf-arrows">
                   <li className="megamenu-container active">
-                    <a href="index.html" className="">
+                    <a href="/" className="">
                       Home
                     </a>
                   </li>
@@ -384,11 +370,11 @@ function Header() {
                     </div>
                   </li>
                   <li>
-                    <a href="product.html" className="sf-with-ul">
+                    <a href="/products" className="sf-with-ul">
                       Product
                     </a>
 
-                    <div className="megamenu megamenu-sm">
+                    {/* <div className="megamenu megamenu-sm">
                       <div className="row no-gutters">
                         <div className="col-md-6">
                           <div className="menu-col">
@@ -452,7 +438,7 @@ function Header() {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </li>
                   <li>
                     <a href="#" className="sf-with-ul">
@@ -474,61 +460,19 @@ function Header() {
                     </ul>
                   </li>
                   <li>
-                    <a href="blog.html" className="">
+                    <a href="/blog" className="">
                       Blog
                     </a>
                   </li>
                   <li>
-                    <a href="elements-list.html" className="sf-with-ul">
-                      Elements
+                    <a href="/about" className="">
+                      About
                     </a>
-
-                    <ul>
-                      <li>
-                        <a href="elements-products.html">Products</a>
-                      </li>
-                      <li>
-                        <a href="elements-typography.html">Typography</a>
-                      </li>
-                      <li>
-                        <a href="elements-titles.html">Titles</a>
-                      </li>
-                      <li>
-                        <a href="elements-banners.html">Banners</a>
-                      </li>
-                      <li>
-                        <a href="elements-product-category.html">
-                          Product Category
-                        </a>
-                      </li>
-                      <li>
-                        <a href="elements-video-banners.html">Video Banners</a>
-                      </li>
-                      <li>
-                        <a href="elements-buttons.html">Buttons</a>
-                      </li>
-                      <li>
-                        <a href="elements-accordions.html">Accordions</a>
-                      </li>
-                      <li>
-                        <a href="elements-tabs.html">Tabs</a>
-                      </li>
-                      <li>
-                        <a href="elements-testimonials.html">Testimonials</a>
-                      </li>
-                      <li>
-                        <a href="elements-blog-posts.html">Blog Posts</a>
-                      </li>
-                      <li>
-                        <a href="elements-portfolio.html">Portfolio</a>
-                      </li>
-                      <li>
-                        <a href="elements-cta.html">Call to Action</a>
-                      </li>
-                      <li>
-                        <a href="elements-icon-boxes.html">Icon Boxes</a>
-                      </li>
-                    </ul>
+                  </li>
+                  <li>
+                    <a href="/contact" className="">
+                      Contact
+                    </a>
                   </li>
                 </ul>
               </nav>
