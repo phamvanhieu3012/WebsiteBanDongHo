@@ -7,8 +7,24 @@ import {
   login,
   register,
 } from "../../actions/userAction";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function Login() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const dispatch = useDispatch();
   let history = useHistory();
 
@@ -16,7 +32,6 @@ function Login() {
     (state) => state.user
   );
 
-  const userInfo = useSelector((state) => state.user);
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [user, setUser] = useState({
@@ -25,6 +40,7 @@ function Login() {
     password: "",
   });
   const { name, email, password } = user;
+  const [er, setEr] = useState("");
 
   const loginSubmit = (e) => {
     e.preventDefault();
@@ -49,7 +65,9 @@ function Login() {
 
   useEffect(() => {
     if (error) {
-      alert(error);
+      // alert(error);
+      setOpen(true);
+      setEr(error);
       dispatch(clearErrors());
     }
     if (isAuthenticated) {
@@ -61,6 +79,15 @@ function Login() {
 
   return (
     <main className="main">
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity="warning"
+          sx={{ width: "100%", fontSize: "0.85em" }}
+        >
+          {er}
+        </Alert>
+      </Snackbar>
       <nav aria-label="breadcrumb" className="breadcrumb-nav border-0 mb-0">
         <div className="container">
           <ol className="breadcrumb">
@@ -178,15 +205,34 @@ function Login() {
                   role="tabpanel"
                   aria-labelledby="register-tab-2"
                 >
-                  <form action="#">
+                  <form
+                    method="POST"
+                    encType="multipart/form-data"
+                    onSubmit={registerSubmit}
+                  >
+                    <div className="form-group">
+                      <label htmlFor="register-name">Tên của bạn *</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="register-name"
+                        required
+                        name="name"
+                        value={name}
+                        onChange={registerDataChange}
+                      />
+                    </div>
+
                     <div className="form-group">
                       <label htmlFor="register-email-2">Email của bạn *</label>
                       <input
                         type="email"
                         className="form-control"
                         id="register-email-2"
-                        name="register-email"
                         required
+                        name="email"
+                        value={email}
+                        onChange={registerDataChange}
                       />
                     </div>
 
@@ -196,21 +242,10 @@ function Login() {
                         type="password"
                         className="form-control"
                         id="register-password-2"
-                        name="register-password"
                         required
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="register-confirmpassword-2">
-                        Xác nhận mật khẩu *
-                      </label>
-                      <input
-                        type="password"
-                        className="form-control"
-                        id="register-confirmpassword-2"
-                        name="register-confirmpassword"
-                        required
+                        name="password"
+                        value={password}
+                        onChange={registerDataChange}
                       />
                     </div>
 
