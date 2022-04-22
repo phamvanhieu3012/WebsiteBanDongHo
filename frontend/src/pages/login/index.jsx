@@ -38,8 +38,12 @@ function Login() {
                     role="tab"
                     aria-controls="signin-2"
                     aria-selected="false"
+                    style={{
+                      fontSize: "2.4rem",
+                      padding: "0.9rem 1rem",
+                    }}
                   >
-                    Sign In
+                    ĐĂNG NHẬP
                   </a>
                 </li>
                 <li className="nav-item">
@@ -51,8 +55,12 @@ function Login() {
                     role="tab"
                     aria-controls="register-2"
                     aria-selected="true"
+                    style={{
+                      fontSize: "2.4rem",
+                      padding: "0.9rem 1rem",
+                    }}
                   >
-                    Register
+                    ĐĂNG KÝ
                   </a>
                 </li>
               </ul>
@@ -65,9 +73,7 @@ function Login() {
                 >
                   <form action="#">
                     <div className="form-group">
-                      <label htmlFor="singin-email-2">
-                        Username or email address *
-                      </label>
+                      <label htmlFor="singin-email-2">Email của bạn *</label>
                       <input
                         type="text"
                         className="form-control"
@@ -78,7 +84,7 @@ function Login() {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="singin-password-2">Password *</label>
+                      <label htmlFor="singin-password-2">Mật khẩu *</label>
                       <input
                         type="password"
                         className="form-control"
@@ -93,26 +99,12 @@ function Login() {
                         type="submit"
                         className="btn btn-outline-primary-2"
                       >
-                        <span>LOG IN</span>
+                        <span>Đăng nhập</span>
                         <i className="icon-long-arrow-right"></i>
                       </button>
 
-                      <div className="custom-control custom-checkbox">
-                        <input
-                          type="checkbox"
-                          className="custom-control-input"
-                          id="signin-remember-2"
-                        />
-                        <label
-                          className="custom-control-label"
-                          htmlFor="signin-remember-2"
-                        >
-                          Remember Me
-                        </label>
-                      </div>
-
                       <a href="#" className="forgot-link">
-                        Forgot Your Password?
+                        Quên mật khẩu?
                       </a>
                     </div>
                   </form>
@@ -126,9 +118,7 @@ function Login() {
                 >
                   <form action="#">
                     <div className="form-group">
-                      <label htmlFor="register-email-2">
-                        Your email address *
-                      </label>
+                      <label htmlFor="register-email-2">Email của bạn *</label>
                       <input
                         type="email"
                         className="form-control"
@@ -139,7 +129,7 @@ function Login() {
                     </div>
 
                     <div className="form-group">
-                      <label htmlFor="register-password-2">Password *</label>
+                      <label htmlFor="register-password-2">Mật khẩu *</label>
                       <input
                         type="password"
                         className="form-control"
@@ -167,7 +157,7 @@ function Login() {
                         type="submit"
                         className="btn btn-outline-primary-2"
                       >
-                        <span>SIGN UP</span>
+                        <span>Đăng ký</span>
                         <i className="icon-long-arrow-right"></i>
                       </button>
 
@@ -177,12 +167,13 @@ function Login() {
                           className="custom-control-input"
                           id="register-policy-2"
                           required
+                          style={{ cursor: "pointer" }}
                         />
                         <label
                           className="custom-control-label"
                           htmlFor="register-policy-2"
                         >
-                          I agree to the <a href="#">privacy policy</a> *
+                          Tôi đồng ý với <a href="#">điều khoản</a> *
                         </label>
                       </div>
                     </div>
