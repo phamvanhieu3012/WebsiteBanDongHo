@@ -21,6 +21,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { loadUser } from "./actions/userAction";
 import PublicRoute from "./components/Route/PublicRoute";
+import ScrollToTop from "react-scroll-to-top";
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -48,6 +49,14 @@ function App() {
 
           <PublicRoute component={NotFound} />
         </Switch>
+        {/* <button id="scroll-top" title="Back to Top">
+          <i className="icon-arrow-up"></i>
+        </button> */}
+        <ScrollToTop smooth />
+
+        {/* <!-- Mobile Menu --> */}
+        <div className="mobile-menu-overlay"></div>
+        {/* <!-- End .mobil-menu-overlay --> */}
         {/* <Login /> */}
         {/* <About /> */}
         {/* <Contact /> */}
