@@ -14,6 +14,13 @@ import {
 } from "./reducers/productReducer";
 
 import {
+  newCategoryReducer,
+  categoriesReducer,
+  categoryReducer,
+  categoryDetailsReducer,
+} from "./reducers/categoryReducer.js";
+
+import {
   allUsersReducer,
   forgotPasswordReducer,
   profileReducer,
@@ -22,12 +29,16 @@ import {
 } from "./reducers/userReducer";
 
 const reducer = combineReducers({
+  // Product
   products: productsReducer,
-  // productsAdmin: productsAdminReducer,
   productDetails: productDetailsReducer,
+  // User
   user: userReducer,
   profile: profileReducer,
   forgotPassword: forgotPasswordReducer,
+  // Category
+  categories: categoriesReducer,
+  categoryDetails: categoryDetailsReducer,
 });
 
 let initialState = {
