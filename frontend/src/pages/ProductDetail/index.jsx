@@ -1,44 +1,56 @@
-import React from "react";
+import { Rating } from "@mui/material";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
+import formatPrice from "../../ultils/formatPrice";
+import { getProductDetails } from "../../actions/productAction";
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
+import { createTheme } from "@mui/material/styles";
+
+const theme = createTheme({
+  palette: {
+    yellow96: "#c96",
+  },
+});
 
 function ProductDetail() {
+  const dispatch = useDispatch();
+
+  const [valueTab, setValueTab] = React.useState(1);
+
+  const handleChange = (event, newValue) => {
+    setValueTab(newValue);
+  };
+
+  let match = useParams();
+
+  const { product, loading, error } = useSelector(
+    (state) => state.productDetails
+  );
+
+  useEffect(() => {
+    dispatch(getProductDetails(match.id));
+  }, [dispatch, match.id]);
+
   return (
     <main className="main">
       <nav aria-label="breadcrumb" className="breadcrumb-nav border-0 mb-0">
         <div className="container d-flex align-items-center">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="index.html">Home</a>
+              <Link to="/">Trang chủ</Link>
             </li>
             <li className="breadcrumb-item">
-              <a href="#">Products</a>
+              <Link to="/products">Sản phẩm</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Default
+              Chi tiết sản phẩm
             </li>
           </ol>
-
-          <nav className="product-pager ml-auto" aria-label="Product">
-            <a
-              className="product-pager-link product-pager-prev"
-              href="#"
-              aria-label="Previous"
-              tabIndex="-1"
-            >
-              <i className="icon-angle-left"></i>
-              <span>Prev</span>
-            </a>
-
-            <a
-              className="product-pager-link product-pager-next"
-              href="#"
-              aria-label="Next"
-              tabIndex="-1"
-            >
-              <span>Next</span>
-              <i className="icon-angle-right"></i>
-            </a>
-          </nav>
-          {/* End .pager-nav */}
         </div>
         {/* End .container */}
       </nav>
@@ -54,9 +66,11 @@ function ProductDetail() {
                     <figure className="product-main-image">
                       <img
                         id="product-zoom"
-                        src="assets/images/products/single/1.jpg"
-                        data-zoom-image="assets/images/products/single/1-big.jpg"
-                        alt="product image"
+                        src={product.images && product.images[0].url}
+                        data-zoom-image={
+                          product.images && product.images[0].url
+                        }
+                        alt={product && product.name}
                       />
 
                       <a
@@ -74,14 +88,20 @@ function ProductDetail() {
                       className="product-image-gallery"
                     >
                       <a
+                        style={{
+                          height: "fitContent",
+                        }}
                         className="product-gallery-item active"
                         href="#"
-                        data-image="assets/images/products/single/1.jpg"
-                        data-zoom-image="assets/images/products/single/1-big.jpg"
+                        // data-image="assets/images/products/single/1.jpg"
+                        data-image={product.images && product.images[0].url}
+                        data-zoom-image={
+                          product.images && product.images[0].url
+                        }
                       >
                         <img
-                          src="assets/images/products/single/1-small.jpg"
-                          alt="product side"
+                          src={product.images && product.images[0].url}
+                          alt="product img1"
                         />
                       </a>
 
@@ -96,97 +116,41 @@ function ProductDetail() {
                           alt="product cross"
                         />
                       </a>
-
-                      <a
-                        className="product-gallery-item"
-                        href="#"
-                        data-image="assets/images/products/single/3.jpg"
-                        data-zoom-image="assets/images/products/single/3-big.jpg"
-                      >
-                        <img
-                          src="assets/images/products/single/3-small.jpg"
-                          alt="product with model"
-                        />
-                      </a>
-
-                      <a
-                        className="product-gallery-item"
-                        href="#"
-                        data-image="assets/images/products/single/4.jpg"
-                        data-zoom-image="assets/images/products/single/4-big.jpg"
-                      >
-                        <img
-                          src="assets/images/products/single/4-small.jpg"
-                          alt="product back"
-                        />
-                      </a>
                     </div>
-                    {/* End .product-image-gallery */}
                   </div>
-                  {/* End .row */}
                 </div>
-                {/* End .product-gallery */}
               </div>
-              {/* End .col-md-6 */}
 
               <div className="col-md-6">
                 <div className="product-details">
-                  <h1 className="product-title">
-                    Dark yellow lace cut out swing dress
-                  </h1>
+                  <h1 className="product-title">{product && product.name}</h1>
                   {/* End .product-title */}
 
                   <div className="ratings-container">
-                    <div className="ratings">
-                      <div
-                        className="ratings-val"
-                        style={{ width: "80%" }}
-                      ></div>
-                      {/* End .ratings-val */}
-                    </div>
-                    {/* End .ratings */}
+                    <Rating
+                      defaultValue={5}
+                      size="large"
+                      value={product && product.ratings}
+                    />
                     <a
                       className="ratings-text"
                       href="#product-review-link"
                       id="review-link"
                     >
-                      ( 2 Reviews )
+                      ( {product && product.numOfReviews} Reviews )
                     </a>
                   </div>
                   {/* End .rating-container */}
 
-                  <div className="product-price">$84.00</div>
+                  <div className="product-price">
+                    {product.price && formatPrice(product.price)}
+                  </div>
                   {/* End .product-price */}
 
                   <div className="product-content">
-                    <p>
-                      Sed egestas, ante et vulputate volutpat, eros pede semper
-                      est, vitae luctus metus libero eu augue. Morbi purus
-                      libero, faucibus adipiscing. Sed lectus.{" "}
-                    </p>
+                    <p>{product.description} </p>
                   </div>
                   {/* End .product-content */}
-
-                  <div className="details-filter-row details-row-size">
-                    <label>Color:</label>
-
-                    <div className="product-nav product-nav-thumbs">
-                      <a href="#" className="active">
-                        <img
-                          src="assets/images/products/single/1-thumb.jpg"
-                          alt="product desc"
-                        />
-                      </a>
-                      <a href="#">
-                        <img
-                          src="assets/images/products/single/2-thumb.jpg"
-                          alt="product desc"
-                        />
-                      </a>
-                    </div>
-                    {/* End .product-nav */}
-                  </div>
-                  {/* End .details-filter-row */}
 
                   <div className="details-filter-row details-row-size">
                     <label htmlFor="size">Size:</label>
@@ -207,28 +171,57 @@ function ProductDetail() {
                   </div>
                   {/* End .details-filter-row */}
 
-                  <div className="details-filter-row details-row-size">
-                    <label htmlFor="qty">Qty:</label>
-                    <div className="product-details-quantity">
+                  <div
+                    style={{
+                      marginTop: "1rem",
+                      display: "flex",
+                    }}
+                    className="details-filter-row details-row-size"
+                  >
+                    <label htmlFor="qty">Số lượng:</label>
+                    <div
+                      style={{
+                        border: "1px solid #d7d7d7",
+                        borderRadius: "3px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        height: "40px",
+                        lineHeight: "30px",
+                        padding: "0 0.5rem",
+                        cursor: "pointer",
+                        width: "130px",
+                        zIndex: "9999",
+                      }}
+                    >
+                      {/* <span onClick={handleDecrement}>-</span> */}
+                      <p style={{ margin: "0 auto" }}>-</p>
                       <input
-                        type="number"
-                        id="qty"
-                        className="form-control"
-                        value="1"
-                        min="1"
-                        max="10"
-                        step="1"
-                        data-decimals="0"
-                        required
+                        style={{
+                          width: "30px",
+                          // borderLeft: "none",
+                          // borderRight: "none",
+                          // borderTop: "1px solid #d7d7d7",
+                          // borderBottom: "1px solid #d7d7d7",
+                          border: "none",
+                          textAlign: "center",
+                          height: "40px",
+                          lineHeight: "30px",
+                          outline: "none",
+                        }}
+                        type="text"
+                        value={1}
+                        readOnly
                       />
+                      <p style={{ margin: "0 auto" }}>+</p>
+                      {/* <span onClick={handleIncrement}>+</span> */}
                     </div>
-                    {/* End .product-details-quantity */}
                   </div>
                   {/* End .details-filter-row */}
 
                   <div className="product-details-action">
                     <a href="#" className="btn-product btn-cart">
-                      <span>add to cart</span>
+                      <span>Thêm vào giỏ hàng</span>
                     </a>
 
                     <div className="details-action-wrapper">
@@ -237,14 +230,7 @@ function ProductDetail() {
                         className="btn-product btn-wishlist"
                         title="Wishlist"
                       >
-                        <span>Add to Wishlist</span>
-                      </a>
-                      <a
-                        href="#"
-                        className="btn-product btn-compare"
-                        title="Compare"
-                      >
-                        <span>Add to Compare</span>
+                        <span>Thêm vào danh sách mong muốn</span>
                       </a>
                     </div>
                     {/* End .details-action-wrapper */}
@@ -253,9 +239,11 @@ function ProductDetail() {
 
                   <div className="product-details-footer">
                     <div className="product-cat">
-                      <span>Category:</span>
-                      <a href="#">Women</a>,<a href="#">Dresses</a>,
-                      <a href="#">Yellow</a>
+                      <span>Danh mục:</span>
+                      <a href="#">Women</a>,
+                      <a href="#">
+                        {product && product.category && product.category.name}
+                      </a>
                     </div>
                     {/* End .product-cat */}
 
@@ -305,283 +293,134 @@ function ProductDetail() {
           </div>
           {/* End .product-details-top */}
 
-          <div className="product-details-tab">
-            <ul className="nav nav-pills justify-content-center" role="tablist">
-              <li className="nav-item">
-                <a
-                  className="nav-link active"
-                  id="product-desc-link"
-                  data-toggle="tab"
-                  href="#product-desc-tab"
-                  role="tab"
-                  aria-controls="product-desc-tab"
-                  aria-selected="true"
+          <Box sx={{ width: "100%", typography: "body1" }}>
+            <TabContext value={valueTab.toString()}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                  centered
                 >
-                  Description
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link"
-                  id="product-info-link"
-                  data-toggle="tab"
-                  href="#product-info-tab"
-                  role="tab"
-                  aria-controls="product-info-tab"
-                  aria-selected="false"
-                >
-                  Additional information
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link"
-                  id="product-shipping-link"
-                  data-toggle="tab"
-                  href="#product-shipping-tab"
-                  role="tab"
-                  aria-controls="product-shipping-tab"
-                  aria-selected="false"
-                >
-                  Shipping & Returns
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className="nav-link"
-                  id="product-review-link"
-                  data-toggle="tab"
-                  href="#product-review-tab"
-                  role="tab"
-                  aria-controls="product-review-tab"
-                  aria-selected="false"
-                >
-                  Reviews (2)
-                </a>
-              </li>
-            </ul>
-            <div className="tab-content">
-              <div
-                className="tab-pane fade show active"
-                id="product-desc-tab"
-                role="tabpanel"
-                aria-labelledby="product-desc-link"
+                  <Tab
+                    label="Giới thiệu"
+                    value="1"
+                    sx={{
+                      fontSize: "1.2rem",
+                    }}
+                  />
+                  <Tab
+                    label="Thông tin thêm"
+                    value="2"
+                    sx={{
+                      fontSize: "1.2rem",
+                    }}
+                  />
+                  <Tab
+                    label={`Đánh giá (${product && product.numOfReviews})`}
+                    value="3"
+                    sx={{
+                      fontSize: "1.2rem",
+                    }}
+                  />
+                </TabList>
+              </Box>
+              <TabPanel
+                value="1"
+                className="product-desc-content"
+                sx={{
+                  fontSize: "1.5rem",
+                  lineHeight: "1.7",
+                }}
               >
-                <div className="product-desc-content">
-                  <h3>Product Information</h3>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    Donec odio. Quisque volutpat mattis eros. Nullam malesuada
-                    erat ut turpis. Suspendisse urna viverra non, semper
-                    suscipit, posuere a, pede. Donec nec justo eget felis
-                    facilisis fermentum. Aliquam porttitor mauris sit amet orci.
-                    Aenean dignissim pellentesque felis. Phasellus ultrices
-                    nulla quis nibh. Quisque a lectus. Donec consectetuer ligula
-                    vulputate sem tristique cursus.{" "}
-                  </p>
-                  <ul>
-                    <li>
-                      Nunc nec porttitor turpis. In eu risus enim. In vitae
-                      mollis elit.{" "}
-                    </li>
-                    <li>Vivamus finibus vel mauris ut vehicula.</li>
-                    <li>
-                      Nullam a magna porttitor, dictum risus nec, faucibus
-                      sapien.
-                    </li>
-                  </ul>
-
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    Donec odio. Quisque volutpat mattis eros. Nullam malesuada
-                    erat ut turpis. Suspendisse urna viverra non, semper
-                    suscipit, posuere a, pede. Donec nec justo eget felis
-                    facilisis fermentum. Aliquam porttitor mauris sit amet orci.
-                    Aenean dignissim pellentesque felis. Phasellus ultrices
-                    nulla quis nibh. Quisque a lectus. Donec consectetuer ligula
-                    vulputate sem tristique cursus.{" "}
-                  </p>
-                </div>
-                {/* End .product-desc-content */}
-              </div>
-              {/* .End .tab-pane */}
-              <div
-                className="tab-pane fade"
-                id="product-info-tab"
-                role="tabpanel"
-                aria-labelledby="product-info-link"
+                <h3 style={{ fontWeight: "bold" }}>Thông tin sản phẩm</h3>
+                <p>{product && product.description}</p>
+              </TabPanel>
+              <TabPanel
+                value="2"
+                className="product-desc-content"
+                sx={{
+                  fontSize: "1.5rem",
+                  lineHeight: "1.7",
+                }}
               >
-                <div className="product-desc-content">
-                  <h3>Information</h3>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    Donec odio. Quisque volutpat mattis eros. Nullam malesuada
-                    erat ut turpis. Suspendisse urna viverra non, semper
-                    suscipit, posuere a, pede. Donec nec justo eget felis
-                    facilisis fermentum. Aliquam porttitor mauris sit amet orci.{" "}
-                  </p>
-
-                  <h3>Fabric & care</h3>
-                  <ul>
-                    <li>Faux suede fabric</li>
-                    <li>Gold tone metal hoop handles.</li>
-                    <li>RI branding</li>
-                    <li>Snake print trim interior </li>
-                    <li>Adjustable cross body strap</li>
-                    <li>
-                      {" "}
-                      Height: 31cm; Width: 32cm; Depth: 12cm; Handle Drop: 61cm
-                    </li>
-                  </ul>
-
-                  <h3>Size</h3>
-                  <p>one size</p>
-                </div>
-                {/* End .product-desc-content */}
-              </div>
-              {/* .End .tab-pane */}
-              <div
-                className="tab-pane fade"
-                id="product-shipping-tab"
-                role="tabpanel"
-                aria-labelledby="product-shipping-link"
+                <h3 style={{ fontWeight: "bold" }}>Thông số thêm về máy</h3>
+                <ul>
+                  <li>
+                    Nhãn hiệu: {product.category && product.category.name}
+                  </li>
+                  <li>Kích cỡ: {product && product.dialSize}</li>
+                  <li>Chất liệu dây: {product && product.ropeMaterial}</li>
+                  <li>
+                    Chất liệu mặt kính: {product && product.glassMaterial}
+                  </li>
+                  <li>Bảo hiểm: 5 năm cả lỗi người dùng tịa PVH</li>
+                  <li>Bảo hành quốc tế: 1 năm</li>
+                  <li>Giới tính: {product && product.sex}</li>
+                </ul>
+              </TabPanel>
+              <TabPanel
+                value="3"
+                className="product-desc-content"
+                sx={{
+                  fontSize: "1.5rem",
+                  lineHeight: "1.7",
+                }}
               >
-                <div className="product-desc-content">
-                  <h3>Delivery & returns</h3>
-                  <p>
-                    We deliver to over 100 countries around the world. For full
-                    details of the delivery options we offer, please view our{" "}
-                    <a href="#">Delivery information</a>
-                    <br />
-                    We hope you’ll love every purchase, but if you ever need to
-                    return an item you can do so within a month of receipt. For
-                    full details of how to make a return, please view our{" "}
-                    <a href="#">Returns information</a>
-                  </p>
-                </div>
-                {/* End .product-desc-content */}
-              </div>
-              {/* .End .tab-pane */}
-              <div
-                className="tab-pane fade"
-                id="product-review-tab"
-                role="tabpanel"
-                aria-labelledby="product-review-link"
-              >
-                <div className="reviews">
-                  <h3>Reviews (2)</h3>
-                  <div className="review">
-                    <div className="row no-gutters">
-                      <div className="col-auto">
-                        <h4>
-                          <a href="#">Samanta J.</a>
-                        </h4>
-                        <div className="ratings-container">
-                          <div className="ratings">
-                            <div
-                              className="ratings-val"
-                              style={{ width: "80%" }}
-                            ></div>
-                            {/* End .ratings-val */}
-                          </div>
-                          {/* End .ratings */}
+                <h3 style={{ fontWeight: "bold" }}>
+                  Đánh giá ({product && product.numOfReviews})
+                </h3>
+                <div className="review">
+                  <div className="row no-gutters">
+                    <div className="col-auto">
+                      <h4>
+                        <a href="#">Saitama J.</a>
+                      </h4>
+                      {/* <div className="ratings-container">
+                        <div className="ratings">
+                          <div
+                            className="ratings-val"
+                            style={{ width: "80%" }}
+                          ></div>
+                      
                         </div>
-                        {/* End .rating-container */}
-                        <span className="review-date">6 days ago</span>
-                      </div>
-                      {/* End .col */}
-                      <div className="col">
-                        <h4>Good, perfect size</h4>
-
-                        <div className="review-content">
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit. Ducimus cum dolores assumenda asperiores
-                            facilis porro reprehenderit animi culpa atque
-                            blanditiis commodi perspiciatis doloremque,
-                            possimus, explicabo, autem fugit beatae quae
-                            voluptas!
-                          </p>
-                        </div>
-                        {/* End .review-content */}
-
-                        <div className="review-action">
-                          <a href="#">
-                            <i className="icon-thumbs-up"></i>Helpful (2)
-                          </a>
-                          <a href="#">
-                            <i className="icon-thumbs-down"></i>Unhelpful (0)
-                          </a>
-                        </div>
-                        {/* End .review-action */}
-                      </div>
-                      {/* End .col-auto */}
+                      </div> */}
+                      {/* End .rating-container */}
+                      <span className="review-date">6 days ago</span>
                     </div>
-                    {/* End .row */}
-                  </div>
-                  {/* End .review */}
+                    {/* End .col */}
+                    <div className="col">
+                      <h4>Good, perfect size</h4>
 
-                  <div className="review">
-                    <div className="row no-gutters">
-                      <div className="col-auto">
-                        <h4>
-                          <a href="#">John Doe</a>
-                        </h4>
-                        <div className="ratings-container">
-                          <div className="ratings">
-                            <div
-                              className="ratings-val"
-                              style={{
-                                width: "100%",
-                              }}
-                            ></div>
-                            {/* End .ratings-val */}
-                          </div>
-                          {/* End .ratings */}
-                        </div>
-                        {/* End .rating-container */}
-                        <span className="review-date">5 days ago</span>
+                      <div className="review-content">
+                        <p>
+                          Lorem ipsum dolor sit amet, consectetur adipisicing
+                          elit. Ducimus cum dolores assumenda asperiores facilis
+                          porro reprehenderit animi culpa atque blanditiis
+                          commodi perspiciatis doloremque, possimus, explicabo,
+                          autem fugit beatae quae voluptas!
+                        </p>
                       </div>
-                      {/* End .col */}
-                      <div className="col">
-                        <h4>Very good</h4>
+                      {/* End .review-content */}
 
-                        <div className="review-content">
-                          <p>
-                            Sed, molestias, tempore? Ex dolor esse iure hic
-                            veniam laborum blanditiis laudantium iste amet. Cum
-                            non voluptate eos enim, ab cumque nam, modi, quas
-                            iure illum repellendus, blanditiis perspiciatis
-                            beatae!
-                          </p>
-                        </div>
-                        {/* End .review-content */}
-
-                        <div className="review-action">
-                          <a href="#">
-                            <i className="icon-thumbs-up"></i>Helpful (0)
-                          </a>
-                          <a href="#">
-                            <i className="icon-thumbs-down"></i>Unhelpful (0)
-                          </a>
-                        </div>
-                        {/* End .review-action */}
+                      <div className="review-action">
+                        <a href="#">
+                          <i className="icon-thumbs-up"></i>Helpful (2)
+                        </a>
+                        <a href="#">
+                          <i className="icon-thumbs-down"></i>Unhelpful (0)
+                        </a>
                       </div>
-                      {/* End .col-auto */}
+                      {/* End .review-action */}
                     </div>
-                    {/* End .row */}
+                    {/* End .col-auto */}
                   </div>
-                  {/* End .review */}
+                  {/* End .row */}
                 </div>
-                {/* End .reviews */}
-              </div>
-              {/* .End .tab-pane */}
-            </div>
-            {/* End .tab-content */}
-          </div>
-          {/* End .product-details-tab */}
+              </TabPanel>
+            </TabContext>
+          </Box>
 
-          <h2 className="title text-center mb-4">You May Also Like</h2>
+          <h2 className="title text-center mb-4">Sản phẩm liên quan</h2>
           {/* End .title text-center */}
 
           <div

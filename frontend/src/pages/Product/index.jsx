@@ -1,6 +1,67 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Rating from "@mui/material/Rating";
+import "./Product.scss";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useParams } from "react-router-dom";
+import { getProduct } from "../../actions/productAction";
+import { Collapse } from "@mui/material";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import formatPrice from "../../ultils/formatPrice";
 
 function Product() {
+  const [close, setClose] = useState(false);
+  const [category, setCategory] = useState("");
+  const [sort, setSort] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [openBrand, setOpenBrand] = React.useState(true);
+  const [openPrice, setOpenPrice] = React.useState(true);
+  const [openRope, setOpenRope] = React.useState(true);
+  const [openGlass, setOpenGlass] = React.useState(true);
+  const [openSize, setOpenSize] = React.useState(true);
+
+  const handleClickOpenBrand = () => {
+    setOpenBrand(!openBrand);
+  };
+  const handleClickOpenPrice = () => {
+    setOpenPrice(!openPrice);
+  };
+  const handleClickOpenRope = () => {
+    setOpenRope(!openRope);
+  };
+  const handleClickOpenGlass = () => {
+    setOpenGlass(!openGlass);
+  };
+  const handleClickOpenSize = () => {
+    setOpenSize(!openSize);
+  };
+
+  const {
+    products,
+    loading,
+    error,
+    productsCount,
+    resultPerPage,
+    filteredProductsCount,
+  } = useSelector((state) => state.products);
+
+  // let match = useParams();
+
+  // console.log(match);
+
+  const data = useSelector((state) => state.products);
+  // const keyword = match && match.params.keyword;
+
+  const dispatch = useDispatch();
+
+  const setCurrentPageNo = (e) => {
+    setCurrentPage(e);
+  };
+
+  useEffect(() => {
+    dispatch(getProduct(currentPage, category, sort));
+  }, [dispatch, currentPage, category, sort]);
+
   return (
     <main className="main">
       <div
@@ -8,9 +69,7 @@ function Product() {
         style={{ backgroundImage: "url('assets/images/page-header-bg.jpg')" }}
       >
         <div className="container">
-          <h1 className="page-title">
-            Grid 3 Columns<span>Shop</span>
-          </h1>
+          <h1 className="page-title">Sản phẩm</h1>
         </div>
         {/* End .container */}
       </div>
@@ -19,13 +78,10 @@ function Product() {
         <div className="container">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="index.html">Home</a>
-            </li>
-            <li className="breadcrumb-item">
-              <a href="#">Shop</a>
+              <a href="/">Trang chủ</a>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Grid 3 Columns
+              Sản phẩm
             </li>
           </ol>
         </div>
@@ -40,7 +96,12 @@ function Product() {
               <div className="toolbox">
                 <div className="toolbox-left">
                   <div className="toolbox-info">
-                    Showing <span>9 of 56</span> Products
+                    Đang xem{" "}
+                    <span>
+                      {filteredProductsCount} trong{" "}
+                      {products && products.length}
+                    </span>{" "}
+                    Sản phẩm
                   </div>
                   {/* End .toolbox-info */}
                 </div>
@@ -48,64 +109,21 @@ function Product() {
 
                 <div className="toolbox-right">
                   <div className="toolbox-sort">
-                    <label htmlFor="sortby">Sort by:</label>
+                    <label htmlFor="sortby">Sắp xếp theo:</label>
                     <div className="select-custom">
                       <select
                         name="sortby"
                         id="sortby"
                         className="form-control"
                       >
-                        <option defaultValue="popularity">Most Popular</option>
-                        <option value="rating">Most Rated</option>
-                        <option value="date">Date</option>
+                        <option defaultValue="popularity">Mới nhất</option>
+                        <option value="rating">Cũ nhất</option>
+                        <option value="price">Giá: Thấp- Cao</option>
+                        <option value="-price">Giá: Cao- Thấp</option>
                       </select>
                     </div>
                   </div>
                   {/* End .toolbox-sort */}
-                  <div className="toolbox-layout">
-                    <a href="category-list.html" className="btn-layout">
-                      <svg width="16" height="10">
-                        <rect x="0" y="0" width="4" height="4" />
-                        <rect x="6" y="0" width="10" height="4" />
-                        <rect x="0" y="6" width="4" height="4" />
-                        <rect x="6" y="6" width="10" height="4" />
-                      </svg>
-                    </a>
-
-                    <a href="category-2cols.html" className="btn-layout">
-                      <svg width="10" height="10">
-                        <rect x="0" y="0" width="4" height="4" />
-                        <rect x="6" y="0" width="4" height="4" />
-                        <rect x="0" y="6" width="4" height="4" />
-                        <rect x="6" y="6" width="4" height="4" />
-                      </svg>
-                    </a>
-
-                    <a href="category.html" className="btn-layout active">
-                      <svg width="16" height="10">
-                        <rect x="0" y="0" width="4" height="4" />
-                        <rect x="6" y="0" width="4" height="4" />
-                        <rect x="12" y="0" width="4" height="4" />
-                        <rect x="0" y="6" width="4" height="4" />
-                        <rect x="6" y="6" width="4" height="4" />
-                        <rect x="12" y="6" width="4" height="4" />
-                      </svg>
-                    </a>
-
-                    <a href="category-4cols.html" className="btn-layout">
-                      <svg width="22" height="10">
-                        <rect x="0" y="0" width="4" height="4" />
-                        <rect x="6" y="0" width="4" height="4" />
-                        <rect x="12" y="0" width="4" height="4" />
-                        <rect x="18" y="0" width="4" height="4" />
-                        <rect x="0" y="6" width="4" height="4" />
-                        <rect x="6" y="6" width="4" height="4" />
-                        <rect x="12" y="6" width="4" height="4" />
-                        <rect x="18" y="6" width="4" height="4" />
-                      </svg>
-                    </a>
-                  </div>
-                  {/* End .toolbox-layout */}
                 </div>
                 {/* End .toolbox-right */}
               </div>
@@ -113,797 +131,112 @@ function Product() {
 
               <div className="products mb-3">
                 <div className="row justify-content-center">
-                  <div className="col-6 col-md-4 col-lg-4">
-                    <div className="product product-7 text-center">
-                      <figure className="product-media">
-                        <span className="product-label label-new">New</span>
-                        <a href="product.html">
-                          <img
-                            src="assets/images/products/product-4.jpg"
-                            alt="Product image"
-                            className="product-image"
-                          />
-                        </a>
+                  {products &&
+                    products.map((product) => (
+                      <div
+                        className="col-6 col-md-4 col-lg-4"
+                        key={product._id}
+                      >
+                        <div className="product product-7 text-center">
+                          <figure className="product-media">
+                            {product.Stock < 0 ? (
+                              <span className="product-label label-out">
+                                Hết hàng
+                              </span>
+                            ) : (
+                              ""
+                            )}
 
-                        <div className="product-action-vertical">
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-wishlist btn-expandable"
-                          >
-                            <span>add to wishlist</span>
-                          </a>
-                          <a
-                            href="popup/quickView.html"
-                            className="btn-product-icon btn-quickview"
-                            title="Quick view"
-                          >
-                            <span>Quick view</span>
-                          </a>
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-compare"
-                            title="Compare"
-                          >
-                            <span>Compare</span>
-                          </a>
-                        </div>
-                        {/* End .product-action-vertical */}
+                            <Link to={`/product/${product._id}`}>
+                              <img
+                                src={product.images[0].url}
+                                alt={product.name}
+                                className="product-image"
+                              />
+                            </Link>
 
-                        <div className="product-action">
-                          <a href="#" className="btn-product btn-cart">
-                            <span>add to cart</span>
-                          </a>
-                        </div>
-                        {/* End .product-action */}
-                      </figure>
-                      {/* End .product-media */}
+                            <div className="product-action-vertical">
+                              <a
+                                href="#"
+                                className="btn-product-icon btn-wishlist btn-expandable"
+                              >
+                                <span>Thêm vào danh sách mong muốn</span>
+                              </a>
+                              <a
+                                href="popup/quickView.html"
+                                className="btn-product-icon btn-quickview"
+                                title="Quick view"
+                              >
+                                <span>Xem nhanh</span>
+                              </a>
+                            </div>
+                            {/* End .product-action-vertical */}
 
-                      <div className="product-body">
-                        <div className="product-cat">
-                          <a href="#">Women</a>
-                        </div>
-                        {/* End .product-cat */}
-                        <h3 className="product-title">
-                          <a href="product.html">
-                            Brown paperbag waist pencil skirt
-                          </a>
-                        </h3>
-                        {/* End .product-title */}
-                        <div className="product-price">$60.00</div>
-                        {/* End .product-price */}
-                        <div className="ratings-container">
-                          <div className="ratings">
-                            <div
-                              className="ratings-val"
-                              style={{ width: "20%" }}
-                            ></div>
-                            {/* End .ratings-val */}
-                          </div>
-                          {/* End .ratings */}
-                          <span className="ratings-text">( 2 Reviews )</span>
-                        </div>
-                        {/* End .rating-container */}
+                            <div className="product-action">
+                              <a href="#" className="btn-product btn-cart">
+                                <span>
+                                  <span
+                                    style={{
+                                      textTransform: "uppercase",
+                                    }}
+                                  >
+                                    T
+                                  </span>
+                                  hêm vào giỏ hàng
+                                </span>
+                              </a>
+                            </div>
+                            {/* End .product-action */}
+                          </figure>
+                          {/* End .product-media */}
 
-                        <div className="product-nav product-nav-thumbs">
-                          <a href="#" className="active">
-                            <img
-                              src="assets/images/products/product-4-thumb.jpg"
-                              alt="product desc"
-                            />
-                          </a>
-                          <a href="#">
-                            <img
-                              src="assets/images/products/product-4-2-thumb.jpg"
-                              alt="product desc"
-                            />
-                          </a>
-
-                          <a href="#">
-                            <img
-                              src="assets/images/products/product-4-3-thumb.jpg"
-                              alt="product desc"
-                            />
-                          </a>
-                        </div>
-                        {/* End .product-nav */}
-                      </div>
-                      {/* End .product-body */}
-                    </div>
-                    {/* End .product */}
-                  </div>
-                  {/* End .col-sm-6 col-lg-4 */}
-
-                  <div className="col-6 col-md-4 col-lg-4">
-                    <div className="product product-7 text-center">
-                      <figure className="product-media">
-                        <a href="product.html">
-                          <img
-                            src="assets/images/products/product-5.jpg"
-                            alt="Product image"
-                            className="product-image"
-                          />
-                        </a>
-
-                        <div className="product-action-vertical">
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-wishlist btn-expandable"
-                          >
-                            <span>add to wishlist</span>
-                          </a>
-                          <a
-                            href="popup/quickView.html"
-                            className="btn-product-icon btn-quickview"
-                            title="Quick view"
-                          >
-                            <span>Quick view</span>
-                          </a>
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-compare"
-                            title="Compare"
-                          >
-                            <span>Compare</span>
-                          </a>
-                        </div>
-                        {/* End .product-action-vertical */}
-
-                        <div className="product-action">
-                          <a href="#" className="btn-product btn-cart">
-                            <span>add to cart</span>
-                          </a>
-                        </div>
-                        {/* End .product-action */}
-                      </figure>
-                      {/* End .product-media */}
-
-                      <div className="product-body">
-                        <div className="product-cat">
-                          <a href="#">Dresses</a>
-                        </div>
-                        {/* End .product-cat */}
-                        <h3 className="product-title">
-                          <a href="product.html">
-                            Dark yellow lace cut out swing dress
-                          </a>
-                        </h3>
-                        {/* End .product-title */}
-                        <div className="product-price">$84.00</div>
-                        {/* End .product-price */}
-                        <div className="ratings-container">
-                          <div className="ratings">
-                            <div
-                              className="ratings-val"
-                              style={{ width: "0%" }}
-                            ></div>
-                            {/* End .ratings-val */}
-                          </div>
-                          {/* End .ratings */}
-                          <span className="ratings-text">( 0 Reviews )</span>
-                        </div>
-                        {/* End .rating-container */}
-
-                        <div className="product-nav product-nav-thumbs">
-                          <a href="#" className="active">
-                            <img
-                              src="assets/images/products/product-5-thumb.jpg"
-                              alt="product desc"
-                            />
-                          </a>
-                          <a href="#">
-                            <img
-                              src="assets/images/products/product-5-2-thumb.jpg"
-                              alt="product desc"
-                            />
-                          </a>
-                        </div>
-                        {/* End .product-nav */}
-                      </div>
-                      {/* End .product-body */}
-                    </div>
-                    {/* End .product */}
-                  </div>
-                  {/* End .col-sm-6 col-lg-4 */}
-
-                  <div className="col-6 col-md-4 col-lg-4">
-                    <div className="product product-7 text-center">
-                      <figure className="product-media">
-                        <span className="product-label label-out">
-                          Out of Stock
-                        </span>
-                        <a href="product.html">
-                          <img
-                            src="assets/images/products/product-6.jpg"
-                            alt="Product image"
-                            className="product-image"
-                          />
-                        </a>
-
-                        <div className="product-action-vertical">
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-wishlist btn-expandable"
-                          >
-                            <span>add to wishlist</span>
-                          </a>
-                          <a
-                            href="popup/quickView.html"
-                            className="btn-product-icon btn-quickview"
-                            title="Quick view"
-                          >
-                            <span>Quick view</span>
-                          </a>
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-compare"
-                            title="Compare"
-                          >
-                            <span>Compare</span>
-                          </a>
-                        </div>
-                        {/* End .product-action-vertical */}
-
-                        <div className="product-action">
-                          <a href="#" className="btn-product btn-cart">
-                            <span>add to cart</span>
-                          </a>
-                        </div>
-                        {/* End .product-action */}
-                      </figure>
-                      {/* End .product-media */}
-
-                      <div className="product-body">
-                        <div className="product-cat">
-                          <a href="#">Jackets</a>
-                        </div>
-                        {/* End .product-cat */}
-                        <h3 className="product-title">
-                          <a href="product.html">
-                            Khaki utility boiler jumpsuit
-                          </a>
-                        </h3>
-                        {/* End .product-title */}
-                        <div className="product-price">
-                          <span className="out-price">$120.00</span>
-                        </div>
-                        {/* End .product-price */}
-                        <div className="ratings-container">
-                          <div className="ratings">
+                          <div className="product-body">
+                            <div className="product-cat">
+                              <a href="#">{product.category.name}</a>
+                            </div>
+                            {/* End .product-cat */}
+                            <h3 className="product-title">
+                              <Link to={`/product/${product._id}`}>
+                                {product.name}
+                              </Link>
+                            </h3>
+                            {/* End .product-title */}
+                            <div className="product-price">
+                              <span
+                                className="out-price"
+                                style={{
+                                  color: "#c96",
+                                }}
+                              >
+                                {formatPrice(product.price)}
+                              </span>
+                            </div>
+                            {/* End .product-price */}
+                            <div className="ratings-container">
+                              {/* <div className="ratings">
                             <div
                               className="ratings-val"
                               style={{ width: "80%" }}
                             ></div>
-                            {/* End .ratings-val */}
+                          </div> */}
+                              <Rating
+                                size="large"
+                                value={product.ratings}
+                                readOnly
+                              />
+                              {/* End .ratings */}
+                              <span className="ratings-text">
+                                ( {product.numOfReviews} Reviews )
+                              </span>
+                            </div>
+                            {/* End .rating-container */}
                           </div>
-                          {/* End .ratings */}
-                          <span className="ratings-text">( 6 Reviews )</span>
+                          {/* End .product-body */}
                         </div>
-                        {/* End .rating-container */}
+                        {/* End .product */}
                       </div>
-                      {/* End .product-body */}
-                    </div>
-                    {/* End .product */}
-                  </div>
-                  {/* End .col-sm-6 col-lg-4 */}
-
-                  <div className="col-6 col-md-4 col-lg-4">
-                    <div className="product product-7 text-center">
-                      <figure className="product-media">
-                        <a href="product.html">
-                          <img
-                            src="assets/images/products/product-7.jpg"
-                            alt="Product image"
-                            className="product-image"
-                          />
-                        </a>
-
-                        <div className="product-action-vertical">
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-wishlist btn-expandable"
-                          >
-                            <span>add to wishlist</span>
-                          </a>
-                          <a
-                            href="popup/quickView.html"
-                            className="btn-product-icon btn-quickview"
-                            title="Quick view"
-                          >
-                            <span>Quick view</span>
-                          </a>
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-compare"
-                            title="Compare"
-                          >
-                            <span>Compare</span>
-                          </a>
-                        </div>
-                        {/* End .product-action-vertical */}
-
-                        <div className="product-action">
-                          <a href="#" className="btn-product btn-cart">
-                            <span>add to cart</span>
-                          </a>
-                        </div>
-                        {/* End .product-action */}
-                      </figure>
-                      {/* End .product-media */}
-
-                      <div className="product-body">
-                        <div className="product-cat">
-                          <a href="#">Jeans</a>
-                        </div>
-                        {/* End .product-cat */}
-                        <h3 className="product-title">
-                          <a href="product.html">
-                            Blue utility pinafore denim dress
-                          </a>
-                        </h3>
-                        {/* End .product-title */}
-                        <div className="product-price">$76.00</div>
-                        {/* End .product-price */}
-                        <div className="ratings-container">
-                          <div className="ratings">
-                            <div
-                              className="ratings-val"
-                              style={{ width: "20%" }}
-                            ></div>
-                            {/* End .ratings-val */}
-                          </div>
-                          {/* End .ratings */}
-                          <span className="ratings-text">( 2 Reviews )</span>
-                        </div>
-                        {/* End .rating-container */}
-                      </div>
-                      {/* End .product-body */}
-                    </div>
-                    {/* End .product */}
-                  </div>
-                  {/* End .col-sm-6 col-lg-4 */}
-
-                  <div className="col-6 col-md-4 col-lg-4">
-                    <div className="product product-7 text-center">
-                      <figure className="product-media">
-                        <span className="product-label label-new">New</span>
-                        <a href="product.html">
-                          <img
-                            src="assets/images/products/product-8.jpg"
-                            alt="Product image"
-                            className="product-image"
-                          />
-                        </a>
-
-                        <div className="product-action-vertical">
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-wishlist btn-expandable"
-                          >
-                            <span>add to wishlist</span>
-                          </a>
-                          <a
-                            href="popup/quickView.html"
-                            className="btn-product-icon btn-quickview"
-                            title="Quick view"
-                          >
-                            <span>Quick view</span>
-                          </a>
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-compare"
-                            title="Compare"
-                          >
-                            <span>Compare</span>
-                          </a>
-                        </div>
-                        {/* End .product-action-vertical */}
-
-                        <div className="product-action">
-                          <a href="#" className="btn-product btn-cart">
-                            <span>add to cart</span>
-                          </a>
-                        </div>
-                        {/* End .product-action */}
-                      </figure>
-                      {/* End .product-media */}
-
-                      <div className="product-body">
-                        <div className="product-cat">
-                          <a href="#">Shoes</a>
-                        </div>
-                        {/* End .product-cat */}
-                        <h3 className="product-title">
-                          <a href="product.html">
-                            Beige knitted elastic runner shoes
-                          </a>
-                        </h3>
-                        {/* End .product-title */}
-                        <div className="product-price">$84.00</div>
-                        {/* End .product-price */}
-                        <div className="ratings-container">
-                          <div className="ratings">
-                            <div
-                              className="ratings-val"
-                              style={{ width: "0%" }}
-                            ></div>
-                            {/* End .ratings-val */}
-                          </div>
-                          {/* End .ratings */}
-                          <span className="ratings-text">( 0 Reviews )</span>
-                        </div>
-                        {/* End .rating-container */}
-
-                        <div className="product-nav product-nav-thumbs">
-                          <a href="#" className="active">
-                            <img
-                              src="assets/images/products/product-8-thumb.jpg"
-                              alt="product desc"
-                            />
-                          </a>
-                          <a href="#">
-                            <img
-                              src="assets/images/products/product-8-2-thumb.jpg"
-                              alt="product desc"
-                            />
-                          </a>
-                        </div>
-                        {/* End .product-nav */}
-                      </div>
-                      {/* End .product-body */}
-                    </div>
-                    {/* End .product */}
-                  </div>
-                  {/* End .col-sm-6 col-lg-4 */}
-
-                  <div className="col-6 col-md-4 col-lg-4">
-                    <div className="product product-7 text-center">
-                      <figure className="product-media">
-                        <a href="product.html">
-                          <img
-                            src="assets/images/products/product-9.jpg"
-                            alt="Product image"
-                            className="product-image"
-                          />
-                        </a>
-
-                        <div className="product-action-vertical">
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-wishlist btn-expandable"
-                          >
-                            <span>add to wishlist</span>
-                          </a>
-                          <a
-                            href="popup/quickView.html"
-                            className="btn-product-icon btn-quickview"
-                            title="Quick view"
-                          >
-                            <span>Quick view</span>
-                          </a>
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-compare"
-                            title="Compare"
-                          >
-                            <span>Compare</span>
-                          </a>
-                        </div>
-                        {/* End .product-action-vertical */}
-
-                        <div className="product-action">
-                          <a href="#" className="btn-product btn-cart">
-                            <span>add to cart</span>
-                          </a>
-                        </div>
-                        {/* End .product-action */}
-                      </figure>
-                      {/* End .product-media */}
-
-                      <div className="product-body">
-                        <div className="product-cat">
-                          <a href="#">Bags</a>
-                        </div>
-                        {/* End .product-cat */}
-                        <h3 className="product-title">
-                          <a href="product.html">
-                            Orange saddle lock front chain cross body bag
-                          </a>
-                        </h3>
-                        {/* End .product-title */}
-                        <div className="product-price">$84.00</div>
-                        {/* End .product-price */}
-                        <div className="ratings-container">
-                          <div className="ratings">
-                            <div
-                              className="ratings-val"
-                              style={{ width: "60%" }}
-                            ></div>
-                            {/* End .ratings-val */}
-                          </div>
-                          {/* End .ratings */}
-                          <span className="ratings-text">( 1 Reviews )</span>
-                        </div>
-                        {/* End .rating-container */}
-
-                        <div className="product-nav product-nav-thumbs">
-                          <a href="#" className="active">
-                            <img
-                              src="assets/images/products/product-9-thumb.jpg"
-                              alt="product desc"
-                            />
-                          </a>
-                          <a href="#">
-                            <img
-                              src="assets/images/products/product-9-2-thumb.jpg"
-                              alt="product desc"
-                            />
-                          </a>
-                          <a href="#">
-                            <img
-                              src="assets/images/products/product-9-3-thumb.jpg"
-                              alt="product desc"
-                            />
-                          </a>
-                        </div>
-                        {/* End .product-nav */}
-                      </div>
-                      {/* End .product-body */}
-                    </div>
-                    {/* End .product */}
-                  </div>
-                  {/* End .col-sm-6 col-lg-4 */}
-
-                  <div className="col-6 col-md-4 col-lg-4">
-                    <div className="product product-7 text-center">
-                      <figure className="product-media">
-                        <span className="product-label label-top">Top</span>
-                        <a href="product.html">
-                          <img
-                            src="assets/images/products/product-11.jpg"
-                            alt="Product image"
-                            className="product-image"
-                          />
-                        </a>
-
-                        <div className="product-action-vertical">
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-wishlist btn-expandable"
-                          >
-                            <span>add to wishlist</span>
-                          </a>
-                          <a
-                            href="popup/quickView.html"
-                            className="btn-product-icon btn-quickview"
-                            title="Quick view"
-                          >
-                            <span>Quick view</span>
-                          </a>
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-compare"
-                            title="Compare"
-                          >
-                            <span>Compare</span>
-                          </a>
-                        </div>
-                        {/* End .product-action-vertical */}
-
-                        <div className="product-action">
-                          <a href="#" className="btn-product btn-cart">
-                            <span>add to cart</span>
-                          </a>
-                        </div>
-                        {/* End .product-action */}
-                      </figure>
-                      {/* End .product-media */}
-
-                      <div className="product-body">
-                        <div className="product-cat">
-                          <a href="#">Shoes</a>
-                        </div>
-                        {/* End .product-cat */}
-                        <h3 className="product-title">
-                          <a href="product.html">
-                            Light brown studded Wide fit wedges
-                          </a>
-                        </h3>
-                        {/* End .product-title */}
-                        <div className="product-price">$110.00</div>
-                        {/* End .product-price */}
-                        <div className="ratings-container">
-                          <div className="ratings">
-                            <div
-                              className="ratings-val"
-                              style={{ width: "80%" }}
-                            ></div>
-                            {/* End .ratings-val */}
-                          </div>
-                          {/* End .ratings */}
-                          <span className="ratings-text">( 1 Reviews )</span>
-                        </div>
-                        {/* End .rating-container */}
-
-                        <div className="product-nav product-nav-thumbs">
-                          <a href="#" className="active">
-                            <img
-                              src="assets/images/products/product-11-thumb.jpg"
-                              alt="product desc"
-                            />
-                          </a>
-                          <a href="#">
-                            <img
-                              src="assets/images/products/product-11-2-thumb.jpg"
-                              alt="product desc"
-                            />
-                          </a>
-
-                          <a href="#">
-                            <img
-                              src="assets/images/products/product-11-3-thumb.jpg"
-                              alt="product desc"
-                            />
-                          </a>
-                        </div>
-                        {/* End .product-nav */}
-                      </div>
-                      {/* End .product-body */}
-                    </div>
-                    {/* End .product */}
-                  </div>
-                  {/* End .col-sm-6 col-lg-4 */}
-
-                  <div className="col-6 col-md-4 col-lg-4">
-                    <div className="product product-7 text-center">
-                      <figure className="product-media">
-                        <a href="product.html">
-                          <img
-                            src="assets/images/products/product-10.jpg"
-                            alt="Product image"
-                            className="product-image"
-                          />
-                        </a>
-
-                        <div className="product-action-vertical">
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-wishlist btn-expandable"
-                          >
-                            <span>add to wishlist</span>
-                          </a>
-                          <a
-                            href="popup/quickView.html"
-                            className="btn-product-icon btn-quickview"
-                            title="Quick view"
-                          >
-                            <span>Quick view</span>
-                          </a>
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-compare"
-                            title="Compare"
-                          >
-                            <span>Compare</span>
-                          </a>
-                        </div>
-                        {/* End .product-action-vertical */}
-
-                        <div className="product-action">
-                          <a href="#" className="btn-product btn-cart">
-                            <span>add to cart</span>
-                          </a>
-                        </div>
-                        {/* End .product-action */}
-                      </figure>
-                      {/* End .product-media */}
-
-                      <div className="product-body">
-                        <div className="product-cat">
-                          <a href="#">Jumpers</a>
-                        </div>
-                        {/* End .product-cat */}
-                        <h3 className="product-title">
-                          <a href="product.html">Yellow button front tea top</a>
-                        </h3>
-                        {/* End .product-title */}
-                        <div className="product-price">$56.00</div>
-                        {/* End .product-price */}
-                        <div className="ratings-container">
-                          <div className="ratings">
-                            <div
-                              className="ratings-val"
-                              style={{ width: "0%" }}
-                            ></div>
-                            {/* End .ratings-val */}
-                          </div>
-                          {/* End .ratings */}
-                          <span className="ratings-text">( 0 Reviews )</span>
-                        </div>
-                        {/* End .rating-container */}
-                      </div>
-                      {/* End .product-body */}
-                    </div>
-                    {/* End .product */}
-                  </div>
-                  {/* End .col-sm-6 col-lg-4 */}
-
-                  <div className="col-6 col-md-4 col-lg-4">
-                    <div className="product product-7 text-center">
-                      <figure className="product-media">
-                        <a href="product.html">
-                          <img
-                            src="assets/images/products/product-12.jpg"
-                            alt="Product image"
-                            className="product-image"
-                          />
-                        </a>
-
-                        <div className="product-action-vertical">
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-wishlist btn-expandable"
-                          >
-                            <span>add to wishlist</span>
-                          </a>
-                          <a
-                            href="popup/quickView.html"
-                            className="btn-product-icon btn-quickview"
-                            title="Quick view"
-                          >
-                            <span>Quick view</span>
-                          </a>
-                          <a
-                            href="#"
-                            className="btn-product-icon btn-compare"
-                            title="Compare"
-                          >
-                            <span>Compare</span>
-                          </a>
-                        </div>
-                        {/* End .product-action-vertical */}
-
-                        <div className="product-action">
-                          <a href="#" className="btn-product btn-cart">
-                            <span>add to cart</span>
-                          </a>
-                        </div>
-                        {/* End .product-action */}
-                      </figure>
-                      {/* End .product-media */}
-
-                      <div className="product-body">
-                        <div className="product-cat">
-                          <a href="#">Bags</a>
-                        </div>
-                        {/* End .product-cat */}
-                        <h3 className="product-title">
-                          <a href="product.html">
-                            Black soft RI weekend travel bag
-                          </a>
-                        </h3>
-                        {/* End .product-title */}
-                        <div className="product-price">$68.00</div>
-                        {/* End .product-price */}
-                        <div className="ratings-container">
-                          <div className="ratings">
-                            <div
-                              className="ratings-val"
-                              style={{ width: "0%" }}
-                            ></div>
-                            {/* End .ratings-val */}
-                          </div>
-                          {/* End .ratings */}
-                          <span className="ratings-text">( 0 Reviews )</span>
-                        </div>
-                        {/* End .rating-container */}
-                      </div>
-                      {/* End .product-body */}
-                    </div>
-                    {/* End .product */}
-                  </div>
-                  {/* End .col-sm-6 col-lg-4 */}
+                    ))}
                 </div>
-                {/* End .row */}
               </div>
               {/* End .products */}
 
@@ -958,28 +291,47 @@ function Product() {
             <aside className="col-lg-3 order-lg-first">
               <div className="sidebar sidebar-shop">
                 <div className="widget widget-clean">
-                  <label>Filters:</label>
+                  <label>Bộ lọc:</label>
                   <a href="#" className="sidebar-filter-clear">
-                    Clean All
+                    Xóa trường
                   </a>
                 </div>
                 {/* End .widget widget-clean */}
 
                 <div className="widget widget-collapsible">
                   <h3 className="widget-title">
-                    <a
-                      data-toggle="collapse"
-                      href="#widget-1"
+                    <p
                       role="button"
                       aria-expanded="true"
                       aria-controls="widget-1"
+                      onClick={handleClickOpenBrand}
+                      style={{
+                        cursor: "pointer",
+                        fontWeight: "500",
+                        fontSize: "1.6rem",
+                        color: "black",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginRight: "10px",
+                      }}
                     >
-                      Category
-                    </a>
+                      Thương hiệu
+                      {openBrand ? (
+                        <ExpandLess fontSize="large" />
+                      ) : (
+                        <ExpandMore fontSize="large" />
+                      )}
+                    </p>
                   </h3>
                   {/* End .widget-title */}
 
-                  <div className="collapse show" id="widget-1">
+                  <Collapse
+                    className="collapse show"
+                    id="widget-1"
+                    in={openBrand}
+                    timeout="auto"
+                    unmountOnExit
+                  >
                     <div className="widget-body">
                       <div className="filter-items filter-items-count">
                         <div className="filter-item">
@@ -1063,63 +415,6 @@ function Product() {
                             <input
                               type="checkbox"
                               className="custom-control-input"
-                              id="cat-5"
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="cat-5"
-                            >
-                              Shoes
-                            </label>
-                          </div>
-                          {/* End .custom-checkbox */}
-                          <span className="item-count">2</span>
-                        </div>
-                        {/* End .filter-item */}
-
-                        <div className="filter-item">
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id="cat-6"
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="cat-6"
-                            >
-                              Jumpers
-                            </label>
-                          </div>
-                          {/* End .custom-checkbox */}
-                          <span className="item-count">1</span>
-                        </div>
-                        {/* End .filter-item */}
-
-                        <div className="filter-item">
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id="cat-7"
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="cat-7"
-                            >
-                              Jeans
-                            </label>
-                          </div>
-                          {/* End .custom-checkbox */}
-                          <span className="item-count">1</span>
-                        </div>
-                        {/* End .filter-item */}
-
-                        <div className="filter-item">
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
                               id="cat-8"
                             />
                             <label
@@ -1137,26 +432,45 @@ function Product() {
                       {/* End .filter-items */}
                     </div>
                     {/* End .widget-body */}
-                  </div>
+                  </Collapse>
                   {/* End .collapse */}
                 </div>
                 {/* End .widget */}
 
                 <div className="widget widget-collapsible">
                   <h3 className="widget-title">
-                    <a
-                      data-toggle="collapse"
-                      href="#widget-2"
+                    <p
                       role="button"
                       aria-expanded="true"
                       aria-controls="widget-2"
+                      onClick={handleClickOpenPrice}
+                      style={{
+                        cursor: "pointer",
+                        fontWeight: "500",
+                        fontSize: "1.6rem",
+                        color: "black",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginRight: "10px",
+                      }}
                     >
-                      Size
-                    </a>
+                      Mức giá
+                      {openPrice ? (
+                        <ExpandLess fontSize="large" />
+                      ) : (
+                        <ExpandMore fontSize="large" />
+                      )}
+                    </p>
                   </h3>
                   {/* End .widget-title */}
 
-                  <div className="collapse show" id="widget-2">
+                  <Collapse
+                    className="collapse show"
+                    id="widget-2"
+                    in={openPrice}
+                    timeout="auto"
+                    unmountOnExit
+                  >
                     <div className="widget-body">
                       <div className="filter-items">
                         <div className="filter-item">
@@ -1164,13 +478,13 @@ function Product() {
                             <input
                               type="checkbox"
                               className="custom-control-input"
-                              id="size-1"
+                              id="price-1"
                             />
                             <label
                               className="custom-control-label"
-                              htmlFor="size-1"
+                              htmlFor="price-1"
                             >
-                              XS
+                              Từ 2 triệu - triệu
                             </label>
                           </div>
                           {/* End .custom-checkbox */}
@@ -1182,32 +496,13 @@ function Product() {
                             <input
                               type="checkbox"
                               className="custom-control-input"
-                              id="size-2"
+                              id="price-2"
                             />
                             <label
                               className="custom-control-label"
-                              htmlFor="size-2"
+                              htmlFor="price-2"
                             >
-                              S
-                            </label>
-                          </div>
-                          {/* End .custom-checkbox */}
-                        </div>
-                        {/* End .filter-item */}
-
-                        <div className="filter-item">
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              checked
-                              id="size-3"
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="size-3"
-                            >
-                              M
+                              Dưới 2 triệu
                             </label>
                           </div>
                           {/* End .custom-checkbox */}
@@ -1220,13 +515,13 @@ function Product() {
                               type="checkbox"
                               className="custom-control-input"
                               checked
-                              id="size-4"
+                              id="price-3"
                             />
                             <label
                               className="custom-control-label"
-                              htmlFor="size-4"
+                              htmlFor="price-3"
                             >
-                              L
+                              Từ 5 triệu - 10 triệu
                             </label>
                           </div>
                           {/* End .custom-checkbox */}
@@ -1238,13 +533,14 @@ function Product() {
                             <input
                               type="checkbox"
                               className="custom-control-input"
-                              id="size-5"
+                              checked
+                              id="price-4"
                             />
                             <label
                               className="custom-control-label"
-                              htmlFor="size-5"
+                              htmlFor="price-4"
                             >
-                              XL
+                              Từ 10 triệu - 20 triệu
                             </label>
                           </div>
                           {/* End .custom-checkbox */}
@@ -1256,42 +552,73 @@ function Product() {
                             <input
                               type="checkbox"
                               className="custom-control-input"
-                              id="size-6"
+                              id="price-5"
                             />
                             <label
                               className="custom-control-label"
-                              htmlFor="size-6"
+                              htmlFor="price-5"
                             >
-                              XXL
+                              Từ 20 triệu - 50 triệu
                             </label>
                           </div>
                           {/* End .custom-checkbox */}
                         </div>
                         {/* End .filter-item */}
+
+                        <div className="filter-item">
+                          <div className="custom-control custom-checkbox">
+                            <input
+                              type="checkbox"
+                              className="custom-control-input"
+                              id="price-6"
+                            />
+                            <label
+                              className="custom-control-label"
+                              htmlFor="price-6"
+                            >
+                              Từ 50 triệu - 100 triệu
+                            </label>
+                          </div>
+                        </div>
                       </div>
-                      {/* End .filter-items */}
                     </div>
-                    {/* End .widget-body */}
-                  </div>
-                  {/* End .collapse */}
+                  </Collapse>
                 </div>
-                {/* End .widget */}
 
                 <div className="widget widget-collapsible">
                   <h3 className="widget-title">
-                    <a
-                      data-toggle="collapse"
-                      href="#widget-4"
+                    <p
                       role="button"
                       aria-expanded="true"
                       aria-controls="widget-4"
+                      onClick={handleClickOpenRope}
+                      style={{
+                        cursor: "pointer",
+                        fontWeight: "500",
+                        fontSize: "1.6rem",
+                        color: "black",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginRight: "10px",
+                      }}
                     >
-                      Brand
-                    </a>
+                      Loại dây
+                      {openRope ? (
+                        <ExpandLess fontSize="large" />
+                      ) : (
+                        <ExpandMore fontSize="large" />
+                      )}
+                    </p>
                   </h3>
                   {/* End .widget-title */}
 
-                  <div className="collapse show" id="widget-4">
+                  <Collapse
+                    className="collapse show"
+                    id="widget-4"
+                    in={openRope}
+                    timeout="auto"
+                    unmountOnExit
+                  >
                     <div className="widget-body">
                       <div className="filter-items">
                         <div className="filter-item">
@@ -1305,7 +632,7 @@ function Product() {
                               className="custom-control-label"
                               htmlFor="brand-1"
                             >
-                              Next
+                              Thép không gỉ
                             </label>
                           </div>
                           {/* End .custom-checkbox */}
@@ -1323,7 +650,7 @@ function Product() {
                               className="custom-control-label"
                               htmlFor="brand-2"
                             >
-                              River Island
+                              Dây da
                             </label>
                           </div>
                           {/* End .custom-checkbox */}
@@ -1341,7 +668,7 @@ function Product() {
                               className="custom-control-label"
                               htmlFor="brand-3"
                             >
-                              Geox
+                              Dây vải
                             </label>
                           </div>
                           {/* End .custom-checkbox */}
@@ -1359,7 +686,7 @@ function Product() {
                               className="custom-control-label"
                               htmlFor="brand-4"
                             >
-                              New Balance
+                              Dây cao su
                             </label>
                           </div>
                           {/* End .custom-checkbox */}
@@ -1377,7 +704,7 @@ function Product() {
                               className="custom-control-label"
                               htmlFor="brand-5"
                             >
-                              UGG
+                              Dây nhựa
                             </label>
                           </div>
                           {/* End .custom-checkbox */}
@@ -1395,10 +722,63 @@ function Product() {
                               className="custom-control-label"
                               htmlFor="brand-6"
                             >
-                              F&F
+                              Titanium
                             </label>
                           </div>
-                          {/* End .custom-checkbox */}
+                        </div>
+                      </div>
+                    </div>
+                  </Collapse>
+                </div>
+
+                <div className="widget widget-collapsible">
+                  <h3 className="widget-title">
+                    <p
+                      role="button"
+                      onClick={handleClickOpenGlass}
+                      style={{
+                        cursor: "pointer",
+                        fontWeight: "500",
+                        fontSize: "1.6rem",
+                        color: "black",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginRight: "10px",
+                      }}
+                    >
+                      Loại mặt kính
+                      {openGlass ? (
+                        <ExpandLess fontSize="large" />
+                      ) : (
+                        <ExpandMore fontSize="large" />
+                      )}
+                    </p>
+                  </h3>
+                  {/* End .widget-title */}
+
+                  <Collapse
+                    className="collapse show"
+                    id="widget-5"
+                    in={openGlass}
+                    timeout="auto"
+                    unmountOnExit
+                  >
+                    <div className="widget-body">
+                      <div className="filter-items">
+                        <div className="filter-item">
+                          <div className="custom-control custom-checkbox">
+                            <input
+                              type="checkbox"
+                              className="custom-control-input"
+                              id="glass-1"
+                            />
+                            <label
+                              className="custom-control-label"
+                              htmlFor="glass-1"
+                            >
+                              Kính cứng
+                            </label>
+                          </div>
                         </div>
                         {/* End .filter-item */}
 
@@ -1407,26 +787,166 @@ function Product() {
                             <input
                               type="checkbox"
                               className="custom-control-input"
-                              id="brand-7"
+                              id="glass-2"
                             />
                             <label
                               className="custom-control-label"
-                              htmlFor="brand-7"
+                              htmlFor="glass-2"
                             >
-                              Nike
+                              Kính Sapphire
                             </label>
                           </div>
-                          {/* End .custom-checkbox */}
+                        </div>
+                        {/* End .filter-item */}
+
+                        <div className="filter-item">
+                          <div className="custom-control custom-checkbox">
+                            <input
+                              type="checkbox"
+                              className="custom-control-input"
+                              checked
+                              id="glass-3"
+                            />
+                            <label
+                              className="custom-control-label"
+                              htmlFor="glass-3"
+                            >
+                              Kính nhựa
+                            </label>
+                          </div>
                         </div>
                         {/* End .filter-item */}
                       </div>
-                      {/* End .filter-items */}
                     </div>
-                    {/* End .widget-body */}
-                  </div>
-                  {/* End .collapse */}
+                  </Collapse>
                 </div>
-                {/* End .widget */}
+
+                <div className="widget widget-collapsible">
+                  <h3 className="widget-title">
+                    <p
+                      role="button"
+                      aria-expanded="true"
+                      aria-controls="widget-7"
+                      onClick={handleClickOpenSize}
+                      style={{
+                        cursor: "pointer",
+                        fontWeight: "500",
+                        fontSize: "1.6rem",
+                        color: "black",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginRight: "10px",
+                      }}
+                    >
+                      Size mặt
+                      {openSize ? (
+                        <ExpandLess fontSize="large" />
+                      ) : (
+                        <ExpandMore fontSize="large" />
+                      )}
+                    </p>
+                  </h3>
+                  {/* End .widget-title */}
+
+                  {/* Size mặt */}
+                  <Collapse
+                    className="collapse show"
+                    id="widget-7"
+                    in={openSize}
+                    timeout="auto"
+                    unmountOnExit
+                  >
+                    <div className="widget-body">
+                      <div className="filter-items">
+                        <div className="filter-item">
+                          <div className="custom-control custom-checkbox">
+                            <input
+                              type="checkbox"
+                              className="custom-control-input"
+                              id="dial-1"
+                            />
+                            <label
+                              className="custom-control-label"
+                              htmlFor="dial-1"
+                            >
+                              {`<`}30 mm
+                            </label>
+                          </div>
+                        </div>
+                        {/* End .filter-item */}
+
+                        <div className="filter-item">
+                          <div className="custom-control custom-checkbox">
+                            <input
+                              type="checkbox"
+                              className="custom-control-input"
+                              id="dial-2"
+                            />
+                            <label
+                              className="custom-control-label"
+                              htmlFor="dial-2"
+                            >
+                              Từ 30mm - 34mm
+                            </label>
+                          </div>
+                        </div>
+                        {/* End .filter-item */}
+
+                        <div className="filter-item">
+                          <div className="custom-control custom-checkbox">
+                            <input
+                              type="checkbox"
+                              className="custom-control-input"
+                              checked
+                              id="dial-3"
+                            />
+                            <label
+                              className="custom-control-label"
+                              htmlFor="dial-3"
+                            >
+                              Từ 35mm - 39mm
+                            </label>
+                          </div>
+                        </div>
+                        {/* End .filter-item */}
+
+                        <div className="filter-item">
+                          <div className="custom-control custom-checkbox">
+                            <input
+                              type="checkbox"
+                              className="custom-control-input"
+                              id="dial-4"
+                            />
+                            <label
+                              className="custom-control-label"
+                              htmlFor="dial-4"
+                            >
+                              Từ 40mm - 43mm
+                            </label>
+                          </div>
+                        </div>
+                        {/* End .filter-item */}
+
+                        <div className="filter-item">
+                          <div className="custom-control custom-checkbox">
+                            <input
+                              type="checkbox"
+                              className="custom-control-input"
+                              id="dial-5"
+                            />
+                            <label
+                              className="custom-control-label"
+                              htmlFor="dial-5"
+                            >
+                              Trên 43mm
+                            </label>
+                          </div>
+                        </div>
+                        {/* End .filter-item */}
+                      </div>
+                    </div>
+                  </Collapse>
+                </div>
 
                 <div className="widget widget-collapsible">
                   <h3 className="widget-title">
@@ -1437,7 +957,7 @@ function Product() {
                       aria-expanded="true"
                       aria-controls="widget-5"
                     >
-                      Price
+                      Giá
                     </a>
                   </h3>
                   {/* End .widget-title */}
@@ -1446,31 +966,21 @@ function Product() {
                     <div className="widget-body">
                       <div className="filter-price">
                         <div className="filter-price-text">
-                          Price Range:
+                          Khoảng giá:
                           <span id="filter-price-range"></span>
                         </div>
                         {/* End .filter-price-text */}
 
                         <div id="price-slider"></div>
-                        {/* End #price-slider */}
                       </div>
-                      {/* End .filter-price */}
                     </div>
-                    {/* End .widget-body */}
                   </div>
-                  {/* End .collapse */}
                 </div>
-                {/* End .widget */}
               </div>
-              {/* End .sidebar sidebar-shop */}
             </aside>
-            {/* End .col-lg-3 */}
           </div>
-          {/* End .row */}
         </div>
-        {/* End .container */}
       </div>
-      {/* End .page-content */}
     </main>
   );
 }

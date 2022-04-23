@@ -5,7 +5,7 @@ const ApiFeatures = require("../utils/apifeatures");
 
 // Get All Product with Pagination
 exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
-  const resultPerPage = 8;
+  const resultPerPage = 9;
   const productsCount = await Product.countDocuments();
 
   const apiFeature = new ApiFeatures(Product.find(), req.query)
@@ -17,7 +17,10 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
 
   let filteredProductsCount = await products2.length;
 
-  const apiFeature2 = new ApiFeatures(Product.find(), req.query)
+  const apiFeature2 = new ApiFeatures(
+    Product.find().populate("category"),
+    req.query
+  )
     .search()
     .filter()
     .sorting()
