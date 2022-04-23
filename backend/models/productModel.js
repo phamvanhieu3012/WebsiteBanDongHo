@@ -23,6 +23,18 @@ const productSchema = mongoose.Schema(
       type: String,
       required: [true, "Hãy nhập đơn vị tính của sản phẩm"],
     },
+    ropeMaterial: {
+      type: String,
+      required: [true, "Hãy nhập chất liệu dây của sản phẩm"],
+    },
+    glassMaterial: {
+      type: String,
+      required: [true, "Hãy nhập chất liệu mặt kính của sản phẩm"],
+    },
+    dialSize: {
+      type: Number,
+      required: [true, "Hãy nhập size mặt của sản phẩm"],
+    },
     active: {
       type: Boolean,
       default: true,
