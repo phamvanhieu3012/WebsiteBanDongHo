@@ -7,10 +7,7 @@ function About() {
         <div className="container">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="index.html">Home</a>
-            </li>
-            <li className="breadcrumb-item">
-              <a href="#">Pages</a>
+              <a href="/">Trang chủ</a>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Về chúng tôi

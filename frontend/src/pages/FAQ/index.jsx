@@ -10,19 +10,14 @@ function FAQ() {
         }}
       >
         <div className="container">
-          <h1 className="page-title">
-            F.A.Q<span>Pages</span>
-          </h1>
+          <h1 className="page-title">F.A.Q</h1>
         </div>
       </div>
       <nav aria-label="breadcrumb" className="breadcrumb-nav">
         <div className="container">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="index.html">Home</a>
-            </li>
-            <li className="breadcrumb-item">
-              <a href="#">Pages</a>
+              <a href="/">Trang chủ</a>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               FAQ

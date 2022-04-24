@@ -10,22 +10,17 @@ function Blog() {
         }}
       >
         <div className="container">
-          <h1 className="page-title">
-            Blog Listing<span>Blog</span>
-          </h1>
+          <h1 className="page-title">Tin tức</h1>
         </div>
       </div>
       <nav aria-label="breadcrumb" className="breadcrumb-nav mb-3">
         <div className="container">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="index.html">Home</a>
-            </li>
-            <li className="breadcrumb-item">
-              <a href="#">Blog</a>
+              <a href="/">Trang chủ</a>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Listing
+              Tin tức
             </li>
           </ol>
         </div>
@@ -325,18 +320,18 @@ function Blog() {
             <aside className="col-lg-3">
               <div className="sidebar">
                 <div className="widget widget-search">
-                  <h3 className="widget-title">Search</h3>
+                  <h3 className="widget-title">Tìm kiếm</h3>
 
                   <form action="#">
                     <label htmlFor="ws" className="sr-only">
-                      Search in blog
+                      Tìm kiếm trong tin tức
                     </label>
                     <input
                       type="search"
                       className="form-control"
                       name="ws"
                       id="ws"
-                      placeholder="Search in blog"
+                      placeholder="Tìm kiếm trong tin tức"
                       required
                     />
                     <button type="submit" className="btn">
@@ -347,7 +342,7 @@ function Blog() {
                 </div>
 
                 <div className="widget widget-cats">
-                  <h3 className="widget-title">Categories</h3>
+                  <h3 className="widget-title">Danh mục</h3>
 
                   <ul>
                     <li>
@@ -374,83 +369,6 @@ function Blog() {
                       <a href="#">
                         Hobbies<span>2</span>
                       </a>
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="widget">
-                  <h3 className="widget-title">Popular Posts</h3>
-
-                  <ul className="posts-list">
-                    <li>
-                      <figure>
-                        <a href="#">
-                          <img
-                            src="assets/images/blog/sidebar/post-1.jpg"
-                            alt="post"
-                          />
-                        </a>
-                      </figure>
-
-                      <div>
-                        <span>Nov 22, 2018</span>
-                        <h4>
-                          <a href="#">Aliquam tincidunt mauris eurisus.</a>
-                        </h4>
-                      </div>
-                    </li>
-                    <li>
-                      <figure>
-                        <a href="#">
-                          <img
-                            src="assets/images/blog/sidebar/post-2.jpg"
-                            alt="post"
-                          />
-                        </a>
-                      </figure>
-
-                      <div>
-                        <span>Nov 19, 2018</span>
-                        <h4>
-                          <a href="#">Cras ornare tristique elit.</a>
-                        </h4>
-                      </div>
-                    </li>
-                    <li>
-                      <figure>
-                        <a href="#">
-                          <img
-                            src="assets/images/blog/sidebar/post-3.jpg"
-                            alt="post"
-                          />
-                        </a>
-                      </figure>
-
-                      <div>
-                        <span>Nov 12, 2018</span>
-                        <h4>
-                          <a href="#">Vivamus vestibulum ntulla nec ante.</a>
-                        </h4>
-                      </div>
-                    </li>
-                    <li>
-                      <figure>
-                        <a href="#">
-                          <img
-                            src="assets/images/blog/sidebar/post-4.jpg"
-                            alt="post"
-                          />
-                        </a>
-                      </figure>
-
-                      <div>
-                        <span>Nov 25, 2018</span>
-                        <h4>
-                          <a href="#">
-                            Donec quis dui at dolor tempor interdum.
-                          </a>
-                        </h4>
-                      </div>
                     </li>
                   </ul>
                 </div>
