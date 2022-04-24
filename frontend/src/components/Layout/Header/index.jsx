@@ -21,9 +21,18 @@ function Header() {
 
   function logoutUser() {
     dispatch(logout());
-    alert.success("Đăng xuất thành công");
+    alert("Đăng xuất thành công");
     history.push("/");
   }
+
+  const searchSubmitHandler = (e) => {
+    e.preventDefault();
+    if (keyword.trim()) {
+      history.push(`/products/${keyword}`);
+    } else {
+      history.push("/products");
+    }
+  };
 
   return (
     <div className="page-wrapper">
@@ -48,34 +57,38 @@ function Header() {
             <div className="header-right">
               <div className="social-icons social-icons-color">
                 <a
-                  href="#"
+                  href="https://www.facebook.com"
                   className="social-icon social-facebook"
                   title="Facebook"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <i className="icon-facebook-f"></i>
                 </a>
                 <a
-                  href="#"
+                  href="https://twitter.com"
                   className="social-icon social-twitter"
                   title="Twitter"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <i className="icon-twitter"></i>
                 </a>
                 <a
-                  href="#"
+                  href="https://www.pinterest.com/"
                   className="social-icon social-pinterest"
                   title="Instagram"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <i className="icon-pinterest-p"></i>
                 </a>
                 <a
-                  href="#"
+                  href="https://www.instagram.com/"
                   className="social-icon social-instagram"
                   title="Pinterest"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   <i className="icon-instagram"></i>
                 </a>
@@ -131,10 +144,10 @@ function Header() {
                 <a href="#" className="search-toggle" role="button">
                   <i className="icon-search"></i>
                 </a>
-                <form action="#" method="get">
+                <form onSubmit={searchSubmitHandler}>
                   <div className="header-search-wrapper search-wrapper-wide">
                     <label htmlFor="q" className="sr-only">
-                      Search
+                      Tìm kiếm
                     </label>
                     <button className="btn btn-primary" type="submit">
                       <i className="icon-search"></i>
@@ -146,6 +159,7 @@ function Header() {
                       id="q"
                       placeholder="Tìm kiếm sản phẩm ..."
                       required
+                      onChange={(e) => setKeyword(e.target.value)}
                     />
                   </div>
                 </form>
@@ -258,10 +272,7 @@ function Header() {
                     >
                       Giỏ hàng
                     </a>
-                    <a
-                      href="checkout.html"
-                      className="btn btn-outline-primary-2"
-                    >
+                    <a href="/checkout" className="btn btn-outline-primary-2">
                       <span>Thanh toán</span>
                       <i className="icon-long-arrow-right"></i>
                     </a>

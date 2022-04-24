@@ -51,12 +51,12 @@ function Product() {
 
   const { categories } = useSelector((state) => state.categories);
 
-  // let match = useParams();
+  let match = useParams();
 
-  // console.log(match);
+  console.log(match);
 
   const data = useSelector((state) => state.products);
-  // const keyword = match && match.params.keyword;
+  const keyword = match && match.keyword;
 
   const dispatch = useDispatch();
 
@@ -71,8 +71,8 @@ function Product() {
   useEffect(() => {
     dispatch(getAllCategories());
     console.log(sort);
-    dispatch(getProduct(currentPage, category, price, sort));
-  }, [dispatch, currentPage, category, price, sort]);
+    dispatch(getProduct(currentPage, category, price, sort, keyword));
+  }, [dispatch, currentPage, category, price, sort, keyword]);
 
   return (
     <main className="main">
@@ -107,16 +107,14 @@ function Product() {
             <div className="col-lg-9">
               <div className="toolbox">
                 <div className="toolbox-left">
-                  <div className="toolbox-info">
+                  {/* <div className="toolbox-info">
                     Đang xem{" "}
                     <span>
                       {resultPerPage} trong {productsCount}
                     </span>{" "}
                     Sản phẩm
-                  </div>
-                  {/* End .toolbox-info */}
+                  </div> */}
                 </div>
-                {/* End .toolbox-left */}
 
                 <div className="toolbox-right">
                   <div className="toolbox-sort">
@@ -174,13 +172,6 @@ function Product() {
                                 className="btn-product-icon btn-wishlist btn-expandable"
                               >
                                 <span>Thêm vào danh sách mong muốn</span>
-                              </a>
-                              <a
-                                href="popup/quickView.html"
-                                className="btn-product-icon btn-quickview"
-                                title="Quick view"
-                              >
-                                <span>Xem nhanh</span>
                               </a>
                             </div>
                             {/* End .product-action-vertical */}

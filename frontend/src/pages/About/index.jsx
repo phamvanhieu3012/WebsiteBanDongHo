@@ -117,7 +117,7 @@ function About() {
                     <a href="#" className="brand">
                       <img
                         src="assets/images/logo/brand-seiko.png"
-                        alt="Brand Name"
+                        alt="Seiko"
                       />
                     </a>
                   </div>
