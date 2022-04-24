@@ -35,12 +35,12 @@ import {
 // Get All Products
 export const getProduct =
   (
-    keyword = "",
     currentPage = 1,
-    price = [0, 25000],
     category,
-    ratings = 0,
-    sort
+    price = [0, 40],
+    // ratings = 0,
+    sort,
+    keyword = ""
   ) =>
   async (dispatch) => {
     try {
@@ -52,15 +52,18 @@ export const getProduct =
       //   link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}&ratings[gte]=${ratings}&${sort}`;
       // }
 
-      let link = `http://localhost:4000/api/v1/products?keyword=${keyword}&page=${currentPage}&${sort}`;
+      console.log("Price", price);
+
+      let priceSort0 = price[0] * 1000000;
+      let priceSort1 = price[1] * 1000000;
+
+      let link = `http://localhost:4000/api/v1/products?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&${sort}`;
 
       if (category) {
-        link = `http://localhost:4000/api/v1/products?keyword=${keyword}&page=${currentPage}&category=${category}&${sort}`;
+        link = `http://localhost:4000/api/v1/products?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&category=${category}&${sort}`;
       }
 
-      const data = await axiosClient.get(link);
-
-      console.log("Data: ", data);
+      const { data } = await axios.get(link);
 
       dispatch({
         type: ALL_PRODUCT_SUCCESS,

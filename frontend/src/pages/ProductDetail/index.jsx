@@ -10,6 +10,8 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { createTheme } from "@mui/material/styles";
+import Zoom from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css";
 
 const theme = createTheme({
   palette: {
@@ -64,22 +66,13 @@ function ProductDetail() {
                 <div className="product-gallery product-gallery-vertical">
                   <div className="row">
                     <figure className="product-main-image">
-                      <img
-                        id="product-zoom"
-                        src={product.images && product.images[0].url}
-                        data-zoom-image={
-                          product.images && product.images[0].url
-                        }
-                        alt={product && product.name}
-                      />
-
-                      <a
-                        href="#"
-                        id="btn-product-gallery"
-                        className="btn-product-gallery"
-                      >
-                        <i className="icon-arrows"></i>
-                      </a>
+                      <Zoom>
+                        <img
+                          id="product-zoom"
+                          src={product.images && product.images[0].url}
+                          alt={product && product.name}
+                        />
+                      </Zoom>
                     </figure>
                     {/* End .product-main-image */}
 
@@ -131,6 +124,7 @@ function ProductDetail() {
                       defaultValue={5}
                       size="large"
                       value={product && product.ratings}
+                      readOnly
                     />
                     <a
                       className="ratings-text"

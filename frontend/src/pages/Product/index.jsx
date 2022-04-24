@@ -8,6 +8,9 @@ import { Collapse } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import formatPrice from "../../ultils/formatPrice";
+import { getAllCategories } from "../../actions/categoryAction";
+import Pagination from "react-js-pagination";
+import Slider from "@mui/material/Slider";
 
 function Product() {
   const [close, setClose] = useState(false);
@@ -19,6 +22,7 @@ function Product() {
   const [openRope, setOpenRope] = React.useState(true);
   const [openGlass, setOpenGlass] = React.useState(true);
   const [openSize, setOpenSize] = React.useState(true);
+  const [price, setPrice] = useState([0, 40]);
 
   const handleClickOpenBrand = () => {
     setOpenBrand(!openBrand);
@@ -45,6 +49,8 @@ function Product() {
     filteredProductsCount,
   } = useSelector((state) => state.products);
 
+  const { categories } = useSelector((state) => state.categories);
+
   // let match = useParams();
 
   // console.log(match);
@@ -58,9 +64,15 @@ function Product() {
     setCurrentPage(e);
   };
 
+  const priceHandler = (event, newPrice) => {
+    setPrice(newPrice);
+  };
+
   useEffect(() => {
-    dispatch(getProduct(currentPage, category, sort));
-  }, [dispatch, currentPage, category, sort]);
+    dispatch(getAllCategories());
+    console.log(sort);
+    dispatch(getProduct(currentPage, category, price, sort));
+  }, [dispatch, currentPage, category, price, sort]);
 
   return (
     <main className="main">
@@ -98,8 +110,7 @@ function Product() {
                   <div className="toolbox-info">
                     Đang xem{" "}
                     <span>
-                      {filteredProductsCount} trong{" "}
-                      {products && products.length}
+                      {resultPerPage} trong {productsCount}
                     </span>{" "}
                     Sản phẩm
                   </div>
@@ -115,11 +126,13 @@ function Product() {
                         name="sortby"
                         id="sortby"
                         className="form-control"
+                        value={sort}
+                        onChange={(e) => setSort(e.target.value)}
                       >
-                        <option defaultValue="popularity">Mới nhất</option>
-                        <option value="rating">Cũ nhất</option>
-                        <option value="price">Giá: Thấp- Cao</option>
-                        <option value="-price">Giá: Cao- Thấp</option>
+                        <option value="">Mới nhất</option>
+                        <option value="sort=oldest">Cũ nhất</option>
+                        <option value="sort=price">Giá: Thấp- Cao</option>
+                        <option value="sort=-price">Giá: Cao- Thấp</option>
                       </select>
                     </div>
                   </div>
@@ -240,52 +253,27 @@ function Product() {
               </div>
               {/* End .products */}
 
-              <nav aria-label="Page navigation">
-                <ul className="pagination justify-content-center">
-                  <li className="page-item disabled">
-                    <a
-                      className="page-link page-link-prev"
-                      href="#"
-                      aria-label="Previous"
-                      tabIndex="-1"
-                      aria-disabled="true"
-                    >
-                      <span aria-hidden="true">
-                        <i className="icon-long-arrow-left"></i>
-                      </span>
-                      Prev
-                    </a>
-                  </li>
-                  <li className="page-item active" aria-current="page">
-                    <a className="page-link" href="#">
-                      1
-                    </a>
-                  </li>
-                  <li className="page-item">
-                    <a className="page-link" href="#">
-                      2
-                    </a>
-                  </li>
-                  <li className="page-item">
-                    <a className="page-link" href="#">
-                      3
-                    </a>
-                  </li>
-                  <li className="page-item-total">of 6</li>
-                  <li className="page-item">
-                    <a
-                      className="page-link page-link-next"
-                      href="#"
-                      aria-label="Next"
-                    >
-                      Next{" "}
-                      <span aria-hidden="true">
-                        <i className="icon-long-arrow-right"></i>
-                      </span>
-                    </a>
-                  </li>
-                </ul>
-              </nav>
+              {resultPerPage < filteredProductsCount && (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Pagination
+                    activePage={currentPage}
+                    itemsCountPerPage={resultPerPage}
+                    totalItemsCount={productsCount}
+                    onChange={setCurrentPageNo}
+                    nextPageText="Trang sau"
+                    prevPageText="Trang trước"
+                    firstPageText="Trang đầu"
+                    lastPageText="Trang cuối"
+                    itemClass="page-item"
+                    linkClass="page-link"
+                  />
+                </div>
+              )}
             </div>
             {/* End .col-lg-9 */}
             <aside className="col-lg-3 order-lg-first">
@@ -334,108 +322,32 @@ function Product() {
                   >
                     <div className="widget-body">
                       <div className="filter-items filter-items-count">
-                        <div className="filter-item">
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id="cat-1"
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="cat-1"
-                            >
-                              Dresses
-                            </label>
-                          </div>
-                          {/* End .custom-checkbox */}
-                          <span className="item-count">3</span>
-                        </div>
-                        {/* End .filter-item */}
-
-                        <div className="filter-item">
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id="cat-2"
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="cat-2"
-                            >
-                              T-shirts
-                            </label>
-                          </div>
-                          {/* End .custom-checkbox */}
-                          <span className="item-count">0</span>
-                        </div>
-                        {/* End .filter-item */}
-
-                        <div className="filter-item">
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id="cat-3"
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="cat-3"
-                            >
-                              Bags
-                            </label>
-                          </div>
-                          {/* End .custom-checkbox */}
-                          <span className="item-count">4</span>
-                        </div>
-                        {/* End .filter-item */}
-
-                        <div className="filter-item">
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id="cat-4"
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="cat-4"
-                            >
-                              Jackets
-                            </label>
-                          </div>
-                          {/* End .custom-checkbox */}
-                          <span className="item-count">2</span>
-                        </div>
-                        {/* End .filter-item */}
-
-                        <div className="filter-item">
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id="cat-8"
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="cat-8"
-                            >
-                              Sportwear
-                            </label>
-                          </div>
-                          {/* End .custom-checkbox */}
-                          <span className="item-count">0</span>
-                        </div>
-                        {/* End .filter-item */}
+                        {categories &&
+                          categories.map((category) => {
+                            return (
+                              <div className="filter-item" key={category._id}>
+                                <div className="custom-control custom-checkbox">
+                                  <input
+                                    type="checkbox"
+                                    className="custom-control-input"
+                                    id={`cat ${category._id}`}
+                                  />
+                                  <label
+                                    className="custom-control-label"
+                                    htmlFor={`cat ${category._id}`}
+                                  >
+                                    {category.name}
+                                  </label>
+                                </div>
+                                {/* End .custom-checkbox */}
+                                <span className="item-count">3</span>
+                              </div>
+                            );
+                          })}
                       </div>
-                      {/* End .filter-items */}
                     </div>
-                    {/* End .widget-body */}
                   </Collapse>
-                  {/* End .collapse */}
                 </div>
-                {/* End .widget */}
 
                 <div className="widget widget-collapsible">
                   <h3 className="widget-title">
@@ -478,25 +390,14 @@ function Product() {
                             <input
                               type="checkbox"
                               className="custom-control-input"
-                              id="price-1"
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="price-1"
-                            >
-                              Từ 2 triệu - triệu
-                            </label>
-                          </div>
-                          {/* End .custom-checkbox */}
-                        </div>
-                        {/* End .filter-item */}
-
-                        <div className="filter-item">
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
                               id="price-2"
+                              onClick={(e) => {
+                                if (e.target.checked) {
+                                  setPrice([0, 2]);
+                                } else {
+                                  setPrice([0, 40]);
+                                }
+                              }}
                             />
                             <label
                               className="custom-control-label"
@@ -514,8 +415,14 @@ function Product() {
                             <input
                               type="checkbox"
                               className="custom-control-input"
-                              checked
                               id="price-3"
+                              onClick={(e) => {
+                                if (e.target.checked) {
+                                  setPrice([5, 10]);
+                                } else {
+                                  setPrice([0, 40]);
+                                }
+                              }}
                             />
                             <label
                               className="custom-control-label"
@@ -533,8 +440,14 @@ function Product() {
                             <input
                               type="checkbox"
                               className="custom-control-input"
-                              checked
                               id="price-4"
+                              onClick={(e) => {
+                                if (e.target.checked) {
+                                  setPrice([10, 20]);
+                                } else {
+                                  setPrice([0, 40]);
+                                }
+                              }}
                             />
                             <label
                               className="custom-control-label"
@@ -553,12 +466,19 @@ function Product() {
                               type="checkbox"
                               className="custom-control-input"
                               id="price-5"
+                              onClick={(e) => {
+                                if (e.target.checked) {
+                                  setPrice([20, 40]);
+                                } else {
+                                  setPrice([0, 40]);
+                                }
+                              }}
                             />
                             <label
                               className="custom-control-label"
                               htmlFor="price-5"
                             >
-                              Từ 20 triệu - 50 triệu
+                              Từ 20 triệu - 40 triệu
                             </label>
                           </div>
                           {/* End .custom-checkbox */}
@@ -576,7 +496,7 @@ function Product() {
                               className="custom-control-label"
                               htmlFor="price-6"
                             >
-                              Từ 50 triệu - 100 triệu
+                              Trên 40 triệu
                             </label>
                           </div>
                         </div>
@@ -966,12 +886,18 @@ function Product() {
                     <div className="widget-body">
                       <div className="filter-price">
                         <div className="filter-price-text">
-                          Khoảng giá:
-                          <span id="filter-price-range"></span>
+                          Khoảng giá: (triệu)
+                          <Slider
+                            value={price}
+                            onChange={priceHandler}
+                            aria-labelledby="range-slider"
+                            min={0}
+                            max={40}
+                            valueLabelDisplay="on"
+                            sx={{ mt: 3 }}
+                          />
                         </div>
                         {/* End .filter-price-text */}
-
-                        <div id="price-slider"></div>
                       </div>
                     </div>
                   </div>
