@@ -5,11 +5,14 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import {
   newProductReducer,
   newReviewReducer,
+  nProductsReducer,
   productDetailsReducer,
   productReducer,
   productReviewsReducer,
   productsAdminReducer,
   productsReducer,
+  menProductsReducer,
+  womenProductsReducer,
   reviewReducer,
 } from "./reducers/productReducer";
 
@@ -32,6 +35,9 @@ const reducer = combineReducers({
   // Product
   products: productsReducer,
   productDetails: productDetailsReducer,
+  nProducts: nProductsReducer,
+  menProducts: menProductsReducer,
+  womenProducts: womenProductsReducer,
   // User
   user: userReducer,
   profile: profileReducer,

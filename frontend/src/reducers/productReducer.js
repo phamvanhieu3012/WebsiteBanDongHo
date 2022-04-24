@@ -32,6 +32,15 @@ import {
   DELETE_REVIEW_FAIL,
   DELETE_REVIEW_RESET,
   CLEAR_ERRORS,
+  N_PRODUCT_REQUEST,
+  N_PRODUCT_SUCCESS,
+  N_PRODUCT_FAIL,
+  MEN_PRODUCT_REQUEST,
+  MEN_PRODUCT_SUCCESS,
+  MEN_PRODUCT_FAIL,
+  WOMEN_PRODUCT_SUCCESS,
+  WOMEN_PRODUCT_REQUEST,
+  WOMEN_PRODUCT_FAIL,
 } from "../constants/productConstants";
 
 export const productsReducer = (state = { products: [] }, action) => {
@@ -58,6 +67,99 @@ export const productsReducer = (state = { products: [] }, action) => {
       };
     case ALL_PRODUCT_FAIL:
     case ADMIN_PRODUCT_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+export const nProductsReducer = (state = { products: [] }, action) => {
+  switch (action.type) {
+    case N_PRODUCT_REQUEST:
+      return {
+        loading: true,
+        products: [],
+      };
+
+    case N_PRODUCT_SUCCESS:
+      return {
+        loading: false,
+        products: action.payload,
+      };
+    case N_PRODUCT_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+export const menProductsReducer = (state = { products: [] }, action) => {
+  switch (action.type) {
+    case MEN_PRODUCT_REQUEST:
+      return {
+        loading: true,
+        products: [],
+      };
+
+    case MEN_PRODUCT_SUCCESS:
+      return {
+        loading: false,
+        products: action.payload.products,
+        productsCount: action.payload.productsCount,
+        resultPerPage: action.payload.resultPerPage,
+        filteredProductsCount: action.payload.filteredProductsCount,
+      };
+    case MEN_PRODUCT_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+export const womenProductsReducer = (state = { products: [] }, action) => {
+  switch (action.type) {
+    case WOMEN_PRODUCT_REQUEST:
+      return {
+        loading: true,
+        products: [],
+      };
+
+    case WOMEN_PRODUCT_SUCCESS:
+      return {
+        loading: false,
+        products: action.payload.products,
+        productsCount: action.payload.productsCount,
+        resultPerPage: action.payload.resultPerPage,
+        filteredProductsCount: action.payload.filteredProductsCount,
+      };
+    case WOMEN_PRODUCT_FAIL:
       return {
         loading: false,
         error: action.payload,

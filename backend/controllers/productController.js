@@ -49,6 +49,88 @@ exports.getAdminProducts = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+//Get number Product
+exports.get8Products = catchAsyncErrors(async (req, res, next) => {
+  const products = await Product.find().limit(8);
+
+  res.status(200).json({
+    success: true,
+    products,
+  });
+});
+
+//Get Men Product
+exports.getMenProducts = catchAsyncErrors(async (req, res, next) => {
+  const resultPerPage = 6;
+  const productsCount = await Product.countDocuments();
+
+  const apiFeature = new ApiFeatures(Product.find({ sex: "Nam" }), req.query)
+    .search()
+    .filter()
+    .sorting();
+
+  const products2 = await apiFeature.query;
+
+  let filteredProductsCount = await products2.length;
+
+  console.log(filteredProductsCount);
+
+  const apiFeature2 = new ApiFeatures(
+    Product.find({ sex: "Nam" }).populate("category"),
+    req.query
+  )
+    .search()
+    .filter()
+    .sorting()
+    .pagination(resultPerPage);
+
+  const products = await apiFeature2.query;
+
+  res.status(200).json({
+    success: true,
+    products,
+    productsCount,
+    resultPerPage,
+    filteredProductsCount,
+  });
+});
+
+//Get Women Product
+exports.getWomenProducts = catchAsyncErrors(async (req, res, next) => {
+  const resultPerPage = 6;
+  const productsCount = await Product.countDocuments();
+
+  const apiFeature = new ApiFeatures(Product.find({ sex: "Nữ" }), req.query)
+    .search()
+    .filter()
+    .sorting();
+
+  const products2 = await apiFeature.query;
+
+  let filteredProductsCount = await products2.length;
+
+  console.log(filteredProductsCount);
+
+  const apiFeature2 = new ApiFeatures(
+    Product.find({ sex: "Nữ" }).populate("category"),
+    req.query
+  )
+    .search()
+    .filter()
+    .sorting()
+    .pagination(resultPerPage);
+
+  const products = await apiFeature2.query;
+
+  res.status(200).json({
+    success: true,
+    products,
+    productsCount,
+    resultPerPage,
+    filteredProductsCount,
+  });
+});
+
 // Get Product Details
 exports.getProductDetails = catchAsyncErrors(async (req, res, next) => {
   const product = await Product.findById(req.params.id);

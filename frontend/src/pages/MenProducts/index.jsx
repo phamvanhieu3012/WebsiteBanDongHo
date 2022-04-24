@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Rating from "@mui/material/Rating";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { getProduct } from "../../actions/productAction";
+import { getMenProduct } from "../../actions/productAction";
 import { Collapse } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
@@ -10,9 +10,8 @@ import formatPrice from "../../ultils/formatPrice";
 import { getAllCategories } from "../../actions/categoryAction";
 import Pagination from "react-js-pagination";
 import Slider from "@mui/material/Slider";
-import "./Product.scss";
 
-function Product() {
+function MenProducts() {
   const [close, setClose] = useState(false);
   const [category, setCategory] = useState("");
   const [sort, setSort] = useState("");
@@ -47,7 +46,7 @@ function Product() {
     productsCount,
     resultPerPage,
     filteredProductsCount,
-  } = useSelector((state) => state.products);
+  } = useSelector((state) => state.menProducts);
 
   const { categories } = useSelector((state) => state.categories);
 
@@ -71,7 +70,7 @@ function Product() {
   useEffect(() => {
     dispatch(getAllCategories());
     console.log(sort);
-    dispatch(getProduct(currentPage, category, price, sort, keyword));
+    dispatch(getMenProduct(currentPage, category, price, sort, keyword));
   }, [dispatch, currentPage, category, price, sort, keyword]);
 
   return (
@@ -81,7 +80,7 @@ function Product() {
         style={{ backgroundImage: "url('assets/images/page-header-bg.jpg')" }}
       >
         <div className="container">
-          <h1 className="page-title">Sản phẩm</h1>
+          <h1 className="page-title">Đồng hồ nam</h1>
         </div>
         {/* End .container */}
       </div>
@@ -93,7 +92,7 @@ function Product() {
               <a href="/">Trang chủ</a>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Sản phẩm
+              Đồng hồ nam
             </li>
           </ol>
         </div>
@@ -322,13 +321,6 @@ function Product() {
                                     type="checkbox"
                                     className="custom-control-input"
                                     id={`cat ${category._id}`}
-                                    onClick={(e) => {
-                                      if (e.target.checked) {
-                                        setPrice([0, 2]);
-                                      } else {
-                                        setPrice([0, 40]);
-                                      }
-                                    }}
                                   />
                                   <label
                                     className="custom-control-label"
@@ -909,4 +901,4 @@ function Product() {
   );
 }
 
-export default Product;
+export default MenProducts;

@@ -23,6 +23,8 @@ import { loadUser } from "./actions/userAction";
 import PublicRoute from "./components/Route/PublicRoute";
 import ScrollToTop from "react-scroll-to-top";
 import ProtectedRoute from "./components/Route/ProtectedRoute";
+import MenProducts from "./pages/MenProducts";
+import WomenProducts from "./pages/WomenProducts";
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -36,19 +38,23 @@ function App() {
       <Router>
         <Switch>
           <PublicRoute exact path="/" component={HomePage} />
-          <PublicRoute exact path="/product/:id" component={ProductDetail} />
           <PublicRoute exact path="/products" component={Product} />
+          <PublicRoute exact path="/products-men" component={MenProducts} />
+          <PublicRoute exact path="/products-women" component={WomenProducts} />
+          <PublicRoute exact path="/products" component={Product} />
+          <PublicRoute exact path="/product/:id" component={ProductDetail} />
           <PublicRoute path="/products/:keyword" component={Product} />
 
           <PublicRoute exact path="/about" component={About} />
           <PublicRoute exact path="/faq" component={FAQ} />
           <PublicRoute exact path="/contact" component={Contact} />
-
           <PublicRoute exact path="/blog" component={Blog} />
 
           <PublicRoute exact path="/login" component={Login} />
-
           <ProtectedRoute exact path="/my-account" component={MyAccount} />
+
+          <PublicRoute exact path="/cart" component={Cart} />
+          <PublicRoute exact path="/checkout" component={Checkout} />
 
           <PublicRoute component={NotFound} />
         </Switch>
@@ -60,18 +66,6 @@ function App() {
         {/* <!-- Mobile Menu --> */}
         <div className="mobile-menu-overlay"></div>
         {/* <!-- End .mobil-menu-overlay --> */}
-        {/* <Login /> */}
-        {/* <About /> */}
-        {/* <Contact /> */}
-        {/* <NotFound /> */}
-        {/* <FAQ /> */}
-        {/* <Blog /> */}
-        {/* <HomePage /> */}
-        {/* <ProductDetail /> */}
-        {/* <Product /> */}
-        {/* <Cart /> */}
-        {/* <MyAccount /> */}
-        {/* <Checkout /> */}
       </Router>
     </div>
   );

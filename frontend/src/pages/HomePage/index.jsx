@@ -1,9 +1,19 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getNProducts } from "../../actions/productAction";
 import { loadUser } from "../../actions/userAction";
 import store from "../../store";
+import formatPrice from "../../ultils/formatPrice";
 
 function HomePage() {
+  const { products, loading, error } = useSelector((state) => state.nProducts);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getNProducts());
+  }, [dispatch]);
+
   return (
     <main className="main">
       <div className="intro-slider-container">
@@ -538,477 +548,66 @@ function HomePage() {
 
         <div className="products">
           <div className="row justify-content-center">
-            <div className="col-6 col-md-4 col-lg-3">
-              <div className="product product-7 text-center">
-                <figure className="product-media">
-                  <span className="product-label label-sale">sale</span>
-                  <a href="product.html">
-                    <img
-                      src="assets/images/demos/demo-6/products/product-1-1.jpg"
-                      alt="Product"
-                      className="product-image"
-                    />
-                    <img
-                      src="assets/images/demos/demo-6/products/product-1-2.jpg"
-                      alt="Product"
-                      className="product-image-hover"
-                    />
-                  </a>
+            {products &&
+              products.map((product) => {
+                return (
+                  <div className="col-6 col-md-4 col-lg-3">
+                    <div className="product product-7 text-center">
+                      <figure className="product-media">
+                        <span className="product-label label-sale">sale</span>
+                        <a href="product.html">
+                          <img
+                            src={product.images[0].url}
+                            alt={product.name}
+                            className="product-image"
+                          />
+                          <img
+                            src="assets/images/demos/demo-6/products/product-1-2.jpg"
+                            alt="Product"
+                            className="product-image-hover"
+                          />
+                        </a>
 
-                  <div className="product-action-vertical">
-                    <a
-                      href="#"
-                      className="btn-product-icon btn-wishlist btn-expandable"
-                    >
-                      <span>Thêm vào danh sách yêu thích</span>
-                    </a>
-                  </div>
-                  {/* End .product-action-vertical */}
+                        <div className="product-action-vertical">
+                          <a
+                            href="#"
+                            className="btn-product-icon btn-wishlist btn-expandable"
+                          >
+                            <span>Thêm vào danh sách yêu thích</span>
+                          </a>
+                        </div>
 
-                  <div className="product-action">
-                    <a href="#" className="btn-product btn-cart">
-                      <span>
-                        <span style={{ textTransform: "uppercase" }}>T</span>hêm
-                        vào giỏ hàng
-                      </span>
-                    </a>
-                  </div>
-                  {/* End .product-action */}
-                </figure>
-                {/* End .product-media */}
+                        <div className="product-action">
+                          <a href="#" className="btn-product btn-cart">
+                            <span>
+                              <span style={{ textTransform: "uppercase" }}>
+                                T
+                              </span>
+                              hêm vào giỏ hàng
+                            </span>
+                          </a>
+                        </div>
+                      </figure>
 
-                <div className="product-body">
-                  <div className="product-cat">
-                    <a href="#">Seiko</a>
+                      <div className="product-body">
+                        <div className="product-cat">
+                          <a href="#">{product.category.name}</a>
+                        </div>
+                        {/* End .product-cat */}
+                        <h3 className="product-title">
+                          <a href="product.html">{product.name}</a>
+                        </h3>
+                        {/* End .product-title */}
+                        <div className="product-price">
+                          {formatPrice(product.price)}
+                          <span className="new-price">Now $7.99</span>
+                          <span className="old-price">Was $12.99</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  {/* End .product-cat */}
-                  <h3 className="product-title">
-                    <a href="product.html">Denim jacket</a>
-                  </h3>
-                  {/* End .product-title */}
-                  <div className="product-price">
-                    $19.99
-                    <span className="new-price">Now $7.99</span>
-                    <span className="old-price">Was $12.99</span>
-                  </div>
-                  {/* End .product-price */}
-                </div>
-              </div>
-            </div>
-            {/* End .col-sm-6 col-md-4 col-lg-3 */}
-
-            <div className="col-6 col-md-4 col-lg-3">
-              <div className="product product-7 text-center">
-                <figure className="product-media">
-                  <span className="product-label label-sale">sale</span>
-                  <a href="product.html">
-                    <img
-                      src="assets/images/demos/demo-6/products/product-1-1.jpg"
-                      alt="Product"
-                      className="product-image"
-                    />
-                    <img
-                      src="assets/images/demos/demo-6/products/product-1-2.jpg"
-                      alt="Product"
-                      className="product-image-hover"
-                    />
-                  </a>
-
-                  <div className="product-action-vertical">
-                    <a
-                      href="#"
-                      className="btn-product-icon btn-wishlist btn-expandable"
-                    >
-                      <span>Thêm vào danh sách yêu thích</span>
-                    </a>
-                  </div>
-                  {/* End .product-action-vertical */}
-
-                  <div className="product-action">
-                    <a href="#" className="btn-product btn-cart">
-                      <span>
-                        <span style={{ textTransform: "uppercase" }}>T</span>hêm
-                        vào giỏ hàng
-                      </span>
-                    </a>
-                  </div>
-                  {/* End .product-action */}
-                </figure>
-                {/* End .product-media */}
-
-                <div className="product-body">
-                  <div className="product-cat">
-                    <a href="#">Seiko</a>
-                  </div>
-                  {/* End .product-cat */}
-                  <h3 className="product-title">
-                    <a href="product.html">Denim jacket</a>
-                  </h3>
-                  {/* End .product-title */}
-                  <div className="product-price">
-                    $19.99
-                    <span className="new-price">Now $7.99</span>
-                    <span className="old-price">Was $12.99</span>
-                  </div>
-                  {/* End .product-price */}
-                </div>
-              </div>
-            </div>
-            {/* End .col-sm-6 col-md-4 col-lg-3 */}
-
-            <div className="col-6 col-md-4 col-lg-3">
-              <div className="product product-7 text-center">
-                <figure className="product-media">
-                  <span className="product-label label-sale">sale</span>
-                  <a href="product.html">
-                    <img
-                      src="assets/images/demos/demo-6/products/product-1-1.jpg"
-                      alt="Product"
-                      className="product-image"
-                    />
-                    <img
-                      src="assets/images/demos/demo-6/products/product-1-2.jpg"
-                      alt="Product"
-                      className="product-image-hover"
-                    />
-                  </a>
-
-                  <div className="product-action-vertical">
-                    <a
-                      href="#"
-                      className="btn-product-icon btn-wishlist btn-expandable"
-                    >
-                      <span>Thêm vào danh sách yêu thích</span>
-                    </a>
-                  </div>
-                  {/* End .product-action-vertical */}
-
-                  <div className="product-action">
-                    <a href="#" className="btn-product btn-cart">
-                      <span>
-                        <span style={{ textTransform: "uppercase" }}>T</span>hêm
-                        vào giỏ hàng
-                      </span>
-                    </a>
-                  </div>
-                  {/* End .product-action */}
-                </figure>
-                {/* End .product-media */}
-
-                <div className="product-body">
-                  <div className="product-cat">
-                    <a href="#">Seiko</a>
-                  </div>
-                  {/* End .product-cat */}
-                  <h3 className="product-title">
-                    <a href="product.html">Denim jacket</a>
-                  </h3>
-                  {/* End .product-title */}
-                  <div className="product-price">
-                    $19.99
-                    <span className="new-price">Now $7.99</span>
-                    <span className="old-price">Was $12.99</span>
-                  </div>
-                  {/* End .product-price */}
-                </div>
-              </div>
-            </div>
-            {/* End .col-sm-6 col-md-4 col-lg-3 */}
-
-            <div className="col-6 col-md-4 col-lg-3">
-              <div className="product product-7 text-center">
-                <figure className="product-media">
-                  <span className="product-label label-sale">sale</span>
-                  <a href="product.html">
-                    <img
-                      src="assets/images/demos/demo-6/products/product-1-1.jpg"
-                      alt="Product"
-                      className="product-image"
-                    />
-                    <img
-                      src="assets/images/demos/demo-6/products/product-1-2.jpg"
-                      alt="Product"
-                      className="product-image-hover"
-                    />
-                  </a>
-
-                  <div className="product-action-vertical">
-                    <a
-                      href="#"
-                      className="btn-product-icon btn-wishlist btn-expandable"
-                    >
-                      <span>Thêm vào danh sách yêu thích</span>
-                    </a>
-                  </div>
-                  {/* End .product-action-vertical */}
-
-                  <div className="product-action">
-                    <a href="#" className="btn-product btn-cart">
-                      <span>
-                        <span style={{ textTransform: "uppercase" }}>T</span>hêm
-                        vào giỏ hàng
-                      </span>
-                    </a>
-                  </div>
-                  {/* End .product-action */}
-                </figure>
-                {/* End .product-media */}
-
-                <div className="product-body">
-                  <div className="product-cat">
-                    <a href="#">Seiko</a>
-                  </div>
-                  {/* End .product-cat */}
-                  <h3 className="product-title">
-                    <a href="product.html">Denim jacket</a>
-                  </h3>
-                  {/* End .product-title */}
-                  <div className="product-price">
-                    $19.99
-                    <span className="new-price">Now $7.99</span>
-                    <span className="old-price">Was $12.99</span>
-                  </div>
-                  {/* End .product-price */}
-                </div>
-              </div>
-            </div>
-            {/* End .col-sm-6 col-md-4 col-lg-3 */}
-
-            <div className="col-6 col-md-4 col-lg-3">
-              <div className="product product-7 text-center">
-                <figure className="product-media">
-                  <span className="product-label label-sale">sale</span>
-                  <a href="product.html">
-                    <img
-                      src="assets/images/demos/demo-6/products/product-1-1.jpg"
-                      alt="Product"
-                      className="product-image"
-                    />
-                    <img
-                      src="assets/images/demos/demo-6/products/product-1-2.jpg"
-                      alt="Product"
-                      className="product-image-hover"
-                    />
-                  </a>
-
-                  <div className="product-action-vertical">
-                    <a
-                      href="#"
-                      className="btn-product-icon btn-wishlist btn-expandable"
-                    >
-                      <span>Thêm vào danh sách yêu thích</span>
-                    </a>
-                  </div>
-                  {/* End .product-action-vertical */}
-
-                  <div className="product-action">
-                    <a href="#" className="btn-product btn-cart">
-                      <span>
-                        <span style={{ textTransform: "uppercase" }}>T</span>hêm
-                        vào giỏ hàng
-                      </span>
-                    </a>
-                  </div>
-                  {/* End .product-action */}
-                </figure>
-                {/* End .product-media */}
-
-                <div className="product-body">
-                  <div className="product-cat">
-                    <a href="#">Seiko</a>
-                  </div>
-                  {/* End .product-cat */}
-                  <h3 className="product-title">
-                    <a href="product.html">Denim jacket</a>
-                  </h3>
-                  {/* End .product-title */}
-                  <div className="product-price">
-                    $19.99
-                    <span className="new-price">Now $7.99</span>
-                    <span className="old-price">Was $12.99</span>
-                  </div>
-                  {/* End .product-price */}
-                </div>
-              </div>
-            </div>
-            {/* End .col-sm-6 col-md-4 col-lg-3 */}
-
-            <div className="col-6 col-md-4 col-lg-3">
-              <div className="product product-7 text-center">
-                <figure className="product-media">
-                  <span className="product-label label-sale">sale</span>
-                  <a href="product.html">
-                    <img
-                      src="assets/images/demos/demo-6/products/product-1-1.jpg"
-                      alt="Product"
-                      className="product-image"
-                    />
-                    <img
-                      src="assets/images/demos/demo-6/products/product-1-2.jpg"
-                      alt="Product"
-                      className="product-image-hover"
-                    />
-                  </a>
-
-                  <div className="product-action-vertical">
-                    <a
-                      href="#"
-                      className="btn-product-icon btn-wishlist btn-expandable"
-                    >
-                      <span>Thêm vào danh sách yêu thích</span>
-                    </a>
-                  </div>
-                  {/* End .product-action-vertical */}
-
-                  <div className="product-action">
-                    <a href="#" className="btn-product btn-cart">
-                      <span>
-                        <span style={{ textTransform: "uppercase" }}>T</span>hêm
-                        vào giỏ hàng
-                      </span>
-                    </a>
-                  </div>
-                  {/* End .product-action */}
-                </figure>
-                {/* End .product-media */}
-
-                <div className="product-body">
-                  <div className="product-cat">
-                    <a href="#">Seiko</a>
-                  </div>
-                  {/* End .product-cat */}
-                  <h3 className="product-title">
-                    <a href="product.html">Denim jacket</a>
-                  </h3>
-                  {/* End .product-title */}
-                  <div className="product-price">
-                    $19.99
-                    <span className="new-price">Now $7.99</span>
-                    <span className="old-price">Was $12.99</span>
-                  </div>
-                  {/* End .product-price */}
-                </div>
-              </div>
-            </div>
-            {/* End .col-sm-6 col-md-4 col-lg-3 */}
-
-            <div className="col-6 col-md-4 col-lg-3">
-              <div className="product product-7 text-center">
-                <figure className="product-media">
-                  <span className="product-label label-sale">sale</span>
-                  <a href="product.html">
-                    <img
-                      src="assets/images/demos/demo-6/products/product-1-1.jpg"
-                      alt="Product"
-                      className="product-image"
-                    />
-                    <img
-                      src="assets/images/demos/demo-6/products/product-1-2.jpg"
-                      alt="Product"
-                      className="product-image-hover"
-                    />
-                  </a>
-
-                  <div className="product-action-vertical">
-                    <a
-                      href="#"
-                      className="btn-product-icon btn-wishlist btn-expandable"
-                    >
-                      <span>Thêm vào danh sách yêu thích</span>
-                    </a>
-                  </div>
-                  {/* End .product-action-vertical */}
-
-                  <div className="product-action">
-                    <a href="#" className="btn-product btn-cart">
-                      <span>
-                        <span style={{ textTransform: "uppercase" }}>T</span>hêm
-                        vào giỏ hàng
-                      </span>
-                    </a>
-                  </div>
-                  {/* End .product-action */}
-                </figure>
-                {/* End .product-media */}
-
-                <div className="product-body">
-                  <div className="product-cat">
-                    <a href="#">Seiko</a>
-                  </div>
-                  {/* End .product-cat */}
-                  <h3 className="product-title">
-                    <a href="product.html">Denim jacket</a>
-                  </h3>
-                  {/* End .product-title */}
-                  <div className="product-price">
-                    $19.99
-                    <span className="new-price">Now $7.99</span>
-                    <span className="old-price">Was $12.99</span>
-                  </div>
-                  {/* End .product-price */}
-                </div>
-              </div>
-            </div>
-            {/* End .col-sm-6 col-md-4 col-lg-3 */}
-
-            <div className="col-6 col-md-4 col-lg-3">
-              <div className="product product-7 text-center">
-                <figure className="product-media">
-                  <span className="product-label label-sale">sale</span>
-                  <a href="product.html">
-                    <img
-                      src="assets/images/demos/demo-6/products/product-1-1.jpg"
-                      alt="Product"
-                      className="product-image"
-                    />
-                    <img
-                      src="assets/images/demos/demo-6/products/product-1-2.jpg"
-                      alt="Product"
-                      className="product-image-hover"
-                    />
-                  </a>
-
-                  <div className="product-action-vertical">
-                    <a
-                      href="#"
-                      className="btn-product-icon btn-wishlist btn-expandable"
-                    >
-                      <span>Thêm vào danh sách yêu thích</span>
-                    </a>
-                  </div>
-                  {/* End .product-action-vertical */}
-
-                  <div className="product-action">
-                    <a href="#" className="btn-product btn-cart">
-                      <span>
-                        <span style={{ textTransform: "uppercase" }}>T</span>hêm
-                        vào giỏ hàng
-                      </span>
-                    </a>
-                  </div>
-                  {/* End .product-action */}
-                </figure>
-                {/* End .product-media */}
-
-                <div className="product-body">
-                  <div className="product-cat">
-                    <a href="#">Seiko</a>
-                  </div>
-                  {/* End .product-cat */}
-                  <h3 className="product-title">
-                    <a href="product.html">Denim jacket</a>
-                  </h3>
-                  {/* End .product-title */}
-                  <div className="product-price">
-                    $19.99
-                    <span className="new-price">Now $7.99</span>
-                    <span className="old-price">Was $12.99</span>
-                  </div>
-                  {/* End .product-price */}
-                </div>
-              </div>
-            </div>
-            {/* End .col-sm-6 col-md-4 col-lg-3 */}
+                );
+              })}
           </div>
           {/* End .row */}
         </div>

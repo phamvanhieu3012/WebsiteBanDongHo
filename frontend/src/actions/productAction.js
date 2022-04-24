@@ -30,6 +30,15 @@ import {
   DELETE_REVIEW_SUCCESS,
   DELETE_REVIEW_FAIL,
   CLEAR_ERRORS,
+  N_PRODUCT_REQUEST,
+  N_PRODUCT_SUCCESS,
+  N_PRODUCT_FAIL,
+  MEN_PRODUCT_REQUEST,
+  MEN_PRODUCT_SUCCESS,
+  MEN_PRODUCT_FAIL,
+  WOMEN_PRODUCT_REQUEST,
+  WOMEN_PRODUCT_SUCCESS,
+  WOMEN_PRODUCT_FAIL,
 } from "../constants/productConstants";
 
 // Get All Products
@@ -51,8 +60,6 @@ export const getProduct =
       // if (category) {
       //   link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}&ratings[gte]=${ratings}&${sort}`;
       // }
-
-      console.log("Price", price);
 
       let priceSort0 = price[0] * 1000000;
       let priceSort1 = price[1] * 1000000;
@@ -95,6 +102,111 @@ export const getAdminProduct = () => async (dispatch) => {
     });
   }
 };
+
+// Get N Products
+export const getNProducts = (numOfProducts) => async (dispatch) => {
+  try {
+    dispatch({ type: N_PRODUCT_REQUEST });
+
+    const { data } = await axios.get("http://localhost:4000/api/v1/nProducts");
+
+    dispatch({
+      type: N_PRODUCT_SUCCESS,
+      payload: data.products,
+    });
+  } catch (error) {
+    dispatch({
+      type: N_PRODUCT_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Get Men Products
+export const getMenProduct =
+  (
+    currentPage = 1,
+    category,
+    price = [0, 40],
+    // ratings = 0,
+    sort,
+    keyword = ""
+  ) =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: MEN_PRODUCT_REQUEST });
+
+      // let link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&ratings[gte]=${ratings}&${sort}`;
+
+      // if (category) {
+      //   link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}&ratings[gte]=${ratings}&${sort}`;
+      // }
+
+      let priceSort0 = price[0] * 1000000;
+      let priceSort1 = price[1] * 1000000;
+
+      let link = `http://localhost:4000/api/v1/menProducts?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&${sort}`;
+
+      if (category) {
+        link = `http://localhost:4000/api/v1/menPoducts?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&category=${category}&${sort}`;
+      }
+
+      const { data } = await axios.get(link);
+
+      dispatch({
+        type: MEN_PRODUCT_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: MEN_PRODUCT_FAIL,
+        payload: error.response.data.message,
+      });
+    }
+  };
+
+// Get Women Products
+export const getWomenProduct =
+  (
+    currentPage = 1,
+    category,
+    price = [0, 40],
+    // ratings = 0,
+    sort,
+    keyword = ""
+  ) =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: WOMEN_PRODUCT_REQUEST });
+
+      // let link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&ratings[gte]=${ratings}&${sort}`;
+
+      // if (category) {
+      //   link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}&ratings[gte]=${ratings}&${sort}`;
+      // }
+
+      let priceSort0 = price[0] * 1000000;
+      let priceSort1 = price[1] * 1000000;
+
+      let link = `http://localhost:4000/api/v1/womenProducts?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&${sort}`;
+
+      if (category) {
+        link = `http://localhost:4000/api/v1/womenPoducts?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&category=${category}&${sort}`;
+      }
+
+      const { data } = await axios.get(link);
+
+      dispatch({
+        type: WOMEN_PRODUCT_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: WOMEN_PRODUCT_FAIL,
+        payload: error.response.data.message,
+      });
+    }
+  };
 
 // Create Product
 export const createProduct = (productData) => async (dispatch) => {
