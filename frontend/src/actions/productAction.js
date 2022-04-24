@@ -89,7 +89,7 @@ export const getAdminProduct = () => async (dispatch) => {
   try {
     dispatch({ type: ADMIN_PRODUCT_REQUEST });
 
-    const { data } = await axios.get("/api/v1/admin/products");
+    const data = await axiosClient.get("/api/v1/admin/products");
 
     dispatch({
       type: ADMIN_PRODUCT_SUCCESS,
@@ -305,11 +305,24 @@ export const newReview = (reviewData) => async (dispatch) => {
   try {
     dispatch({ type: NEW_REVIEW_REQUEST });
 
+    const token = localStorage.getItem("token");
+
     const config = {
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `token ${token}`,
+      },
     };
 
-    const { data } = await axios.put(`/api/v1/review`, reviewData, config);
+    const { data } = await axios.put(
+      `http://localhost:4000/api/v1/review`,
+      {
+        rating: reviewData.rating,
+        comment: reviewData.comment,
+        productId: reviewData.productId,
+      },
+      config
+    );
 
     dispatch({
       type: NEW_REVIEW_SUCCESS,
@@ -328,7 +341,7 @@ export const getAllReviews = (id) => async (dispatch) => {
   try {
     dispatch({ type: ALL_REVIEW_REQUEST });
 
-    const { data } = await axios.get(`/api/v1/reviews?id=${id}`);
+    const data = await axiosClient.get(`/api/v1/reviews?id=${id}`);
 
     dispatch({
       type: ALL_REVIEW_SUCCESS,
@@ -347,7 +360,7 @@ export const deleteReviews = (reviewId, productId) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_REVIEW_REQUEST });
 
-    const { data } = await axios.delete(
+    const data = await axiosClient.delete(
       `/api/v1/reviews?id=${reviewId}&productId=${productId}`
     );
 

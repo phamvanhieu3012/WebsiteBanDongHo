@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { getNProducts } from "../../actions/productAction";
 import { loadUser } from "../../actions/userAction";
 import store from "../../store";
@@ -555,7 +556,7 @@ function HomePage() {
                     <div className="product product-7 text-center">
                       <figure className="product-media">
                         <span className="product-label label-sale">sale</span>
-                        <a href="product.html">
+                        <Link to={`/product/${product._id}`}>
                           <img
                             src={product.images[0].url}
                             alt={product.name}
@@ -566,7 +567,7 @@ function HomePage() {
                             alt="Product"
                             className="product-image-hover"
                           />
-                        </a>
+                        </Link>
 
                         <div className="product-action-vertical">
                           <a
@@ -595,7 +596,9 @@ function HomePage() {
                         </div>
                         {/* End .product-cat */}
                         <h3 className="product-title">
-                          <a href="product.html">{product.name}</a>
+                          <Link to={`/product/${product._id}`}>
+                            {product.name}
+                          </Link>
                         </h3>
                         {/* End .product-title */}
                         <div className="product-price">

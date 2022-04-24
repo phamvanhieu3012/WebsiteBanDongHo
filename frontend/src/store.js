@@ -34,6 +34,7 @@ import {
 const reducer = combineReducers({
   // Product
   products: productsReducer,
+  productsAdmin: productsAdminReducer,
   productDetails: productDetailsReducer,
   nProducts: nProductsReducer,
   menProducts: menProductsReducer,
@@ -45,6 +46,9 @@ const reducer = combineReducers({
   // Category
   categories: categoriesReducer,
   categoryDetails: categoryDetailsReducer,
+  //Review
+  newReview: newReviewReducer,
+  review: reviewReducer,
 });
 
 let initialState = {
