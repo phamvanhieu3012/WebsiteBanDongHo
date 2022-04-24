@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import { loadUser } from "./actions/userAction";
 import PublicRoute from "./components/Route/PublicRoute";
 import ScrollToTop from "react-scroll-to-top";
+import ProtectedRoute from "./components/Route/ProtectedRoute";
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -46,6 +47,8 @@ function App() {
           <PublicRoute exact path="/blog" component={Blog} />
 
           <PublicRoute exact path="/login" component={Login} />
+
+          <ProtectedRoute exact path="/my-account" component={MyAccount} />
 
           <PublicRoute component={NotFound} />
         </Switch>

@@ -1,6 +1,79 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import {
+  clearErrors,
+  loadUser,
+  logout,
+  updatePassword,
+  updateProfile,
+} from "../../actions/userAction";
+import {
+  UPDATE_PASSWORD_RESET,
+  UPDATE_PROFILE_RESET,
+} from "../../constants/userConstants";
 
 function MyAccount() {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+  const { error, isUpdated, loading } = useSelector((state) => state.profile);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  let history = useHistory();
+
+  function logoutUser() {
+    dispatch(logout());
+    alert("Đăng xuất thành công");
+    history.push("/");
+  }
+
+  const updateProfileSubmit = (e) => {
+    e.preventDefault();
+    const myForm = {
+      name,
+      email,
+    };
+    dispatch(updateProfile(myForm));
+  };
+
+  const updatePasswordSubmit = (e) => {
+    e.preventDefault();
+
+    const myForm = {
+      oldPassword,
+      newPassword,
+      confirmPassword,
+    };
+    dispatch(updatePassword(myForm));
+  };
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name);
+      setEmail(user.email);
+    }
+    if (error) {
+      alert(error);
+      dispatch(clearErrors());
+    }
+    if (isUpdated) {
+      alert("Cập nhật thành công");
+      dispatch(loadUser());
+      history.push("/my-account");
+      dispatch({
+        type: UPDATE_PROFILE_RESET,
+      });
+      dispatch({
+        type: UPDATE_PASSWORD_RESET,
+      });
+    }
+  }, [dispatch, error, history, user, isUpdated]);
+
   return (
     <main className="main">
       <div
@@ -10,30 +83,21 @@ function MyAccount() {
         }}
       >
         <div className="container">
-          <h1 className="page-title">
-            My Account<span>Shop</span>
-          </h1>
+          <h1 className="page-title">Tài khoản của tôi</h1>
         </div>
-        {/* End .container */}
       </div>
-      {/* End .page-header */}
       <nav aria-label="breadcrumb" className="breadcrumb-nav mb-3">
         <div className="container">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="index.html">Home</a>
-            </li>
-            <li className="breadcrumb-item">
-              <a href="#">Shop</a>
+              <a href="index.html">Trang chủ</a>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              My Account
+              Tài khoản của tôi
             </li>
           </ol>
         </div>
-        {/* End .container */}
       </nav>
-      {/* End .breadcrumb-nav */}
 
       <div className="page-content">
         <div className="dashboard">
@@ -67,20 +131,7 @@ function MyAccount() {
                       aria-controls="tab-orders"
                       aria-selected="false"
                     >
-                      Orders
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      className="nav-link"
-                      id="tab-downloads-link"
-                      data-toggle="tab"
-                      href="#tab-downloads"
-                      role="tab"
-                      aria-controls="tab-downloads"
-                      aria-selected="false"
-                    >
-                      Downloads
+                      Đơn hàng
                     </a>
                   </li>
                   <li className="nav-item">
@@ -93,7 +144,7 @@ function MyAccount() {
                       aria-controls="tab-address"
                       aria-selected="false"
                     >
-                      Adresses
+                      Địa chỉ
                     </a>
                   </li>
                   <li className="nav-item">
@@ -106,13 +157,17 @@ function MyAccount() {
                       aria-controls="tab-account"
                       aria-selected="false"
                     >
-                      Account Details
+                      Chi tiết tài khoản
                     </a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" href="#">
-                      Sign Out
-                    </a>
+                    <span
+                      className="nav-link"
+                      onClick={logoutUser}
+                      style={{ cursor: "pointer" }}
+                    >
+                      Đăng xuất
+                    </span>
                   </li>
                 </ul>
               </aside>
@@ -127,26 +182,34 @@ function MyAccount() {
                     aria-labelledby="tab-dashboard-link"
                   >
                     <p>
-                      Hello{" "}
-                      <span className="font-weight-normal text-dark">User</span>{" "}
-                      (not{" "}
-                      <span className="font-weight-normal text-dark">User</span>
-                      ? <a href="#">Log out</a>)
+                      Xin chào{" "}
+                      <span className="font-weight-normal text-dark">
+                        {user.name}
+                      </span>{" "}
+                      (Không phải{" "}
+                      <span className="font-weight-normal text-dark">
+                        {user.name}
+                      </span>
+                      ?{" "}
+                      <span style={{ cursor: "pointer" }} onClick={logoutUser}>
+                        Đăng xuất
+                      </span>
+                      )
                       <br />
-                      From your account dashboard you can view your{" "}
+                      Từ giao diện tài khoản bạn có thể xem{" "}
                       <a
                         href="#tab-orders"
                         className="tab-trigger-link link-underline"
                       >
-                        recent orders
+                        những đơn hàng gần đây
                       </a>
-                      , manage your{" "}
+                      , quản lý{" "}
                       <a href="#tab-address" className="tab-trigger-link">
-                        shipping and billing addresses
+                        thông tin ship của bạn
                       </a>
-                      , and{" "}
+                      , và{" "}
                       <a href="#tab-account" className="tab-trigger-link">
-                        edit your password and account details
+                        chỉnh sửa thông tin bản thân và tài khoản của bạn
                       </a>
                       .
                     </p>
@@ -159,29 +222,9 @@ function MyAccount() {
                     role="tabpanel"
                     aria-labelledby="tab-orders-link"
                   >
-                    <p>No order has been made yet.</p>
-                    <a
-                      href="category.html"
-                      className="btn btn-outline-primary-2"
-                    >
-                      <span>GO SHOP</span>
-                      <i className="icon-long-arrow-right"></i>
-                    </a>
-                  </div>
-                  {/* .End .tab-pane */}
-
-                  <div
-                    className="tab-pane fade"
-                    id="tab-downloads"
-                    role="tabpanel"
-                    aria-labelledby="tab-downloads-link"
-                  >
-                    <p>No downloads available yet.</p>
-                    <a
-                      href="category.html"
-                      className="btn btn-outline-primary-2"
-                    >
-                      <span>GO SHOP</span>
+                    <p>Chưa có đơn hàng nào được tạo.</p>
+                    <a href="/products" className="btn btn-outline-primary-2">
+                      <span>Đi xem Shop</span>
                       <i className="icon-long-arrow-right"></i>
                     </a>
                   </div>
@@ -194,32 +237,27 @@ function MyAccount() {
                     aria-labelledby="tab-address-link"
                   >
                     <p>
-                      The following addresses will be used on the checkout page
-                      by default.
+                      Thông tin địa chỉ sẽ được dùng để thanh toán mặc định.
                     </p>
 
                     <div className="row">
                       <div className="col-lg-6">
                         <div className="card card-dashboard">
                           <div className="card-body">
-                            <h3 className="card-title">Billing Address</h3>
+                            <h3 className="card-title">Thông tin của bạn</h3>
                             {/* End .card-title */}
 
                             <p>
-                              User Name
+                              Họ và tên: {user.name}
                               <br />
-                              User Company
+                              Email của bạn: {user.email}
                               <br />
-                              John str
+                              Địa chỉ: New York, NY 10001
                               <br />
-                              New York, NY 10001
-                              <br />
-                              1-234-987-6543
-                              <br />
-                              yourmail@mail.com
+                              Số điện thoại: 1-234-987-6543
                               <br />
                               <a href="#">
-                                Edit <i className="icon-edit"></i>
+                                Sửa <i className="icon-edit"></i>
                               </a>
                             </p>
                           </div>
@@ -232,14 +270,14 @@ function MyAccount() {
                       <div className="col-lg-6">
                         <div className="card card-dashboard">
                           <div className="card-body">
-                            <h3 className="card-title">Shipping Address</h3>
+                            <h3 className="card-title">Địa chỉ giao hàng</h3>
                             {/* End .card-title */}
 
                             <p>
-                              You have not set up this type of address yet.
+                              Bạn chưa nhập địa chỉ của bạn.
                               <br />
                               <a href="#">
-                                Edit <i className="icon-edit"></i>
+                                Sửa <i className="icon-edit"></i>
                               </a>
                             </p>
                           </div>
@@ -259,58 +297,76 @@ function MyAccount() {
                     role="tabpanel"
                     aria-labelledby="tab-account-link"
                   >
-                    <form action="#">
-                      <div className="row">
-                        <div className="col-sm-6">
-                          <label>First Name *</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            required
-                          />
-                        </div>
-                        {/* End .col-sm-6 */}
-
-                        <div className="col-sm-6">
-                          <label>Last Name *</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            required
-                          />
-                        </div>
-                        {/* End .col-sm-6 */}
-                      </div>
-                      {/* End .row */}
-
-                      <label>Display Name *</label>
-                      <input type="text" className="form-control" required />
+                    <form
+                      encType="multipart/form-data"
+                      onSubmit={updateProfileSubmit}
+                    >
+                      <label>Họ và tên *</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                      />
                       <small className="form-text">
-                        This will be how your name will be displayed in the
-                        account section and in reviews
+                        Tên của bạn sẽ được hiển thị ở phần tài khoản và bình
+                        luận
                       </small>
 
-                      <label>Email address *</label>
-                      <input type="email" className="form-control" required />
-
-                      <label>
-                        Current password (leave blank to leave unchanged)
-                      </label>
-                      <input type="password" className="form-control" />
-
-                      <label>
-                        New password (leave blank to leave unchanged)
-                      </label>
-                      <input type="password" className="form-control" />
-
-                      <label>Confirm new password</label>
-                      <input type="password" className="form-control mb-2" />
+                      <label>Địa chỉ email *</label>
+                      <input
+                        type="email"
+                        className="form-control"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
 
                       <button
                         type="submit"
                         className="btn btn-outline-primary-2"
                       >
-                        <span>SAVE CHANGES</span>
+                        <span>LƯU THAY ĐỔI</span>
+                        <i className="icon-long-arrow-right"></i>
+                      </button>
+                    </form>
+                    <form
+                      encType="multipart/form-data"
+                      onSubmit={updatePasswordSubmit}
+                    >
+                      <label>Mật khẩu hiện tại *</label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        required
+                        value={oldPassword}
+                        onChange={(e) => setOldPassword(e.target.value)}
+                      />
+
+                      <label>Mật khẩu mới *</label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        required
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                      />
+
+                      <label>Xác nhận mật khẩu *</label>
+                      <input
+                        type="password"
+                        className="form-control mb-2"
+                        required
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                      />
+
+                      <button
+                        type="submit"
+                        className="btn btn-outline-primary-2"
+                      >
+                        <span>ĐỔI MẬT KHẨU</span>
                         <i className="icon-long-arrow-right"></i>
                       </button>
                     </form>

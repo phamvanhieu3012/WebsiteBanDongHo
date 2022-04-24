@@ -1,6 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory, useParams } from "react-router-dom";
+import { logout } from "../../../actions/userAction.js";
 
 function Header() {
+  const [keyword, setKeyword] = useState("");
+
+  const { isAuthenticated, user } = useSelector((state) => state.user);
+
+  let history = useHistory();
+  const dispatch = useDispatch();
+
+  const navigateHiddenLogin = () => {
+    history.push("/login");
+  };
+
+  // useEffect(() => {
+  //   dispatch(getProduct(category));
+  // }, [dispatch, category]);
+
+  function logoutUser() {
+    dispatch(logout());
+    alert.success("Đăng xuất thành công");
+    history.push("/");
+  }
+
   return (
     <div className="page-wrapper">
       <header className="header header-6">
@@ -61,30 +85,42 @@ function Header() {
                   <a href="#">Links</a>
                   <ul>
                     <li>
-                      <a href="/login">
-                        <i className="icon-user"></i>Login
-                      </a>
+                      {isAuthenticated ? (
+                        <p onClick={logoutUser} style={{ cursor: "pointer" }}>
+                          <i className="icon-user"></i>Đăng xuất
+                        </p>
+                      ) : (
+                        <a href="/login">
+                          <i className="icon-user"></i>Đăng nhập
+                        </a>
+                      )}
                     </li>
                   </ul>
                 </li>
               </ul>
 
-              <div className="header-dropdown">
-                <a href="#">Eng</a>
-                <div className="header-menu">
-                  <ul>
-                    <li>
-                      <a href="#">English</a>
-                    </li>
-                    <li>
-                      <a href="#">French</a>
-                    </li>
-                    <li>
-                      <a href="#">Spanish</a>
-                    </li>
-                  </ul>
+              {isAuthenticated ? (
+                <div className="header-dropdown">
+                  <a href="my-account" style={{ cursor: "pointer" }}>
+                    Tài khoản
+                  </a>
+                  <div className="header-menu">
+                    <ul>
+                      <li>
+                        <a href="#">Edit Account</a>
+                      </li>
+                      <li>
+                        <a href="#">French</a>
+                      </li>
+                      <li>
+                        <a href="#">Spanish</a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
@@ -108,7 +144,7 @@ function Header() {
                       className="form-control"
                       name="q"
                       id="q"
-                      placeholder="Search product ..."
+                      placeholder="Tìm kiếm sản phẩm ..."
                       required
                     />
                   </div>
@@ -128,11 +164,11 @@ function Header() {
             </div>
 
             <div className="header-right">
-              <a href="wishlist.html" className="wishlist-link">
+              {/* <a href="wishlist.html" className="wishlist-link">
                 <i className="icon-heart-o"></i>
                 <span className="wishlist-count">3</span>
                 <span className="wishlist-txt">My Wishlist</span>
-              </a>
+              </a> */}
 
               <div className="dropdown cart-dropdown">
                 <a
@@ -205,20 +241,28 @@ function Header() {
                   </div>
 
                   <div className="dropdown-cart-total">
-                    <span>Total</span>
+                    <span>Tổng cộng</span>
 
                     <span className="cart-total-price">$160.00</span>
                   </div>
 
                   <div className="dropdown-cart-action">
-                    <a href="cart.html" className="btn btn-primary">
-                      View Cart
+                    <a
+                      href="/cart"
+                      className="btn btn-outline-primary-2"
+                      style={{
+                        "&:hover": {
+                          color: "#c96 !important",
+                        },
+                      }}
+                    >
+                      Giỏ hàng
                     </a>
                     <a
                       href="checkout.html"
                       className="btn btn-outline-primary-2"
                     >
-                      <span>Checkout</span>
+                      <span>Thanh toán</span>
                       <i className="icon-long-arrow-right"></i>
                     </a>
                   </div>
@@ -235,144 +279,15 @@ function Header() {
                 <ul className="menu sf-arrows">
                   <li className="megamenu-container active">
                     <a href="/" className="">
-                      Home
+                      Trang chủ
                     </a>
                   </li>
                   <li>
-                    <a href="category.html" className="sf-with-ul">
-                      Shop
-                    </a>
-
-                    <div className="megamenu megamenu-md">
-                      <div className="row no-gutters">
-                        <div className="col-md-8">
-                          <div className="menu-col">
-                            <div className="row">
-                              <div className="col-md-6">
-                                <div className="menu-title">
-                                  Shop with sidebar
-                                </div>
-                                <ul>
-                                  <li>
-                                    <a href="category-list.html">Shop List</a>
-                                  </li>
-                                  <li>
-                                    <a href="category-2cols.html">
-                                      Shop Grid 2 Columns
-                                    </a>
-                                  </li>
-                                  <li>
-                                    <a href="category.html">
-                                      Shop Grid 3 Columns
-                                    </a>
-                                  </li>
-                                  <li>
-                                    <a href="category-4cols.html">
-                                      Shop Grid 4 Columns
-                                    </a>
-                                  </li>
-                                  <li>
-                                    <a href="category-market.html">
-                                      <span>
-                                        Shop Market
-                                        <span className="tip tip-new">New</span>
-                                      </span>
-                                    </a>
-                                  </li>
-                                </ul>
-
-                                <div className="menu-title">
-                                  Shop no sidebar
-                                </div>
-                                <ul>
-                                  <li>
-                                    <a href="category-boxed.html">
-                                      <span>
-                                        Shop Boxed No Sidebar
-                                        <span className="tip tip-hot">Hot</span>
-                                      </span>
-                                    </a>
-                                  </li>
-                                  <li>
-                                    <a href="category-fullwidth.html">
-                                      Shop Fullwidth No Sidebar
-                                    </a>
-                                  </li>
-                                </ul>
-                              </div>
-
-                              <div className="col-md-6">
-                                <div className="menu-title">
-                                  Product Category
-                                </div>
-                                <ul>
-                                  <li>
-                                    <a href="product-category-boxed.html">
-                                      Product Category Boxed
-                                    </a>
-                                  </li>
-                                  <li>
-                                    <a href="product-category-fullwidth.html">
-                                      <span>
-                                        Product Category Fullwidth
-                                        <span className="tip tip-new">New</span>
-                                      </span>
-                                    </a>
-                                  </li>
-                                </ul>
-                                <div className="menu-title">Shop Pages</div>
-                                <ul>
-                                  <li>
-                                    <a href="cart.html">Cart</a>
-                                  </li>
-                                  <li>
-                                    <a href="checkout.html">Checkout</a>
-                                  </li>
-                                  <li>
-                                    <a href="wishlist.html">Wishlist</a>
-                                  </li>
-                                  <li>
-                                    <a href="dashboard.html">My Account</a>
-                                  </li>
-                                  <li>
-                                    <a href="#">Lookbook</a>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="col-md-4">
-                          <div className="banner banner-overlay">
-                            <a
-                              href="category.html"
-                              className="banner banner-menu"
-                            >
-                              <img
-                                src="assets/images/menu/banner-1.jpg"
-                                alt="Banner"
-                              />
-
-                              <div className="banner-content banner-content-top">
-                                <div className="banner-title text-white">
-                                  Last <br />
-                                  Chance
-                                  <br />
-                                  <span>
-                                    <strong>Sale</strong>
-                                  </span>
-                                </div>
-                              </div>
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <a href="/products" className="sf-with-ul">
-                      Product
+                    <a
+                      href="/products"
+                      // className="sf-with-ul"
+                    >
+                      Sản phẩm
                     </a>
 
                     {/* <div className="megamenu megamenu-sm">
@@ -441,38 +356,20 @@ function Header() {
                       </div>
                     </div> */}
                   </li>
-                  <li>
-                    <a href="#" className="sf-with-ul">
-                      Pages
-                    </a>
-                    <ul>
-                      <li>
-                        <a href="/about">About</a>
-                      </li>
-                      <li>
-                        <a href="/contact">Contact</a>
-                      </li>
-                      <li>
-                        <a href="/faq">FAQs</a>
-                      </li>
-                      <li>
-                        <a href="404.html">Error 404</a>
-                      </li>
-                    </ul>
-                  </li>
+
                   <li>
                     <a href="/blog" className="">
-                      Blog
+                      Tin tức
                     </a>
                   </li>
                   <li>
                     <a href="/about" className="">
-                      About
+                      Về chúng tôi
                     </a>
                   </li>
                   <li>
                     <a href="/contact" className="">
-                      Contact
+                      Kết nối
                     </a>
                   </li>
                   <li>
