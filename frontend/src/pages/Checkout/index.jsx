@@ -10,107 +10,87 @@ function Checkout() {
         }}
       >
         <div className="container">
-          <h1 className="page-title">
-            Checkout<span>Shop</span>
-          </h1>
+          <h1 className="page-title">Thanh toán</h1>
         </div>
-        {/* End .container */}
       </div>
-      {/* End .page-header */}
       <nav aria-label="breadcrumb" className="breadcrumb-nav">
         <div className="container">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="index.html">Home</a>
-            </li>
-            <li className="breadcrumb-item">
-              <a href="#">Shop</a>
+              <a href="/">Trang chủ</a>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              Checkout
+              Thanh toán
             </li>
           </ol>
         </div>
-        {/* End .container */}
       </nav>
-      {/* End .breadcrumb-nav */}
 
       <div className="page-content">
         <div className="checkout">
           <div className="container">
-            {/* End .checkout-discount */}
             <form action="#">
               <div className="row">
                 <div className="col-lg-9">
-                  <h2 className="checkout-title">Billing Details</h2>
-                  {/* End .checkout-title */}
-                  <div className="row">
-                    <div className="col-sm-6">
-                      <label>First Name *</label>
-                      <input type="text" className="form-control" required />
-                    </div>
-                    {/* End .col-sm-6 */}
+                  <h2 className="checkout-title">Thông tin thanh toán</h2>
 
-                    <div className="col-sm-6">
-                      <label>Last Name *</label>
-                      <input type="text" className="form-control" required />
-                    </div>
-                    {/* End .col-sm-6 */}
-                  </div>
-                  {/* End .row */}
-
-                  <label>Company Name (Optional)</label>
-                  <input type="text" className="form-control" />
-
-                  <label>Country *</label>
+                  <label>Họ và tên *</label>
                   <input type="text" className="form-control" required />
 
-                  <label>Street address *</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="House number and Street name"
-                    required
-                  />
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Appartments, suite, unit etc ..."
-                    required
-                  />
-
-                  <div className="row">
-                    <div className="col-sm-6">
-                      <label>Town / City *</label>
-                      <input type="text" className="form-control" required />
-                    </div>
-                    {/* End .col-sm-6 */}
-
-                    <div className="col-sm-6">
-                      <label>State / County *</label>
-                      <input type="text" className="form-control" required />
-                    </div>
-                    {/* End .col-sm-6 */}
-                  </div>
-                  {/* End .row */}
-
-                  <div className="row">
-                    <div className="col-sm-6">
-                      <label>Postcode / ZIP *</label>
-                      <input type="text" className="form-control" required />
-                    </div>
-                    {/* End .col-sm-6 */}
-
-                    <div className="col-sm-6">
-                      <label>Phone *</label>
-                      <input type="tel" className="form-control" required />
-                    </div>
-                    {/* End .col-sm-6 */}
-                  </div>
-                  {/* End .row */}
-
-                  <label>Email address *</label>
+                  <label>Địa chỉ email *</label>
                   <input type="email" className="form-control" required />
+
+                  <label>Số điện thoại *</label>
+                  <input
+                    type="tel"
+                    className="form-control"
+                    placeholder="Số điện thoại"
+                    required
+                  />
+
+                  <div className="row">
+                    <div className="col-sm-6">
+                      <label>Tỉnh / Thành phố *</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        required
+                        placeholder="VD: Hà Nội"
+                      />
+                    </div>
+
+                    <div className="col-sm-6">
+                      <label>Quận / Huyện *</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        required
+                        placeholder="VD: Cầu Giấy"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-sm-6">
+                      <label>Xã / Phường *</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        required
+                        placeholder="VD: Mai Dịch"
+                      />
+                    </div>
+
+                    <div className="col-sm-6">
+                      <label>Địa chỉ *</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        required
+                        placeholder="VD: Số nhà 100, Ngõ 50 Trần Bình"
+                      />
+                    </div>
+                  </div>
 
                   <div className="custom-control custom-checkbox">
                     <input
@@ -122,10 +102,9 @@ function Checkout() {
                       className="custom-control-label"
                       htmlFor="checkout-create-acc"
                     >
-                      Create an account?
+                      Tạo một tài khoản mới?
                     </label>
                   </div>
-                  {/* End .custom-checkbox */}
 
                   <div className="custom-control custom-checkbox">
                     <input
@@ -137,30 +116,27 @@ function Checkout() {
                       className="custom-control-label"
                       htmlFor="checkout-diff-address"
                     >
-                      Ship to a different address?
+                      Giao hàng đến một địa chỉ khác?
                     </label>
                   </div>
-                  {/* End .custom-checkbox */}
 
-                  <label>Order notes (optional)</label>
+                  <label>Thông tin bổ sung (Tùy chọn)</label>
                   <textarea
                     className="form-control"
                     cols="30"
                     rows="4"
-                    placeholder="Notes about your order, e.g. special notes for delivery"
+                    placeholder="Ghi chú về đơn hàng, ví dụ: thời gian hay chỉ dẫn địa điểm giao hàng chi tiết hơn"
                   ></textarea>
                 </div>
-                {/* End .col-lg-9 */}
                 <aside className="col-lg-3">
                   <div className="summary">
-                    <h3 className="summary-title">Your Order</h3>
-                    {/* End .summary-title */}
+                    <h3 className="summary-title">Đơn hàng của bạn</h3>
 
                     <table className="table table-summary">
                       <thead>
                         <tr>
-                          <th>Product</th>
-                          <th>Total</th>
+                          <th>Sản phẩm</th>
+                          <th>Tạm tính</th>
                         </tr>
                       </thead>
 
@@ -179,22 +155,19 @@ function Checkout() {
                           <td>$76,00</td>
                         </tr>
                         <tr className="summary-subtotal">
-                          <td>Subtotal:</td>
+                          <td>Tạm tính:</td>
                           <td>$160.00</td>
                         </tr>
-                        {/* End .summary-subtotal */}
                         <tr>
-                          <td>Shipping:</td>
-                          <td>Free shipping</td>
+                          <td>Phí giao hàng:</td>
+                          <td>Miễn phí</td>
                         </tr>
                         <tr className="summary-total">
-                          <td>Total:</td>
+                          <td>Tổng cộng:</td>
                           <td>$160.00</td>
                         </tr>
-                        {/* End .summary-total */}
                       </tbody>
                     </table>
-                    {/* End .table table-summary */}
 
                     <div className="accordion-summary" id="accordion-payment">
                       <div className="card">
@@ -207,7 +180,7 @@ function Checkout() {
                               aria-expanded="true"
                               aria-controls="collapse-1"
                             >
-                              Direct bank transfer
+                              Chuyển khoản ngân hàng
                             </a>
                           </h2>
                         </div>
@@ -219,16 +192,11 @@ function Checkout() {
                           data-parent="#accordion-payment"
                         >
                           <div className="card-body">
-                            Make your payment directly into our bank account.
-                            Please use your Order ID as the payment reference.
-                            Your order will not be shipped until the funds have
-                            cleared in our account.
+                            Giữ lại ID đơn hàng khi thanh toán. Đon hàng của bạn
+                            sẽ được vận chuyển khi thanh toán.
                           </div>
-                          {/* End .card-body */}
                         </div>
-                        {/* End .collapse */}
                       </div>
-                      {/* End .card */}
 
                       <div className="card">
                         <div className="card-header" id="heading-2">
@@ -241,11 +209,10 @@ function Checkout() {
                               aria-expanded="false"
                               aria-controls="collapse-2"
                             >
-                              Check payments
+                              Trả tiền mặt khi nhận hàng
                             </a>
                           </h2>
                         </div>
-                        {/* End .card-header */}
                         <div
                           id="collapse-2"
                           className="collapse"
@@ -257,11 +224,8 @@ function Checkout() {
                             Donec odio. Quisque volutpat mattis eros. Nullam
                             malesuada erat ut turpis.
                           </div>
-                          {/* End .card-body */}
                         </div>
-                        {/* End .collapse */}
                       </div>
-                      {/* End .card */}
 
                       <div className="card">
                         <div className="card-header" id="heading-3">
@@ -274,7 +238,7 @@ function Checkout() {
                               aria-expanded="false"
                               aria-controls="collapse-3"
                             >
-                              Cash on delivery
+                              Chuyển khoản bằng Stripe
                             </a>
                           </h2>
                         </div>
@@ -290,11 +254,8 @@ function Checkout() {
                             amet, consectetuer adipiscing elit. Donec odio.
                             Quisque volutpat mattis eros.
                           </div>
-                          {/* End .card-body */}
                         </div>
-                        {/* End .collapse */}
                       </div>
-                      {/* End .card */}
 
                       <div className="card">
                         <div className="card-header" id="heading-4">
@@ -326,11 +287,8 @@ function Checkout() {
                             nibh, viverra non, semper suscipit, posuere a, pede.
                             Donec nec justo eget felis facilisis fermentum.
                           </div>
-                          {/* End .card-body */}
                         </div>
-                        {/* End .collapse */}
                       </div>
-                      {/* End .card */}
 
                       <div className="card">
                         <div className="card-header" id="heading-5">
@@ -343,7 +301,7 @@ function Checkout() {
                               aria-expanded="false"
                               aria-controls="collapse-5"
                             >
-                              Credit Card (Stripe)
+                              Chuyển khoản bằng VNPAY
                               <img
                                 src="assets/images/payments-summary.png"
                                 alt="payments cards"
@@ -365,11 +323,8 @@ function Checkout() {
                             Donec odio. Quisque volutpat mattis eros. Lorem
                             ipsum dolor sit ame.
                           </div>
-                          {/* End .card-body */}
                         </div>
-                        {/* End .collapse */}
                       </div>
-                      {/* End .card */}
                     </div>
                     {/* End .accordion */}
 
@@ -377,28 +332,20 @@ function Checkout() {
                       type="submit"
                       className="btn btn-outline-primary-2 btn-order btn-block"
                     >
-                      <span className="btn-text">Place Order</span>
+                      <span className="btn-text">Đặt hàng</span>
                       <span className="btn-hover-text">
-                        Proceed to Checkout
+                        Tiến hành thanh toán
                       </span>
                     </button>
                   </div>
-                  {/* End .summary */}
                 </aside>
-                {/* End .col-lg-3 */}
               </div>
-              {/* End .row */}
             </form>
           </div>
-          {/* End .container */}
         </div>
-        {/* End .checkout */}
       </div>
-      {/* End .page-content */}
     </main>
   );
 }
-{
-  /*  */
-}
+
 export default Checkout;

@@ -19,14 +19,17 @@ exports.getCartDetails = catchAsyncErrors(async (req, res, next) => {
 
 //Get my cart
 exports.myCart = catchAsyncErrors(async (req, res, next) => {
-  const cart = await Cart.findOne({ user: req.user._id });
+  const cart = await Cart.findOne({ user: req.user._id }).populate({
+    path: "cartItems.product",
+    model: "Product",
+  });
 
-  let cartItems = await cart.cartItems;
+  // let cartItems = await cart.cartItems;
 
   res.status(200).json({
     success: true,
     cart,
-    cartItems,
+    // cartItems,
   });
 });
 
@@ -54,7 +57,6 @@ exports.addCartItem = catchAsyncErrors(async (req, res, next) => {
       let productItem = cart.cartItems[itemIndex];
       productItem.quantity += quantity;
       if (productItem.quantity > item.Stock) {
-        console.log();
         return next(
           new ErrorHander("Số lượng sản phẩm còn lại trong kho không đủ", 400)
         );
@@ -66,7 +68,6 @@ exports.addCartItem = catchAsyncErrors(async (req, res, next) => {
     cart.totalPrice += quantity * price;
     cart = await cart.save();
     let cartItems = await cart.cartItems;
-    console.log(cartItems);
     res.status(201).json({
       success: true,
       cart,

@@ -11,14 +11,10 @@ function Header() {
 
   const { isAuthenticated, user } = useSelector((state) => state.user);
 
-  const { cart, cartItems, isDeleted } = useSelector((state) => state.cart);
+  const { cart, isDeleted } = useSelector((state) => state.cart);
 
   let history = useHistory();
   const dispatch = useDispatch();
-
-  const navigateHiddenLogin = () => {
-    history.push("/login");
-  };
 
   // useEffect(() => {
   //   dispatch(getProduct(category));
@@ -216,7 +212,7 @@ function Header() {
                 >
                   <i className="icon-shopping-cart"></i>
                   <span className="cart-count">
-                    {cartItems && cartItems.length}
+                    {cart && cart.cartItems.length}
                   </span>
                   <span className="cart-txt">
                     {cart && formatPrice(cart.totalPrice)}

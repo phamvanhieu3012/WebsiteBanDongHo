@@ -552,7 +552,7 @@ function HomePage() {
             {products &&
               products.map((product) => {
                 return (
-                  <div className="col-6 col-md-4 col-lg-3">
+                  <div className="col-6 col-md-4 col-lg-3" key={product._id}>
                     <div className="product product-7 text-center">
                       <figure className="product-media">
                         <span className="product-label label-sale">sale</span>

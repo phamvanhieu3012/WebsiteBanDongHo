@@ -1,218 +1,259 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import { addToCart, deleteFromCart, getCart } from "../../actions/cartAction";
+import Loader from "../../components/Common/Loader";
+import {
+  ADD_TO_CART_RESET,
+  REMOVE_CART_ITEM_RESET,
+} from "../../constants/cartConstants";
+import formatPrice from "../../ultils/formatPrice";
 
 function Cart() {
+  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { cart, cartItems, isDeleted, isUpdated, loading } = useSelector(
+    (state) => state.cart
+  );
+
+  let history = useHistory();
+  const dispatch = useDispatch();
+
+  const increaseQuantity = (id, quantity, stock) => {
+    const newQty = quantity + 1;
+    console.log(newQty);
+    if (stock <= quantity) {
+      alert("Sản phẩm trong kho không còn đủ");
+      return;
+    }
+    dispatch(addToCart(id, 1));
+  };
+
+  const decreaseQuantity = (id, quantity) => {
+    console.log(id);
+    const newQty = quantity - 1;
+    if (newQty === 0) {
+      dispatch(deleteFromCart(id));
+      return;
+    }
+    if (1 >= quantity) {
+      return;
+    }
+    dispatch(addToCart(id, -1));
+  };
+
+  const deleteCartItems = (id) => {
+    dispatch(deleteFromCart(id));
+  };
+
+  useEffect(() => {
+    if (isUpdated) {
+      dispatch(getCart());
+      dispatch({ type: ADD_TO_CART_RESET });
+    }
+    if (isDeleted) {
+      dispatch(getCart());
+      dispatch({ type: REMOVE_CART_ITEM_RESET });
+    }
+  }, [dispatch, isUpdated, isDeleted]);
+
   return (
-    <main className="main">
-      <div
-        className="page-header text-center"
-        style={{
-          backgroundImage: "url('assets/images/page-header-bg.jpg')",
-        }}
-      >
-        <div className="container">
-          <h1 className="page-title">
-            Shopping Cart<span>Shop</span>
-          </h1>
-        </div>
-        {/* End .container */}
-      </div>
-      {/* End .page-header */}
-      <nav aria-label="breadcrumb" className="breadcrumb-nav">
-        <div className="container">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item">
-              <a href="index.html">Home</a>
-            </li>
-            <li className="breadcrumb-item">
-              <a href="#">Shop</a>
-            </li>
-            <li className="breadcrumb-item active" aria-current="page">
-              Shopping Cart
-            </li>
-          </ol>
-        </div>
-        {/* End .container */}
-      </nav>
-      {/* End .breadcrumb-nav */}
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <main className="main">
+          <div
+            className="page-header text-center"
+            style={{
+              backgroundImage: "url('assets/images/page-header-bg.jpg')",
+            }}
+          >
+            <div className="container">
+              <h1 className="page-title">Giỏ hàng</h1>
+            </div>
+          </div>
+          <nav aria-label="breadcrumb" className="breadcrumb-nav">
+            <div className="container">
+              <ol className="breadcrumb">
+                <li className="breadcrumb-item">
+                  <a href="/">Trang chủ</a>
+                </li>
+                <li className="breadcrumb-item active" aria-current="page">
+                  Giỏ hàng
+                </li>
+              </ol>
+            </div>
+          </nav>
 
-      <div className="page-content">
-        <div className="cart">
-          <div className="container">
-            <div className="row">
-              <div className="col-lg-9">
-                <table className="table table-cart table-mobile">
-                  <thead>
-                    <tr>
-                      <th>Product</th>
-                      <th>Price</th>
-                      <th>Quantity</th>
-                      <th>Total</th>
-                      <th></th>
-                    </tr>
-                  </thead>
+          <div className="page-content">
+            <div className="cart">
+              <div className="container">
+                <div className="row">
+                  <div className="col-lg-9">
+                    <table className="table table-cart table-mobile">
+                      <thead>
+                        <tr>
+                          <th>Sản phẩm</th>
+                          <th>Giá</th>
+                          <th>Số lượng</th>
+                          <th>Tạm tính</th>
+                          <th></th>
+                        </tr>
+                      </thead>
 
-                  <tbody>
-                    <tr>
-                      <td className="product-col">
-                        <div className="product">
-                          <figure className="product-media">
-                            <a href="#">
-                              <img
-                                src="assets/images/products/table/product-1.jpg"
-                                alt="Product image"
-                              />
-                            </a>
-                          </figure>
+                      <tbody>
+                        {cart &&
+                          cart.cartItems.map((item) => (
+                            <tr key={item.product._id}>
+                              <td className="product-col">
+                                <div className="product">
+                                  <figure className="product-media">
+                                    {console.log(item.product)}
+                                    <Link to={`/product/${item.product._id}`}>
+                                      <img src={item.image} alt={item.name} />
+                                    </Link>
+                                  </figure>
 
-                          <h3 className="product-title">
-                            <a href="#">Beige knitted elastic runner shoes</a>
-                          </h3>
-                          {/* End .product-title */}
-                        </div>
-                        {/* End .product */}
-                      </td>
-                      <td className="price-col">$84.00</td>
-                      <td className="quantity-col">
-                        <div className="cart-product-quantity">
-                          <input
-                            type="number"
-                            className="form-control"
-                            value="1"
-                            min="1"
-                            max="10"
-                            step="1"
-                            data-decimals="0"
-                            required
-                          />
-                        </div>
-                        {/* End .cart-product-quantity */}
-                      </td>
-                      <td className="total-col">$84.00</td>
-                      <td className="remove-col">
-                        <button className="btn-remove">
-                          <i className="icon-close"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="product-col">
-                        <div className="product">
-                          <figure className="product-media">
-                            <a href="#">
-                              <img
-                                src="assets/images/products/table/product-2.jpg"
-                                alt="Product image"
-                              />
-                            </a>
-                          </figure>
+                                  <h3 className="product-title">
+                                    <Link to={`/product/${item.product._id}`}>
+                                      {item.name}
+                                    </Link>
+                                  </h3>
+                                </div>
+                              </td>
+                              <td className="price-col">
+                                {formatPrice(item.price)}
+                              </td>
+                              <td className="quantity-col">
+                                <div className="cart-product-quantity">
+                                  <div
+                                    style={{
+                                      border: "1px solid #d7d7d7",
+                                      borderRadius: "3px",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      height: "40px",
+                                      lineHeight: "30px",
+                                      padding: "0 0.5rem",
+                                      cursor: "pointer",
+                                      width: "130px",
+                                      zIndex: "9999",
+                                    }}
+                                  >
+                                    <p
+                                      style={{
+                                        padding: "0 15px",
+                                        cursor: "pointer",
+                                      }}
+                                      onClick={() =>
+                                        decreaseQuantity(
+                                          item.product._id,
+                                          item.quantity
+                                        )
+                                      }
+                                    >
+                                      -
+                                    </p>
+                                    <input
+                                      style={{
+                                        width: "30px",
+                                        border: "none",
+                                        textAlign: "center",
+                                        height: "40px",
+                                        lineHeight: "30px",
+                                        outline: "none",
+                                      }}
+                                      type="text"
+                                      value={item.quantity}
+                                      readOnly
+                                    />
+                                    <p
+                                      style={{
+                                        padding: "0 15px",
+                                        cursor: "pointer",
+                                      }}
+                                      onClick={() =>
+                                        increaseQuantity(
+                                          item.product._id,
+                                          item.quantity,
+                                          item.product.Stock
+                                        )
+                                      }
+                                    >
+                                      +
+                                    </p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="total-col">
+                                {formatPrice(item.quantity * item.price)}
+                              </td>
+                              <td className="remove-col">
+                                <button
+                                  className="btn-remove"
+                                  onClick={() =>
+                                    deleteCartItems(item.product._id)
+                                  }
+                                >
+                                  <i className="icon-close"></i>
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
 
-                          <h3 className="product-title">
-                            <a href="#">Blue utility pinafore denim dress</a>
-                          </h3>
-                          {/* End .product-title */}
-                        </div>
-                        {/* End .product */}
-                      </td>
-                      <td className="price-col">$76.00</td>
-                      <td className="quantity-col">
-                        <div className="cart-product-quantity">
-                          <input
-                            type="number"
-                            className="form-control"
-                            value="1"
-                            min="1"
-                            max="10"
-                            step="1"
-                            data-decimals="0"
-                            required
-                          />
-                        </div>
-                        {/* End .cart-product-quantity */}
-                      </td>
-                      <td className="total-col">$76.00</td>
-                      <td className="remove-col">
-                        <button className="btn-remove">
-                          <i className="icon-close"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                {/* End .table table-wishlist */}
-
-                <div className="cart-bottom">
-                  <div className="cart-discount">
-                    <form action="#">
-                      <div className="input-group">
-                        <input
-                          type="text"
-                          className="form-control"
-                          required
-                          placeholder="coupon code"
-                        />
-                        <div className="input-group-append">
-                          <button
-                            className="btn btn-outline-primary-2"
-                            type="submit"
-                          >
-                            <i className="icon-long-arrow-right"></i>
-                          </button>
-                        </div>
-                        {/* .End .input-group-append */}
-                      </div>
-                      {/* End .input-group */}
-                    </form>
+                    <div className="cart-bottom">
+                      <a href="#" className="btn btn-outline-dark-2">
+                        <span>CẬP NHẬT GIỎ HÀNG</span>
+                        <i className="icon-refresh"></i>
+                      </a>
+                    </div>
+                    {/* End .cart-bottom */}
                   </div>
-                  {/* End .cart-discount */}
+                  {/* End .col-lg-9 */}
+                  <aside className="col-lg-3">
+                    <div className="summary summary-cart">
+                      <h3 className="summary-title">Tổng giỏ hàng</h3>
+                      {/* End .summary-title */}
 
-                  <a href="#" className="btn btn-outline-dark-2">
-                    <span>UPDATE CART</span>
-                    <i className="icon-refresh"></i>
-                  </a>
-                </div>
-                {/* End .cart-bottom */}
-              </div>
-              {/* End .col-lg-9 */}
-              <aside className="col-lg-3">
-                <div className="summary summary-cart">
-                  <h3 className="summary-title">Cart Total</h3>
-                  {/* End .summary-title */}
+                      <table className="table table-summary">
+                        <tbody>
+                          <tr className="summary-subtotal">
+                            <td>Tạm tính:</td>
+                            <td>{cart && formatPrice(cart.totalPrice)}</td>
+                          </tr>
+                          {/* End .summary-subtotal */}
+                          <tr className="summary-shipping">
+                            <td>Shipping:</td>
+                            <td>&nbsp;</td>
+                          </tr>
 
-                  <table className="table table-summary">
-                    <tbody>
-                      <tr className="summary-subtotal">
-                        <td>Subtotal:</td>
-                        <td>$160.00</td>
-                      </tr>
-                      {/* End .summary-subtotal */}
-                      <tr className="summary-shipping">
-                        <td>Shipping:</td>
-                        <td>&nbsp;</td>
-                      </tr>
+                          <tr className="summary-shipping-row">
+                            <td>
+                              <div className="custom-control custom-radio">
+                                <input
+                                  type="radio"
+                                  id="free-shipping"
+                                  name="shipping"
+                                  className="custom-control-input"
+                                  checked
+                                />
+                                <label
+                                  className="custom-control-label"
+                                  htmlFor="free-shipping"
+                                >
+                                  Miễn phí vận chuyển
+                                </label>
+                              </div>
+                              {/* End .custom-control */}
+                            </td>
+                            <td>{formatPrice(0)}</td>
+                          </tr>
+                          {/* End .summary-shipping-row */}
 
-                      <tr className="summary-shipping-row">
-                        <td>
-                          <div className="custom-control custom-radio">
-                            <input
-                              type="radio"
-                              id="free-shipping"
-                              name="shipping"
-                              className="custom-control-input"
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="free-shipping"
-                            >
-                              Free Shipping
-                            </label>
-                          </div>
-                          {/* End .custom-control */}
-                        </td>
-                        <td>$0.00</td>
-                      </tr>
-                      {/* End .summary-shipping-row */}
-
-                      <tr className="summary-shipping-row">
+                          {/* <tr className="summary-shipping-row">
                         <td>
                           <div className="custom-control custom-radio">
                             <input
@@ -228,11 +269,10 @@ function Cart() {
                               Standart:
                             </label>
                           </div>
-                          {/* End .custom-control */}
                         </td>
                         <td>$10.00</td>
                       </tr>
-                      {/* End .summary-shipping-row */}
+                     
 
                       <tr className="summary-shipping-row">
                         <td>
@@ -250,57 +290,48 @@ function Cart() {
                               Express:
                             </label>
                           </div>
-                          {/* End .custom-control */}
                         </td>
                         <td>$20.00</td>
-                      </tr>
-                      {/* End .summary-shipping-row */}
+                      </tr> */}
 
-                      <tr className="summary-shipping-estimate">
+                          {/* <tr className="summary-shipping-estimate">
                         <td>
                           Estimate for Your Country
                           <br /> <a href="dashboard.html">Change address</a>
                         </td>
                         <td>&nbsp;</td>
-                      </tr>
-                      {/* End .summary-shipping-estimate */}
+                      </tr> */}
 
-                      <tr className="summary-total">
-                        <td>Total:</td>
-                        <td>$160.00</td>
-                      </tr>
-                      {/* End .summary-total */}
-                    </tbody>
-                  </table>
-                  {/* End .table table-summary */}
+                          <tr className="summary-total">
+                            <td>Tổng cộng:</td>
+                            <td>{cart && formatPrice(cart.totalPrice)}</td>
+                          </tr>
+                        </tbody>
+                      </table>
 
-                  <a
-                    href="checkout.html"
-                    className="btn btn-outline-primary-2 btn-order btn-block"
-                  >
-                    PROCEED TO CHECKOUT
-                  </a>
+                      <a
+                        href="/checkout"
+                        className="btn btn-outline-primary-2 btn-order btn-block"
+                      >
+                        THANH TOÁN
+                      </a>
+                    </div>
+
+                    <a
+                      href="/products"
+                      className="btn btn-outline-dark-2 btn-block mb-3"
+                    >
+                      <span>TIẾP TỤC MUA SẮM</span>
+                      <i className="icon-refresh"></i>
+                    </a>
+                  </aside>
                 </div>
-                {/* End .summary */}
-
-                <a
-                  href="category.html"
-                  className="btn btn-outline-dark-2 btn-block mb-3"
-                >
-                  <span>CONTINUE SHOPPING</span>
-                  <i className="icon-refresh"></i>
-                </a>
-              </aside>
-              {/* End .col-lg-3 */}
+              </div>
             </div>
-            {/* End .row */}
           </div>
-          {/* End .container */}
-        </div>
-        {/* End .cart */}
-      </div>
-      {/* End .page-content */}
-    </main>
+        </main>
+      )}
+    </>
   );
 }
 
