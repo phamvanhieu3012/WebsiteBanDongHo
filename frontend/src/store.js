@@ -30,6 +30,7 @@ import {
   userDetailsReducer,
   userReducer,
 } from "./reducers/userReducer";
+import { cartReducer } from "./reducers/cartReducer";
 
 const reducer = combineReducers({
   // Product
@@ -49,6 +50,8 @@ const reducer = combineReducers({
   //Review
   newReview: newReviewReducer,
   review: reviewReducer,
+  //Cart
+  cart: cartReducer,
 });
 
 let initialState = {

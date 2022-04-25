@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory, useParams } from "react-router-dom";
+import { deleteFromCart, getCart } from "../../../actions/cartAction.js";
 import { logout } from "../../../actions/userAction.js";
+import { REMOVE_CART_ITEM_RESET } from "../../../constants/cartConstants.js";
+import formatPrice from "../../../ultils/formatPrice.js";
 
 function Header() {
   const [keyword, setKeyword] = useState("");
 
   const { isAuthenticated, user } = useSelector((state) => state.user);
+
+  const { cart, cartItems, isDeleted } = useSelector((state) => state.cart);
 
   let history = useHistory();
   const dispatch = useDispatch();
@@ -33,6 +38,21 @@ function Header() {
       history.push("/products");
     }
   };
+
+  const deleteCartItems = (id) => {
+    dispatch(deleteFromCart(id));
+  };
+
+  useEffect(() => {
+    dispatch(getCart());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isDeleted) {
+      dispatch(getCart());
+      dispatch({ type: REMOVE_CART_ITEM_RESET });
+    }
+  }, [dispatch, isDeleted]);
 
   return (
     <div className="page-wrapper">
@@ -195,69 +215,62 @@ function Header() {
                   data-display="static"
                 >
                   <i className="icon-shopping-cart"></i>
-                  <span className="cart-count">2</span>
-                  <span className="cart-txt">$ 164,00</span>
+                  <span className="cart-count">
+                    {cartItems && cartItems.length}
+                  </span>
+                  <span className="cart-txt">
+                    {cart && formatPrice(cart.totalPrice)}
+                  </span>
                 </a>
 
                 <div className="dropdown-menu dropdown-menu-right">
                   <div className="dropdown-cart-products">
-                    <div className="product">
-                      <div className="product-cart-details">
-                        <h4 className="product-title">
-                          <a href="product.html">
-                            Beige knitted elastic runner shoes
-                          </a>
-                        </h4>
+                    {cart &&
+                      cart.cartItems.map((item) => (
+                        <div className="product" key={item.product}>
+                          <div className="product-cart-details">
+                            <h4 className="product-title">
+                              <Link to={`/product/${item.product}`}>
+                                {item.name}
+                              </Link>
+                            </h4>
 
-                        <span className="cart-product-info">
-                          <span className="cart-product-qty">1</span>x $84.00
-                        </span>
-                      </div>
+                            <span className="cart-product-info">
+                              <span className="cart-product-qty">
+                                {item.quantity}
+                              </span>{" "}
+                              x {formatPrice(item.price)}
+                            </span>
+                          </div>
 
-                      <figure className="product-image-container">
-                        <a href="product.html" className="product-image">
-                          <img
-                            src="assets/images/products/cart/product-1.jpg"
-                            alt="product"
-                          />
-                        </a>
-                      </figure>
-                      <a href="#" className="btn-remove" title="Remove Product">
-                        <i className="icon-close"></i>
-                      </a>
-                    </div>
-
-                    <div className="product">
-                      <div className="product-cart-details">
-                        <h4 className="product-title">
-                          <a href="product.html">
-                            Blue utility pinafore denim dress
-                          </a>
-                        </h4>
-
-                        <span className="cart-product-info">
-                          <span className="cart-product-qty">1</span>x $76.00
-                        </span>
-                      </div>
-
-                      <figure className="product-image-container">
-                        <a href="product.html" className="product-image">
-                          <img
-                            src="assets/images/products/cart/product-2.jpg"
-                            alt="product"
-                          />
-                        </a>
-                      </figure>
-                      <a href="#" className="btn-remove" title="Remove Product">
-                        <i className="icon-close"></i>
-                      </a>
-                    </div>
+                          <figure className="product-image-container">
+                            <Link
+                              to={`/product/${item.product}`}
+                              className="product-image"
+                            >
+                              <img src={item.image} alt={item.name} />
+                            </Link>
+                          </figure>
+                          <p
+                            className="btn-remove"
+                            title="Xóa sản phẩm"
+                            style={{
+                              cursor: "pointer",
+                            }}
+                            onClick={() => deleteCartItems(item.product)}
+                          >
+                            <i className="icon-close"></i>
+                          </p>
+                        </div>
+                      ))}
                   </div>
 
                   <div className="dropdown-cart-total">
                     <span>Tổng cộng</span>
 
-                    <span className="cart-total-price">$160.00</span>
+                    <span className="cart-total-price">
+                      {cart && formatPrice(cart.totalPrice)}
+                    </span>
                   </div>
 
                   <div className="dropdown-cart-action">

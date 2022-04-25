@@ -30,6 +30,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { NEW_REVIEW_RESET } from "../../constants/productConstants";
 import "./ProductDetail.scss";
+import { addToCart, getCart } from "../../actions/cartAction";
+import { ADD_TO_CART_RESET } from "../../constants/cartConstants";
 
 const responsive = {
   desktop: {
@@ -70,6 +72,7 @@ function ProductDetail() {
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+  const [quantity, setQuantity] = useState(1);
 
   const handleChange = (event, newValue) => {
     setValueTab(newValue);
@@ -92,6 +95,8 @@ function ProductDetail() {
     (state) => state.newReview
   );
 
+  const { error: cartError, isUpdated } = useSelector((state) => state.cart);
+
   const { products } = useSelector((state) => state.productsAdmin);
 
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -112,6 +117,10 @@ function ProductDetail() {
     dispatch(getAdminProduct());
   }, [dispatch]);
 
+  useEffect(() => {
+    scrollToTop();
+  }, []);
+
   const submitReviewToggle = () => {
     open ? setOpen(false) : setOpen(true);
   };
@@ -125,6 +134,40 @@ function ProductDetail() {
     dispatch(newReview(myForm));
     setOpen(false);
   };
+
+  //Handle cart
+
+  const handleIncrement = () => {
+    console.log(product.Stock);
+    if (product.Stock <= quantity) return;
+
+    const qty = quantity + 1;
+    setQuantity(qty);
+  };
+
+  const handleDecrement = () => {
+    if (1 >= quantity) return;
+
+    const qty = quantity - 1;
+    setQuantity(qty);
+  };
+
+  const addToCartHandler = () => {
+    if (cartError) {
+      alert(cartError);
+      return;
+    }
+    dispatch(addToCart(product._id, quantity));
+    alert("Thêm sản phẩm vào giỏ hàng thành công");
+    dispatch(getProductDetails(match.id));
+  };
+
+  useEffect(() => {
+    if (isUpdated) {
+      dispatch(getCart());
+      dispatch({ type: ADD_TO_CART_RESET });
+    }
+  }, [dispatch, isUpdated]);
 
   return (
     <main className="main">
@@ -170,7 +213,7 @@ function ProductDetail() {
                     >
                       <a
                         style={{
-                          height: "fitContent",
+                          height: "fit-content",
                         }}
                         className="product-gallery-item active"
                         href="#"
@@ -213,11 +256,7 @@ function ProductDetail() {
                       value={product && product.ratings}
                       readOnly
                     />
-                    <a
-                      className="ratings-text"
-                      href="#product-review-link"
-                      id="review-link"
-                    >
+                    <a className="ratings-text" href="#" id="review-link">
                       ( {product && product.numOfReviews} Reviews )
                     </a>
                   </div>
@@ -252,6 +291,10 @@ function ProductDetail() {
                   </div>
                   {/* End .details-filter-row */}
 
+                  <div className="product-content">
+                    <p>Hiện có: {product.Stock} sản phẩm </p>
+                  </div>
+
                   <div
                     style={{
                       marginTop: "1rem",
@@ -276,14 +319,15 @@ function ProductDetail() {
                       }}
                     >
                       {/* <span onClick={handleDecrement}>-</span> */}
-                      <p style={{ margin: "0 auto" }}>-</p>
+                      <p
+                        style={{ padding: "0 15px", cursor: "pointer" }}
+                        onClick={handleDecrement}
+                      >
+                        -
+                      </p>
                       <input
                         style={{
                           width: "30px",
-                          // borderLeft: "none",
-                          // borderRight: "none",
-                          // borderTop: "1px solid #d7d7d7",
-                          // borderBottom: "1px solid #d7d7d7",
                           border: "none",
                           textAlign: "center",
                           height: "40px",
@@ -291,19 +335,31 @@ function ProductDetail() {
                           outline: "none",
                         }}
                         type="text"
-                        value={1}
+                        value={quantity}
                         readOnly
                       />
-                      <p style={{ margin: "0 auto" }}>+</p>
+                      <p
+                        style={{ padding: "0 15px", cursor: "pointer" }}
+                        onClick={handleIncrement}
+                      >
+                        +
+                      </p>
                       {/* <span onClick={handleIncrement}>+</span> */}
                     </div>
                   </div>
                   {/* End .details-filter-row */}
 
                   <div className="product-details-action">
-                    <a href="#" className="btn-product btn-cart">
+                    <p
+                      className="btn-product btn-cart"
+                      style={{
+                        cursor: "pointer",
+                        transition: "all 0.25s linear",
+                      }}
+                      onClick={addToCartHandler}
+                    >
                       <span>Thêm vào giỏ hàng</span>
-                    </a>
+                    </p>
 
                     <div className="details-action-wrapper">
                       <a

@@ -6797,6 +6797,11 @@ p {
 .btn-cart:before {
   content: "\e812";
 }
+
+.btn-cart:hover span {
+  color: white !important;
+}
+
 .btn-wishlist {
   font-size: 1.6rem;
 }
