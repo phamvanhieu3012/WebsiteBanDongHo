@@ -9,12 +9,34 @@ import {
 } from "../../actions/userAction";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles({
+  root: {},
+  avatarInput: {
+    display: "flex",
+    alignItems: " center",
+  },
+  avatarPreview: {
+    width: "6rem",
+    height: "6rem",
+    borderRadius: "100%",
+    marginRight: "15px",
+  },
+  avatarFile: {
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    padding: "0%",
+  },
+});
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 function Login() {
+  const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
   const handleClose = (event, reason) => {
@@ -42,6 +64,9 @@ function Login() {
   const { name, email, password } = user;
   const [er, setEr] = useState("");
 
+  const [avatar, setAvatar] = useState("/Profile.png");
+  const [avatarPreview, setAvatarPreview] = useState("/Profile.png");
+
   const loginSubmit = (e) => {
     e.preventDefault();
     dispatch(login(loginEmail, loginPassword));
@@ -50,17 +75,42 @@ function Login() {
   const registerSubmit = (e) => {
     e.preventDefault();
 
-    const myForm = {
-      name,
-      email,
-      password,
-    };
+    // const myForm = {
+    //   name,
+    //   email,
+    //   password,
+    //   avatar,
+    // };
+
+    const myForm = new FormData();
+
+    console.log(avatar);
+
+    myForm.set("name", name);
+    myForm.set("email", email);
+    myForm.set("password", password);
+    myForm.set("avatar", avatar);
+
+    console.log(myForm);
 
     dispatch(register(myForm));
   };
 
   const registerDataChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    if (e.target.name === "avatar") {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setAvatarPreview(reader.result);
+          setAvatar(reader.result);
+        }
+      };
+
+      reader.readAsDataURL(e.target.files[0]);
+    } else {
+      setUser({ ...user, [e.target.name]: e.target.value });
+    }
   };
 
   useEffect(() => {
@@ -247,6 +297,24 @@ function Login() {
                         value={password}
                         onChange={registerDataChange}
                       />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="register-avatar">Ảnh đại diện</label>
+                      <div id="registerImage" className={classes.avatarInput}>
+                        <img
+                          src={avatarPreview}
+                          alt="Avatar Preview"
+                          className={classes.avatarPreview}
+                        />
+                        <input
+                          id="register-avatar"
+                          className={classes.avatarFile}
+                          type="file"
+                          name="avatar"
+                          accept="image/*"
+                          onChange={registerDataChange}
+                        />
+                      </div>
                     </div>
 
                     <div className="form-footer">

@@ -72,13 +72,22 @@ export const register = (userData) => async (dispatch) => {
   try {
     dispatch({ type: REGISTER_USER_REQUEST });
 
-    const config = {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-      },
-    };
+    // const config = {
+    //   headers: {
+    //     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+    //   },
+    // };
 
-    const data = await axiosClient.post(`/api/v1/register`, userData, config);
+    const config = { headers: { "Content-Type": "multipart/form-data" } };
+
+    console.log("hello world");
+
+    const { data } = await axios.post(
+      `http://localhost:4000/api/v1/register`,
+      userData,
+      config
+    );
+    console.log("hello world");
 
     dispatch({ type: REGISTER_USER_SUCCESS, payload: data.user });
   } catch (error) {

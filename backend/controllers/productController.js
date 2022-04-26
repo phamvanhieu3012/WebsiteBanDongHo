@@ -2,6 +2,7 @@ const Product = require("../models/productModel");
 const ErrorHander = require("../utils/errorhander");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ApiFeatures = require("../utils/apifeatures");
+const cloudinary = require("cloudinary");
 
 // Get All Product with Pagination
 exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
@@ -147,28 +148,28 @@ exports.getProductDetails = catchAsyncErrors(async (req, res, next) => {
 
 // Create Product -- Staff
 exports.createProduct = catchAsyncErrors(async (req, res, next) => {
-  // let images = [];
+  let images = [];
 
-  // if (typeof req.body.images === "string") {
-  //   images.push(req.body.images);
-  // } else {
-  //   images = req.body.images;
-  // }
+  if (typeof req.body.images === "string") {
+    images.push(req.body.images);
+  } else {
+    images = req.body.images;
+  }
 
-  // const imagesLinks = [];
+  const imagesLinks = [];
 
-  // for (let i = 0; i < images.length; i++) {
-  //   const result = await cloudinary.v2.uploader.upload(images[i], {
-  //     folder: "products",
-  //   });
+  for (let i = 0; i < images.length; i++) {
+    const result = await cloudinary.v2.uploader.upload(images[i], {
+      folder: "products",
+    });
 
-  //   imagesLinks.push({
-  //     public_id: result.public_id,
-  //     url: result.secure_url,
-  //   });
-  // }
+    imagesLinks.push({
+      public_id: result.public_id,
+      url: result.secure_url,
+    });
+  }
 
-  // req.body.images = imagesLinks;
+  req.body.images = imagesLinks;
   req.body.user = req.user.id;
 
   const product = await Product.create(req.body);
@@ -188,36 +189,36 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHander("Không tìm thấy sản phẩm", 404));
   }
 
-  // // Images Start Here
-  // let images = [];
+  // Xử lý Images
+  let images = [];
 
-  // if (typeof req.body.images === "string") {
-  //   images.push(req.body.images);
-  // } else {
-  //   images = req.body.images;
-  // }
+  if (typeof req.body.images === "string") {
+    images.push(req.body.images);
+  } else {
+    images = req.body.images;
+  }
 
-  // if (images !== undefined) {
-  //   // Deleting Images From Cloudinary
-  //   for (let i = 0; i < product.images.length; i++) {
-  //     await cloudinary.v2.uploader.destroy(product.images[i].public_id);
-  //   }
+  if (images !== undefined) {
+    // Xóa ảnh ở Cloudinary
+    for (let i = 0; i < product.images.length; i++) {
+      await cloudinary.v2.uploader.destroy(product.images[i].public_id);
+    }
 
-  //   const imagesLinks = [];
+    const imagesLinks = [];
 
-  //   for (let i = 0; i < images.length; i++) {
-  //     const result = await cloudinary.v2.uploader.upload(images[i], {
-  //       folder: "products",
-  //     });
+    for (let i = 0; i < images.length; i++) {
+      const result = await cloudinary.v2.uploader.upload(images[i], {
+        folder: "products",
+      });
 
-  //     imagesLinks.push({
-  //       public_id: result.public_id,
-  //       url: result.secure_url,
-  //     });
-  //   }
+      imagesLinks.push({
+        public_id: result.public_id,
+        url: result.secure_url,
+      });
+    }
 
-  //   req.body.images = imagesLinks;
-  // }
+    req.body.images = imagesLinks;
+  }
 
   product = await Product.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -239,10 +240,10 @@ exports.deleteProduct = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHander("Không tìm thấy sản phẩm", 404));
   }
 
-  // // Deleting Images From Cloudinary
-  // for (let i = 0; i < product.images.length; i++) {
-  //   await cloudinary.v2.uploader.destroy(product.images[i].public_id);
-  // }
+  // Xóa ảnh ở Cloudinary
+  for (let i = 0; i < product.images.length; i++) {
+    await cloudinary.v2.uploader.destroy(product.images[i].public_id);
+  }
 
   await product.remove();
 

@@ -4,14 +4,17 @@ const User = require("../models/userModel");
 const sendToken = require("../utils/jwtToken");
 const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
+const cloudinary = require("cloudinary");
 
 // Register a User
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  // const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-  //   folder: "avatars",
-  //   width: 150,
-  //   crop: "scale",
-  // });
+  const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+    folder: "avatars",
+    width: 150,
+    crop: "scale",
+  });
+
+  console.log(myCloud);
 
   const { name, email, password, shippingInfo } = req.body;
 
@@ -20,10 +23,10 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     email,
     password,
     avatar: {
-      // public_id: myCloud.public_id,
-      // url: myCloud.secure_url,
-      public_id: "this is a sample id",
-      url: "https://res.cloudinary.com/phuockaito/image/upload/v1617902959/user/1_gxwhfk.jpg",
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
+      // public_id: "this is a sample id",
+      // url: "https://res.cloudinary.com/phuockaito/image/upload/v1617902959/user/1_gxwhfk.jpg",
     },
     shippingInfo,
   });
