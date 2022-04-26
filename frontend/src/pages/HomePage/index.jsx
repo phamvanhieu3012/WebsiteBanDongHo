@@ -5,6 +5,8 @@ import { getNProducts } from "../../actions/productAction";
 import { loadUser } from "../../actions/userAction";
 import store from "../../store";
 import formatPrice from "../../ultils/formatPrice";
+import Carousel from "react-elastic-carousel";
+import "./Homepage.scss";
 
 function HomePage() {
   const { products, loading, error } = useSelector((state) => state.nProducts);
@@ -18,55 +20,25 @@ function HomePage() {
   return (
     <main className="main">
       <div className="intro-slider-container">
-        <div
-          className="intro-slider owl-carousel owl-theme owl-nav-inside owl-light"
-          data-toggle="owl"
-          data-owl-options='{
-                        "dots": false,
-                        "nav": false, 
-                        "responsive": {
-                            "992": {
-                                "nav": true
-                            }
-                        }
-                    }'
-        >
-          <div
-            className="intro-slide"
-            style={{
-              backgroundImage:
-                "url(assets/images/banners/home/banner-dongho.png)",
-            }}
-          >
-            {/* <div className="container intro-content text-center">
+        <Carousel itemsToShow={1} pagination={false}>
+          {/*
+             <div className="container intro-content text-center">
               <h3 className="intro-subtitle text-white">You're Looking Good</h3>
               <h1 className="intro-title text-white">New Lookbook</h1>
 
               <a href="/products" className="btn btn-outline-white-4">
                 <span>Discover More</span>
               </a>
-            </div> */}
-          </div>
-
-          <div
-            className="intro-slide"
-            style={{
-              backgroundImage:
-                "url(assets/images/banners/home/banner-dongho3.png)",
-            }}
-          >
-            {/* <div className="container intro-content text-center">
-              <h3 className="intro-subtitle text-white">Don’t Miss</h3>
-              <h1 className="intro-title text-white">Mysrety Deals</h1>
-
-              <a href="/products" className="btn btn-outline-white-4">
-                <span>Discover More</span>
-              </a>
-            </div> */}
-          </div>
-        </div>
-
-        <span className="slider-loader"></span>
+          </div>*/}
+          <img
+            src="assets/images/banners/home/banner-dongho.png"
+            alt="banner 1"
+          />
+          <img
+            src="assets/images/banners/home/banner-dongho3.png"
+            alt="banner 3"
+          />
+        </Carousel>
       </div>
 
       <div className="pt-2 pb-3">
