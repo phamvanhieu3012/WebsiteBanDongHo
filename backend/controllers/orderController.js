@@ -1,5 +1,6 @@
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
+const Cart = require("../models/cartModel");
 const ErrorHander = require("../utils/errorhander");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 
@@ -15,6 +16,11 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     shippingPrice,
     totalPrice,
   } = req.body;
+
+  let cart = await Cart.findOne({ user: req.user._id });
+  if (cart) {
+    const data = await Cart.findByIdAndDelete({ _id: cart._id });
+  }
 
   const order = await Order.create({
     shippingInfo,
