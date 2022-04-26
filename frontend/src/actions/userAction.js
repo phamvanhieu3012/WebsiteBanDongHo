@@ -35,6 +35,9 @@ import {
   USER_DETAILS_SUCCESS,
   USER_DETAILS_FAIL,
   CLEAR_ERRORS,
+  UPDATE_SHIP_REQUEST,
+  UPDATE_SHIP_SUCCESS,
+  UPDATE_SHIP_FAIL,
 } from "../constants/userConstants";
 import axios from "axios";
 import axiosClient from "../api/axiosClient";
@@ -156,6 +159,36 @@ export const updateProfile = (userData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: UPDATE_PROFILE_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Update Profile
+export const updateShippingInfo = (userData) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_SHIP_REQUEST });
+
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `token ${token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `http://localhost:4000/api/v1/shippingInfo/update`,
+      {
+        shippingInfo: userData,
+      },
+      config
+    );
+
+    dispatch({ type: UPDATE_SHIP_SUCCESS, payload: data.success });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_SHIP_FAIL,
       payload: error.response.data.message,
     });
   }
