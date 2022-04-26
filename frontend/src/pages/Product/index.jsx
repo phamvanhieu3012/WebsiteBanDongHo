@@ -312,33 +312,38 @@ function Product() {
                     unmountOnExit
                   >
                     <div className="widget-body">
-                      <div className="filter-items filter-items-count">
+                      <div className="filter-items">
                         {categories &&
-                          categories.map((category) => {
+                          categories.map((cat) => {
                             return (
-                              <div className="filter-item" key={category._id}>
+                              <div className="filter-item" key={cat._id}>
                                 <div className="custom-control custom-checkbox">
                                   <input
                                     type="checkbox"
                                     className="custom-control-input"
-                                    id={`cat ${category._id}`}
+                                    id={`${cat._id}`}
                                     onClick={(e) => {
                                       if (e.target.checked) {
-                                        setPrice([0, 2]);
+                                        console.log("lan 1");
+                                        setCategory(cat._id);
                                       } else {
-                                        setPrice([0, 40]);
+                                        console.log("lan 2");
+                                        setCategory("");
                                       }
                                     }}
+                                    checked={
+                                      category === cat._id ? true : false
+                                    }
                                   />
                                   <label
                                     className="custom-control-label"
-                                    htmlFor={`cat ${category._id}`}
+                                    htmlFor={`${cat._id}`}
                                   >
-                                    {category.name}
+                                    {cat.name}
                                   </label>
                                 </div>
                                 {/* End .custom-checkbox */}
-                                <span className="item-count">3</span>
+                                {/* <span className="item-count">3</span> */}
                               </div>
                             );
                           })}

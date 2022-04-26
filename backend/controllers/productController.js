@@ -133,7 +133,7 @@ exports.getWomenProducts = catchAsyncErrors(async (req, res, next) => {
 
 // Get Product Details
 exports.getProductDetails = catchAsyncErrors(async (req, res, next) => {
-  const product = await Product.findById(req.params.id);
+  const product = await Product.findById(req.params.id).populate("category");
 
   if (!product) {
     return next(new ErrorHander("Product not found", 404));
