@@ -14,6 +14,8 @@ function Header() {
 
   const { cart, isDeleted, loading } = useSelector((state) => state.cart);
 
+  const { cartItems } = useSelector((state) => state.cartLocal);
+
   let history = useHistory();
   const dispatch = useDispatch();
 
@@ -50,6 +52,17 @@ function Header() {
       dispatch({ type: REMOVE_CART_ITEM_RESET });
     }
   }, [dispatch, isDeleted]);
+
+  let toggleCartItems = localStorage.getItem("cartItems");
+  const [toggle, setToggle] = useState(false);
+
+  useEffect(() => {
+    if (toggleCartItems) {
+      setToggle(true);
+    } else {
+      setToggle(false);
+    }
+  }, [toggleCartItems]);
 
   return (
     <>
@@ -208,97 +221,193 @@ function Header() {
                 <span className="wishlist-txt">My Wishlist</span>
               </a> */}
 
-                  <div className="dropdown cart-dropdown">
-                    <a
-                      href="#"
-                      className="dropdown-toggle"
-                      role="button"
-                      data-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                      data-display="static"
-                    >
-                      <i className="icon-shopping-cart"></i>
-                      <span className="cart-count">
-                        {cart ? cart.cartItems.length : `0`}
-                      </span>
-                      <span className="cart-txt">
-                        {cart && formatPrice(cart.totalPrice)}
-                      </span>
-                    </a>
-
-                    <div className="dropdown-menu dropdown-menu-right">
-                      <div className="dropdown-cart-products">
-                        {cart &&
-                          cart.cartItems.map((item) => (
-                            <div className="product" key={item.product}>
-                              <div className="product-cart-details">
-                                <h4 className="product-title">
-                                  <Link to={`/product/${item.product}`}>
-                                    {item.name}
-                                  </Link>
-                                </h4>
-
-                                <span className="cart-product-info">
-                                  <span className="cart-product-qty">
-                                    {item.quantity}
-                                  </span>{" "}
-                                  x {formatPrice(item.price)}
-                                </span>
-                              </div>
-
-                              <figure className="product-image-container">
-                                <Link
-                                  to={`/product/${item.product}`}
-                                  className="product-image"
-                                >
-                                  <img src={item.image} alt={item.name} />
-                                </Link>
-                              </figure>
-                              <p
-                                className="btn-remove"
-                                title="Xóa sản phẩm"
-                                style={{
-                                  cursor: "pointer",
-                                }}
-                                onClick={() => deleteCartItems(item.product)}
-                              >
-                                <i className="icon-close"></i>
-                              </p>
-                            </div>
-                          ))}
-                      </div>
-
-                      <div className="dropdown-cart-total">
-                        <span>Tổng cộng</span>
-
-                        <span className="cart-total-price">
+                  {user ? (
+                    <div className="dropdown cart-dropdown">
+                      <a
+                        href="#"
+                        className="dropdown-toggle"
+                        role="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        data-display="static"
+                      >
+                        <i className="icon-shopping-cart"></i>
+                        <span className="cart-count">
+                          {cart ? cart.cartItems.length : `0`}
+                        </span>
+                        <span className="cart-txt">
                           {cart && formatPrice(cart.totalPrice)}
                         </span>
-                      </div>
+                      </a>
 
-                      <div className="dropdown-cart-action">
-                        <a
-                          href="/cart"
-                          className="btn btn-outline-primary-2"
-                          style={{
-                            "&:hover": {
-                              color: "#c96 !important",
-                            },
-                          }}
-                        >
-                          Giỏ hàng
-                        </a>
-                        <a
-                          href="/checkout"
-                          className="btn btn-outline-primary-2"
-                        >
-                          <span>Thanh toán</span>
-                          <i className="icon-long-arrow-right"></i>
-                        </a>
+                      <div className="dropdown-menu dropdown-menu-right">
+                        <div className="dropdown-cart-products">
+                          {cart &&
+                            cart.cartItems.map((item) => (
+                              <div className="product" key={item.product}>
+                                <div className="product-cart-details">
+                                  <h4 className="product-title">
+                                    <Link to={`/product/${item.product}`}>
+                                      {item.name}
+                                    </Link>
+                                  </h4>
+
+                                  <span className="cart-product-info">
+                                    <span className="cart-product-qty">
+                                      {item.quantity}
+                                    </span>{" "}
+                                    x {formatPrice(item.price)}
+                                  </span>
+                                </div>
+
+                                <figure className="product-image-container">
+                                  <Link
+                                    to={`/product/${item.product}`}
+                                    className="product-image"
+                                  >
+                                    <img src={item.image} alt={item.name} />
+                                  </Link>
+                                </figure>
+                                <p
+                                  className="btn-remove"
+                                  title="Xóa sản phẩm"
+                                  style={{
+                                    cursor: "pointer",
+                                  }}
+                                  onClick={() => deleteCartItems(item.product)}
+                                >
+                                  <i className="icon-close"></i>
+                                </p>
+                              </div>
+                            ))}
+                        </div>
+
+                        <div className="dropdown-cart-total">
+                          <span>Tổng cộng</span>
+
+                          <span className="cart-total-price">
+                            {cart && formatPrice(cart.totalPrice)}
+                          </span>
+                        </div>
+
+                        <div className="dropdown-cart-action">
+                          <a
+                            href="/cart"
+                            className="btn btn-outline-primary-2"
+                            style={{
+                              "&:hover": {
+                                color: "#c96 !important",
+                              },
+                            }}
+                          >
+                            Giỏ hàng
+                          </a>
+                          <a
+                            href="/checkout"
+                            className="btn btn-outline-primary-2"
+                          >
+                            <span>Thanh toán</span>
+                            <i className="icon-long-arrow-right"></i>
+                          </a>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="dropdown cart-dropdown">
+                      <a
+                        href="#"
+                        className="dropdown-toggle"
+                        role="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        data-display="static"
+                      >
+                        <i className="icon-shopping-cart"></i>
+                        <span className="cart-count">
+                          {/* {cartItems && cartItems.length} */}
+                          {toggle ? cartItems.length : `0`}
+                        </span>
+                        <span className="cart-txt">
+                          {/* {cart && formatPrice(cart.totalPrice)} */}
+                        </span>
+                      </a>
+
+                      <div className="dropdown-menu dropdown-menu-right">
+                        <div className="dropdown-cart-products">
+                          {cartItems &&
+                            toggle &&
+                            cartItems.map((item) => (
+                              <div className="product" key={item.product}>
+                                <div className="product-cart-details">
+                                  <h4 className="product-title">
+                                    <Link to={`/product/${item.product}`}>
+                                      {item.name}
+                                    </Link>
+                                  </h4>
+
+                                  <span className="cart-product-info">
+                                    <span className="cart-product-qty">
+                                      {item.quantity}
+                                    </span>{" "}
+                                    x {formatPrice(item.price)}
+                                  </span>
+                                </div>
+
+                                <figure className="product-image-container">
+                                  <Link
+                                    to={`/product/${item.product}`}
+                                    className="product-image"
+                                  >
+                                    <img src={item.image} alt={item.name} />
+                                  </Link>
+                                </figure>
+                                <p
+                                  className="btn-remove"
+                                  title="Xóa sản phẩm"
+                                  style={{
+                                    cursor: "pointer",
+                                  }}
+                                  onClick={() => deleteCartItems(item.product)}
+                                >
+                                  <i className="icon-close"></i>
+                                </p>
+                              </div>
+                            ))}
+                        </div>
+
+                        <div className="dropdown-cart-total">
+                          <span>Tổng cộng</span>
+
+                          <span className="cart-total-price">
+                            {/* {cart && formatPrice(cart.totalPrice)} */}
+                          </span>
+                        </div>
+
+                        <div className="dropdown-cart-action">
+                          <a
+                            href="/cart"
+                            className="btn btn-outline-primary-2"
+                            style={{
+                              "&:hover": {
+                                color: "#c96 !important",
+                              },
+                            }}
+                          >
+                            Giỏ hàng
+                          </a>
+                          <a
+                            href="/checkout"
+                            className="btn btn-outline-primary-2"
+                          >
+                            <span>Thanh toán</span>
+                            <i className="icon-long-arrow-right"></i>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

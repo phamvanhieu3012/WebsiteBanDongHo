@@ -11,6 +11,9 @@ import {
   REMOVE_CART_ITEM_FAIL,
   REMOVE_CART_ITEM_RESET,
   CLEAR_ERRORS,
+  ADD_TO_CART,
+  REMOVE_CART_ITEM,
+  SAVE_SHIPPING_INFO,
 } from "../constants/cartConstants.js";
 
 export const cartReducer = (state = {}, action) => {
@@ -77,6 +80,51 @@ export const cartReducer = (state = {}, action) => {
         ...state,
         error: null,
       };
+    default:
+      return state;
+  }
+};
+
+export const cartLocalReducer = (
+  state = { cartItems: [], shippingInfo: {} },
+  action
+) => {
+  switch (action.type) {
+    case ADD_TO_CART:
+      const item = action.payload;
+
+      const isItemExistIndex = state.cartItems.findIndex(
+        (i) => i.product === item.product
+      );
+
+      if (isItemExistIndex > -1) {
+        let cartItem = state.cartItems[isItemExistIndex];
+        cartItem.quantity += action.payload.quantity;
+        return {
+          ...state,
+          cartItems: state.cartItems.map((i) =>
+            i.product === cartItem.product ? cartItem : i
+          ),
+        };
+      } else {
+        return {
+          ...state,
+          cartItems: [...state.cartItems, item],
+        };
+      }
+
+    case REMOVE_CART_ITEM:
+      return {
+        ...state,
+        cartItems: state.cartItems.filter((i) => i.product !== action.payload),
+      };
+
+    case SAVE_SHIPPING_INFO:
+      return {
+        ...state,
+        shippingInfo: action.payload,
+      };
+
     default:
       return state;
   }

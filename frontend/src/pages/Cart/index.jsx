@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import { addToCart, deleteFromCart, getCart } from "../../actions/cartAction";
+import {
+  addItemsToCartLocal,
+  addToCart,
+  deleteFromCart,
+  getCart,
+  removeItemsFromCart,
+} from "../../actions/cartAction";
 import Loader from "../../components/Common/Loader";
 import {
   ADD_TO_CART_RESET,
@@ -11,9 +17,11 @@ import formatPrice from "../../ultils/formatPrice";
 
 function Cart() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
-  const { cart, cartItems, isDeleted, isUpdated, loading } = useSelector(
+  const { cart, isDeleted, isUpdated, loading } = useSelector(
     (state) => state.cart
   );
+
+  const { cartItems } = useSelector((state) => state.cartLocal);
 
   let history = useHistory();
   const dispatch = useDispatch();
@@ -55,6 +63,29 @@ function Cart() {
       dispatch({ type: REMOVE_CART_ITEM_RESET });
     }
   }, [dispatch, isUpdated, isDeleted]);
+
+  //cart local
+  const increaseQuantityLocal = (id, quantity, stock) => {
+    console.log("hello world");
+    const newQty = quantity + 1;
+    if (stock <= quantity) {
+      return;
+    }
+    console.log("hello");
+    dispatch(addItemsToCartLocal(id, 1));
+  };
+
+  const decreaseQuantityLocal = (id, quantity) => {
+    const newQty = quantity - 1;
+    if (newQty === 0) {
+      dispatch(removeItemsFromCart(id));
+      return;
+    }
+    if (1 >= quantity) {
+      return;
+    }
+    dispatch(addItemsToCartLocal(id, -1));
+  };
 
   return (
     <>
@@ -101,107 +132,212 @@ function Cart() {
                         </tr>
                       </thead>
 
-                      <tbody>
-                        {cart &&
-                          cart.cartItems.map((item) => (
-                            <tr key={item.product._id}>
-                              <td className="product-col">
-                                <div className="product">
-                                  <figure className="product-media">
-                                    {console.log(item.product)}
-                                    <Link to={`/product/${item.product._id}`}>
-                                      <img src={item.image} alt={item.name} />
-                                    </Link>
-                                  </figure>
+                      {user ? (
+                        <tbody>
+                          {cart &&
+                            cart.cartItems.map((item) => (
+                              <tr key={item.product._id}>
+                                <td className="product-col">
+                                  <div className="product">
+                                    <figure className="product-media">
+                                      {console.log(item.product)}
+                                      <Link to={`/product/${item.product._id}`}>
+                                        <img src={item.image} alt={item.name} />
+                                      </Link>
+                                    </figure>
 
-                                  <h3 className="product-title">
-                                    <Link to={`/product/${item.product._id}`}>
-                                      {item.name}
-                                    </Link>
-                                  </h3>
-                                </div>
-                              </td>
-                              <td className="price-col">
-                                {formatPrice(item.price)}
-                              </td>
-                              <td className="quantity-col">
-                                <div className="cart-product-quantity">
-                                  <div
-                                    style={{
-                                      border: "1px solid #d7d7d7",
-                                      borderRadius: "3px",
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      height: "40px",
-                                      lineHeight: "30px",
-                                      padding: "0 0.5rem",
-                                      cursor: "pointer",
-                                      width: "130px",
-                                      zIndex: "9999",
-                                    }}
-                                  >
-                                    <p
+                                    <h3 className="product-title">
+                                      <Link to={`/product/${item.product._id}`}>
+                                        {item.name}
+                                      </Link>
+                                    </h3>
+                                  </div>
+                                </td>
+                                <td className="price-col">
+                                  {formatPrice(item.price)}
+                                </td>
+                                <td className="quantity-col">
+                                  <div className="cart-product-quantity">
+                                    <div
                                       style={{
-                                        padding: "0 15px",
-                                        cursor: "pointer",
-                                      }}
-                                      onClick={() =>
-                                        decreaseQuantity(
-                                          item.product._id,
-                                          item.quantity
-                                        )
-                                      }
-                                    >
-                                      -
-                                    </p>
-                                    <input
-                                      style={{
-                                        width: "30px",
-                                        border: "none",
-                                        textAlign: "center",
+                                        border: "1px solid #d7d7d7",
+                                        borderRadius: "3px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
                                         height: "40px",
                                         lineHeight: "30px",
-                                        outline: "none",
-                                      }}
-                                      type="text"
-                                      value={item.quantity}
-                                      readOnly
-                                    />
-                                    <p
-                                      style={{
-                                        padding: "0 15px",
+                                        padding: "0 0.5rem",
                                         cursor: "pointer",
+                                        width: "130px",
+                                        zIndex: "9999",
                                       }}
-                                      onClick={() =>
-                                        increaseQuantity(
-                                          item.product._id,
-                                          item.quantity,
-                                          item.product.Stock
-                                        )
-                                      }
                                     >
-                                      +
-                                    </p>
+                                      <p
+                                        style={{
+                                          padding: "0 15px",
+                                          cursor: "pointer",
+                                        }}
+                                        onClick={() =>
+                                          decreaseQuantity(
+                                            item.product._id,
+                                            item.quantity
+                                          )
+                                        }
+                                      >
+                                        -
+                                      </p>
+                                      <input
+                                        style={{
+                                          width: "30px",
+                                          border: "none",
+                                          textAlign: "center",
+                                          height: "40px",
+                                          lineHeight: "30px",
+                                          outline: "none",
+                                        }}
+                                        type="text"
+                                        value={item.quantity}
+                                        readOnly
+                                      />
+                                      <p
+                                        style={{
+                                          padding: "0 15px",
+                                          cursor: "pointer",
+                                        }}
+                                        onClick={() =>
+                                          increaseQuantity(
+                                            item.product._id,
+                                            item.quantity,
+                                            item.product.Stock
+                                          )
+                                        }
+                                      >
+                                        +
+                                      </p>
+                                    </div>
                                   </div>
-                                </div>
-                              </td>
-                              <td className="total-col">
-                                {formatPrice(item.quantity * item.price)}
-                              </td>
-                              <td className="remove-col">
-                                <button
-                                  className="btn-remove"
-                                  onClick={() =>
-                                    deleteCartItems(item.product._id)
-                                  }
-                                >
-                                  <i className="icon-close"></i>
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
-                      </tbody>
+                                </td>
+                                <td className="total-col">
+                                  {formatPrice(item.quantity * item.price)}
+                                </td>
+                                <td className="remove-col">
+                                  <button
+                                    className="btn-remove"
+                                    onClick={() =>
+                                      deleteCartItems(item.product._id)
+                                    }
+                                  >
+                                    <i className="icon-close"></i>
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      ) : (
+                        <tbody>
+                          {cartItems &&
+                            cartItems.map((item) => (
+                              <tr key={item.product}>
+                                <td className="product-col">
+                                  <div className="product">
+                                    <figure className="product-media">
+                                      <Link to={`/product/${item.product}`}>
+                                        <img src={item.image} alt={item.name} />
+                                      </Link>
+                                    </figure>
+
+                                    <h3 className="product-title">
+                                      <Link to={`/product/${item.product}`}>
+                                        {item.name}
+                                      </Link>
+                                    </h3>
+                                  </div>
+                                </td>
+                                <td className="price-col">
+                                  {formatPrice(item.price)}
+                                </td>
+                                <td className="quantity-col">
+                                  <div className="cart-product-quantity">
+                                    <div
+                                      style={{
+                                        border: "1px solid #d7d7d7",
+                                        borderRadius: "3px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        height: "40px",
+                                        lineHeight: "30px",
+                                        padding: "0 0.5rem",
+                                        cursor: "pointer",
+                                        width: "130px",
+                                        zIndex: "9999",
+                                      }}
+                                    >
+                                      <p
+                                        style={{
+                                          padding: "0 15px",
+                                          cursor: "pointer",
+                                        }}
+                                        onClick={() =>
+                                          decreaseQuantityLocal(
+                                            item.product,
+                                            item.quantity
+                                          )
+                                        }
+                                      >
+                                        -
+                                      </p>
+                                      <input
+                                        style={{
+                                          width: "30px",
+                                          border: "none",
+                                          textAlign: "center",
+                                          height: "40px",
+                                          lineHeight: "30px",
+                                          outline: "none",
+                                        }}
+                                        type="text"
+                                        value={item.quantity}
+                                        readOnly
+                                      />
+                                      <p
+                                        style={{
+                                          padding: "0 15px",
+                                          cursor: "pointer",
+                                        }}
+                                        onClick={() =>
+                                          increaseQuantityLocal(
+                                            item.product,
+                                            item.quantity,
+                                            item.stock
+                                          )
+                                        }
+                                      >
+                                        +
+                                      </p>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className="total-col">
+                                  {formatPrice(item.quantity * item.price)}
+                                </td>
+                                <td className="remove-col">
+                                  <button
+                                    className="btn-remove"
+                                    onClick={() =>
+                                      dispatch(
+                                        removeItemsFromCart(item.product)
+                                      )
+                                    }
+                                  >
+                                    <i className="icon-close"></i>
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      )}
                     </table>
 
                     <div className="cart-bottom">
@@ -222,7 +358,20 @@ function Cart() {
                         <tbody>
                           <tr className="summary-subtotal">
                             <td>Tạm tính:</td>
-                            <td>{cart && formatPrice(cart.totalPrice)}</td>
+                            {user ? (
+                              <td>{cart && formatPrice(cart.totalPrice)}</td>
+                            ) : (
+                              <td>
+                                {cartItems &&
+                                  formatPrice(
+                                    cartItems.reduce(
+                                      (acc, item) =>
+                                        acc + item.quantity * item.price,
+                                      0
+                                    )
+                                  )}
+                              </td>
+                            )}
                           </tr>
                           {/* End .summary-subtotal */}
                           <tr className="summary-shipping">
@@ -304,7 +453,20 @@ function Cart() {
 
                           <tr className="summary-total">
                             <td>Tổng cộng:</td>
-                            <td>{cart && formatPrice(cart.totalPrice)}</td>
+                            {user ? (
+                              <td>{cart && formatPrice(cart.totalPrice)}</td>
+                            ) : (
+                              <td>
+                                {cartItems &&
+                                  formatPrice(
+                                    cartItems.reduce(
+                                      (acc, item) =>
+                                        acc + item.quantity * item.price,
+                                      0
+                                    )
+                                  )}
+                              </td>
+                            )}
                           </tr>
                         </tbody>
                       </table>

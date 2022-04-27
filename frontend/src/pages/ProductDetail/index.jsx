@@ -30,7 +30,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { NEW_REVIEW_RESET } from "../../constants/productConstants";
 import "./ProductDetail.scss";
-import { addToCart, getCart } from "../../actions/cartAction";
+import {
+  addItemsToCartLocal,
+  addToCart,
+  getCart,
+} from "../../actions/cartAction";
 import { ADD_TO_CART_RESET } from "../../constants/cartConstants";
 import Loader from "../../components/Common/Loader";
 
@@ -139,7 +143,6 @@ function ProductDetail() {
   //Handle cart
 
   const handleIncrement = () => {
-    console.log(product.Stock);
     if (product.Stock <= quantity) return;
 
     const qty = quantity + 1;
@@ -161,6 +164,11 @@ function ProductDetail() {
     dispatch(addToCart(product._id, quantity));
     alert("Thêm sản phẩm vào giỏ hàng thành công");
     dispatch(getProductDetails(match.id));
+  };
+
+  const addToCartLocalHandler = () => {
+    dispatch(addItemsToCartLocal(match.id, quantity));
+    alert("Thêm sản phẩm vào giỏ hàng thành công");
   };
 
   useEffect(() => {
@@ -279,7 +287,7 @@ function ProductDetail() {
                       </div>
                       {/* End .product-content */}
 
-                      <div className="details-filter-row details-row-size">
+                      {/* <div className="details-filter-row details-row-size">
                         <label htmlFor="size">Size:</label>
                         <div className="select-custom">
                           <select
@@ -294,96 +302,109 @@ function ProductDetail() {
                             <option value="xl">Extra Large</option>
                           </select>
                         </div>
-                        {/* End .select-custom */}
 
                         <a href="#" className="size-guide">
                           <i className="icon-th-list"></i>size guide
                         </a>
-                      </div>
-                      {/* End .details-filter-row */}
+                      </div> */}
 
                       <div className="product-content">
                         <p>Hiện có: {product.Stock} sản phẩm </p>
                       </div>
-
-                      <div
-                        style={{
-                          marginTop: "1rem",
-                          display: "flex",
-                        }}
-                        className="details-filter-row details-row-size"
-                      >
-                        <label htmlFor="qty">Số lượng:</label>
-                        <div
-                          style={{
-                            border: "1px solid #d7d7d7",
-                            borderRadius: "3px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            height: "40px",
-                            lineHeight: "30px",
-                            padding: "0 0.5rem",
-                            cursor: "pointer",
-                            width: "130px",
-                            zIndex: "9999",
-                          }}
-                        >
-                          {/* <span onClick={handleDecrement}>-</span> */}
-                          <p
-                            style={{ padding: "0 15px", cursor: "pointer" }}
-                            onClick={handleDecrement}
-                          >
-                            -
-                          </p>
-                          <input
+                      {product && product.Stock > 0 ? (
+                        <>
+                          <div
                             style={{
-                              width: "30px",
-                              border: "none",
-                              textAlign: "center",
-                              height: "40px",
-                              lineHeight: "30px",
-                              outline: "none",
+                              marginTop: "1rem",
+                              display: "flex",
                             }}
-                            type="text"
-                            value={quantity}
-                            readOnly
-                          />
-                          <p
-                            style={{ padding: "0 15px", cursor: "pointer" }}
-                            onClick={handleIncrement}
+                            className="details-filter-row details-row-size"
                           >
-                            +
-                          </p>
-                          {/* <span onClick={handleIncrement}>+</span> */}
-                        </div>
-                      </div>
-                      {/* End .details-filter-row */}
+                            <label htmlFor="qty">Số lượng:</label>
+                            <div
+                              style={{
+                                border: "1px solid #d7d7d7",
+                                borderRadius: "3px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                height: "40px",
+                                lineHeight: "30px",
+                                padding: "0 0.5rem",
+                                cursor: "pointer",
+                                width: "130px",
+                                zIndex: "9999",
+                              }}
+                            >
+                              {/* <span onClick={handleDecrement}>-</span> */}
+                              <p
+                                style={{ padding: "0 15px", cursor: "pointer" }}
+                                onClick={handleDecrement}
+                              >
+                                -
+                              </p>
+                              <input
+                                style={{
+                                  width: "30px",
+                                  border: "none",
+                                  textAlign: "center",
+                                  height: "40px",
+                                  lineHeight: "30px",
+                                  outline: "none",
+                                }}
+                                type="text"
+                                value={quantity}
+                                readOnly
+                              />
+                              <p
+                                style={{ padding: "0 15px", cursor: "pointer" }}
+                                onClick={handleIncrement}
+                              >
+                                +
+                              </p>
+                              {/* <span onClick={handleIncrement}>+</span> */}
+                            </div>
+                          </div>
 
-                      <div className="product-details-action">
-                        <p
-                          className="btn-product btn-cart"
-                          style={{
-                            cursor: "pointer",
-                            transition: "all 0.25s linear",
-                          }}
-                          onClick={addToCartHandler}
-                        >
-                          <span>Thêm vào giỏ hàng</span>
-                        </p>
+                          <div className="product-details-action">
+                            {user ? (
+                              <p
+                                className="btn-product btn-cart"
+                                style={{
+                                  cursor: "pointer",
+                                  transition: "all 0.25s linear",
+                                }}
+                                onClick={addToCartHandler}
+                              >
+                                <span>Thêm vào giỏ hàng</span>
+                              </p>
+                            ) : (
+                              <p
+                                className="btn-product btn-cart"
+                                style={{
+                                  cursor: "pointer",
+                                  transition: "all 0.25s linear",
+                                }}
+                                onClick={addToCartLocalHandler}
+                              >
+                                <span>Thêm vào giỏ hàng</span>
+                              </p>
+                            )}
 
-                        <div className="details-action-wrapper">
-                          <a
-                            href="#"
-                            className="btn-product btn-wishlist"
-                            title="Wishlist"
-                          >
-                            <span>Thêm vào danh sách mong muốn</span>
-                          </a>
-                        </div>
-                        {/* End .details-action-wrapper */}
-                      </div>
-                      {/* End .product-details-action */}
+                            <div className="details-action-wrapper">
+                              <a
+                                href="#"
+                                className="btn-product btn-wishlist"
+                                title="Wishlist"
+                              >
+                                <span>Thêm vào danh sách mong muốn</span>
+                              </a>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        ""
+                      )}
 
                       <div className="product-details-footer">
                         <div className="product-cat">
@@ -430,15 +451,10 @@ function ProductDetail() {
                           </a>
                         </div>
                       </div>
-                      {/* End .product-details-footer */}
                     </div>
-                    {/* End .product-details */}
                   </div>
-                  {/* End .col-md-6 */}
                 </div>
-                {/* End .row */}
               </div>
-              {/* End .product-details-top */}
               <Box sx={{ width: "100%", typography: "body1" }}>
                 <TabContext value={valueTab.toString()}>
                   <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -575,10 +591,14 @@ function ProductDetail() {
                       Đánh giá ({product && product.numOfReviews})
                     </h3>
                     <div className="review">
+                      {console.log(product)}
                       {product.reviews && product.reviews[0] ? (
                         product.reviews &&
                         product.reviews.map((review) => (
-                          <div className="row no-gutters" key={review._id}>
+                          <div
+                            className="row no-gutters"
+                            // key={review._id}
+                          >
                             <div className="col-auto">
                               <h4>
                                 <a href="#">{review.name}</a>
@@ -600,7 +620,7 @@ function ProductDetail() {
                                 <p>{review.comment}</p>
                               </div>
                               {/* End .review-content */}
-                              {user._id === review.user ? (
+                              {(user && user._id) === review.user ? (
                                 <div className="review-action">
                                   <span
                                     style={{
@@ -744,11 +764,13 @@ function ProductDetail() {
                 dotListClass="custom-dot-list-style"
                 itemClass="carousel-item-padding-40-px"
               >
+                {console.log(products)}
+                {console.log(product)}
                 {products &&
                   products
                     .filter(
                       (prod) =>
-                        product.category === prod.category &&
+                        product.category._id === prod.category &&
                         product._id !== prod._id
                     )
                     .map((prod) => (
@@ -757,7 +779,7 @@ function ProductDetail() {
                         key={prod._id}
                       >
                         <figure className="product-media">
-                          {product.Stock < 0 ? (
+                          {product.Stock <= 0 ? (
                             <span className="product-label label-out">
                               Hết hàng
                             </span>

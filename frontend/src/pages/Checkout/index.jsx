@@ -19,7 +19,7 @@ import { makeStyles } from "@mui/styles";
 import "./Checkout.scss";
 import { updateShippingInfo } from "../../actions/userAction.js";
 import { UPDATE_SHIP_RESET } from "../../constants/userConstants.js";
-import { getCart } from "../../actions/cartAction.js";
+import { getCart, saveShippingInfo } from "../../actions/cartAction.js";
 
 const useStyles = makeStyles({
   root: {},
@@ -42,6 +42,9 @@ function Checkout() {
     isUpdated,
     loading: profileLoading,
   } = useSelector((state) => state.profile);
+  const { cartItems, shippingInfo: shippingInfoLocal } = useSelector(
+    (state) => state.cartLocal
+  );
 
   console.log(user);
 
@@ -71,7 +74,16 @@ function Checkout() {
       setAddress(user.shippingInfo.address);
       setPhoneNo(user.shippingInfo.phoneNo);
     }
-  }, [user]);
+    if (!user && shippingInfoLocal) {
+      setName(shippingInfoLocal.name);
+      setEmail(shippingInfoLocal.email);
+      setCity(shippingInfoLocal.city);
+      setState(shippingInfoLocal.state);
+      setCountry(shippingInfoLocal.country);
+      setAddress(shippingInfoLocal.address);
+      setPhoneNo(shippingInfoLocal.phoneNo);
+    }
+  }, [user, shippingInfoLocal]);
 
   const handleChangePayment = (event) => {
     setPayment(event.target.value);
@@ -85,58 +97,95 @@ function Checkout() {
       return;
     }
 
-    const shippingInfo = {
-      city: city,
-      state: state,
-      country: country,
-      address: address,
-      phoneNo: phoneNo,
-    };
-
-    const cartItems = cart.cartItems.map((item) => {
-      return {
-        ...item,
-        product: item.product._id,
+    if (user) {
+      const shippingInfo = {
+        city: city,
+        state: state,
+        country: country,
+        address: address,
+        phoneNo: phoneNo,
       };
-    });
 
-    const order = {
-      name: user.name,
-      email: user.email,
-      shippingInfo: shippingInfo,
-      orderItems: cartItems,
-      user: user && user._id,
-      itemsPrice: cart && cart.totalPrice,
-      shippingPrice: 0,
-      totalPrice: cart && cart.totalPrice,
-      paymentInfo: {
-        id: "abc",
-        type: payment,
-        status: "Chưa thanh toán",
-      },
-      orderComments: comments,
-    };
+      const cartItems1 = cart.cartItems.map((item) => {
+        return {
+          ...item,
+          product: item.product._id,
+        };
+      });
 
-    console.log(order);
+      const order = {
+        name: user.name,
+        email: user.email,
+        shippingInfo: shippingInfo,
+        orderItems: cartItems1,
+        user: user && user._id,
+        itemsPrice: cart && cart.totalPrice,
+        shippingPrice: 0,
+        totalPrice: cart && cart.totalPrice,
+        paymentInfo: {
+          id: "abc",
+          type: payment,
+          status: "Chưa thanh toán",
+        },
+        orderComments: comments,
+      };
+      console.log(order);
 
-    sessionStorage.setItem("order", JSON.stringify(order));
-    sessionStorage.setItem(
-      "paidAt",
-      JSON.stringify(new Date().toLocaleDateString("en-GB"))
-    );
-    // //Lưu thông tin ship vào user nếu đã đăng nhập
-    // // Chưa đăng nhập thì lưu vào localStorage
-    // dispatch(
-    //   saveShippingInfo({
-    //     address,
-    //     selectedCity,
-    //     selectedDistrict,
-    //     selectedWard,
-    //     phoneNo,
-    //   })
-    // );
-    dispatch(updateShippingInfo(shippingInfo));
-    dispatch(createOrder(order));
+      sessionStorage.setItem("order", JSON.stringify(order));
+      sessionStorage.setItem(
+        "paidAt",
+        JSON.stringify(new Date().toLocaleDateString("en-GB"))
+      );
+
+      dispatch(updateShippingInfo(shippingInfo));
+      dispatch(createOrder(order));
+    } else {
+      const shippingInfo = {
+        city: city,
+        state: state,
+        country: country,
+        address: address,
+        phoneNo: phoneNo,
+      };
+
+      const subtotal = cartItems.reduce(
+        (acc, item) => acc + item.quantity * item.price,
+        0
+      );
+
+      const order = {
+        name: name,
+        email: email,
+        shippingInfo: shippingInfo,
+        orderItems: cartItems,
+        // user: user && user._id,
+        itemsPrice: subtotal,
+        shippingPrice: 0,
+        totalPrice: subtotal,
+        paymentInfo: {
+          id: "abc",
+          type: payment,
+          status: "Chưa thanh toán",
+        },
+        orderComments: comments,
+      };
+      console.log(order);
+
+      //Lưu thông tin ship vào user nếu đã đăng nhập
+      // Chưa đăng nhập thì lưu vào localStorage
+      dispatch(
+        saveShippingInfo({
+          name,
+          email,
+          address,
+          city,
+          state,
+          country,
+          phoneNo,
+        })
+      );
+      dispatch(createOrder(order));
+    }
   };
 
   useEffect(() => {
@@ -156,6 +205,7 @@ function Checkout() {
     }
     if (isSubmit) {
       alert("Tạo đơn hàng thành công");
+      localStorage.removeItem("cartItems");
       history.push("/");
     }
   }, [dispatch, error, history, isSubmit]);
@@ -328,34 +378,81 @@ function Checkout() {
                               <th>Tạm tính</th>
                             </tr>
                           </thead>
-
-                          <tbody>
-                            {cart &&
-                              cart.cartItems.map((item) => (
-                                <tr>
-                                  <td>
-                                    <Link to={`/product/${item.product._id}`}>
-                                      {item.name}
-                                    </Link>
-                                  </td>
-                                  <td>
-                                    {formatPrice(item.quantity * item.price)}
-                                  </td>
-                                </tr>
-                              ))}
-                            <tr className="summary-subtotal">
-                              <td>Tạm tính:</td>
-                              <td>{cart && formatPrice(cart.totalPrice)}</td>
-                            </tr>
-                            <tr>
-                              <td>Phí giao hàng:</td>
-                              <td>Miễn phí</td>
-                            </tr>
-                            <tr className="summary-total">
-                              <td>Tổng cộng:</td>
-                              <td>{cart && formatPrice(cart.totalPrice)}</td>
-                            </tr>
-                          </tbody>
+                          {user ? (
+                            <tbody>
+                              {cart &&
+                                cart.cartItems.map((item) => (
+                                  <tr>
+                                    <td>
+                                      <Link to={`/product/${item.product._id}`}>
+                                        {item.name} x {item.quantity}
+                                      </Link>
+                                    </td>
+                                    <td>
+                                      {formatPrice(item.quantity * item.price)}
+                                    </td>
+                                  </tr>
+                                ))}
+                              <tr className="summary-subtotal">
+                                <td>Tạm tính:</td>
+                                <td>{cart && formatPrice(cart.totalPrice)}</td>
+                              </tr>
+                              <tr>
+                                <td>Phí giao hàng:</td>
+                                <td>Miễn phí</td>
+                              </tr>
+                              <tr className="summary-total">
+                                <td>Tổng cộng:</td>
+                                <td>{cart && formatPrice(cart.totalPrice)}</td>
+                              </tr>
+                            </tbody>
+                          ) : (
+                            <tbody>
+                              {cartItems &&
+                                cartItems.map((item) => (
+                                  <tr>
+                                    <td>
+                                      <Link to={`/product/${item.product}`}>
+                                        {item.name} x {item.quantity}
+                                      </Link>
+                                    </td>
+                                    <td>
+                                      {formatPrice(item.quantity * item.price)}
+                                    </td>
+                                  </tr>
+                                ))}
+                              <tr className="summary-subtotal">
+                                <td>Tạm tính:</td>
+                                <td>
+                                  {cartItems &&
+                                    formatPrice(
+                                      cartItems.reduce(
+                                        (acc, item) =>
+                                          acc + item.quantity * item.price,
+                                        0
+                                      )
+                                    )}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Phí giao hàng:</td>
+                                <td>Miễn phí</td>
+                              </tr>
+                              <tr className="summary-total">
+                                <td>Tổng cộng:</td>
+                                <td>
+                                  {cartItems &&
+                                    formatPrice(
+                                      cartItems.reduce(
+                                        (acc, item) =>
+                                          acc + item.quantity * item.price,
+                                        0
+                                      )
+                                    )}
+                                </td>
+                              </tr>
+                            </tbody>
+                          )}
                         </table>
 
                         <div

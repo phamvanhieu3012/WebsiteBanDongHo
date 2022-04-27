@@ -43,8 +43,6 @@ export const createOrder = (order) => async (dispatch) => {
       config
     );
 
-    // localStorage.removeItem("cartItems");
-
     dispatch({ type: CREATE_ORDER_SUCCESS, payload: data });
     dispatch(getCart());
   } catch (error) {

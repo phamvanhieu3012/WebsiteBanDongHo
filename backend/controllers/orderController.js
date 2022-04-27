@@ -17,28 +17,50 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     totalPrice,
   } = req.body;
 
-  let cart = await Cart.findOne({ user: req.user._id });
-  if (cart) {
-    const data = await Cart.findByIdAndDelete({ _id: cart._id });
+  if (req.user) {
+    let cart = await Cart.findOne({ user: req.user._id });
+    if (cart) {
+      const data = await Cart.findByIdAndDelete({ _id: cart._id });
+    }
   }
 
-  const order = await Order.create({
-    shippingInfo,
-    orderItems,
-    name,
-    email,
-    paymentInfo,
-    itemsPrice,
-    shippingPrice,
-    totalPrice,
-    paidAt: Date.now(),
-    user: req.user._id,
-  });
+  if (req.user) {
+    const order = await Order.create({
+      shippingInfo,
+      orderItems,
+      name,
+      email,
+      paymentInfo,
+      itemsPrice,
+      shippingPrice,
+      totalPrice,
+      paidAt: Date.now(),
+      user: req.user._id,
+    });
 
-  res.status(201).json({
-    success: true,
-    order,
-  });
+    res.status(201).json({
+      success: true,
+      order,
+    });
+  } else {
+    const order = await Order.create({
+      shippingInfo,
+      orderItems,
+      name,
+      email,
+      paymentInfo,
+      itemsPrice,
+      shippingPrice,
+      totalPrice,
+      paidAt: Date.now(),
+      // user: req.user._id,
+    });
+
+    res.status(201).json({
+      success: true,
+      order,
+    });
+  }
 });
 
 // get Single Order

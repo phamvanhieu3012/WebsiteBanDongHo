@@ -2,15 +2,18 @@ import axios from "axios";
 import axiosClient from "../api/axiosClient";
 
 import {
+  ADD_TO_CART,
   ADD_TO_CART_FAIL,
   ADD_TO_CART_REQUEST,
   ADD_TO_CART_SUCCESS,
   GET_CART_FAIL,
   GET_CART_REQUEST,
   GET_CART_SUCCESS,
+  REMOVE_CART_ITEM,
   REMOVE_CART_ITEM_FAIL,
   REMOVE_CART_ITEM_REQUEST,
   REMOVE_CART_ITEM_SUCCESS,
+  SAVE_SHIPPING_INFO,
 } from "../constants/cartConstants";
 
 // Get cart
@@ -108,4 +111,52 @@ export const deleteFromCart = (productId) => async (dispatch) => {
       payload: error.response.data.message,
     });
   }
+};
+
+// Add to Cart Local
+export const addItemsToCartLocal =
+  (id, quantity) => async (dispatch, getState) => {
+    const { data } = await axios.get(
+      `http://localhost:4000/api/v1/product/${id}`
+    );
+
+    dispatch({
+      type: ADD_TO_CART,
+      payload: {
+        product: data.product._id,
+        name: data.product.name,
+        price: data.product.price,
+        image: data.product.images[0].url,
+        stock: data.product.Stock,
+        quantity,
+      },
+    });
+
+    localStorage.setItem(
+      "cartItems",
+      JSON.stringify(getState().cartLocal.cartItems)
+    );
+  };
+
+// REMOVE FROM CART LOCAL
+export const removeItemsFromCart = (id) => async (dispatch, getState) => {
+  dispatch({
+    type: REMOVE_CART_ITEM,
+    payload: id,
+  });
+
+  localStorage.setItem(
+    "cartItems",
+    JSON.stringify(getState().cartLocal.cartItems)
+  );
+};
+
+// SAVE SHIPPING INFO
+export const saveShippingInfo = (data) => async (dispatch) => {
+  dispatch({
+    type: SAVE_SHIPPING_INFO,
+    payload: data,
+  });
+
+  localStorage.setItem("shippingInfo", JSON.stringify(data));
 };

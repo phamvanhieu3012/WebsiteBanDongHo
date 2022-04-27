@@ -150,7 +150,7 @@ function Product() {
                       >
                         <div className="product product-7 text-center">
                           <figure className="product-media">
-                            {product.Stock < 0 ? (
+                            {product.Stock <= 0 ? (
                               <span className="product-label label-out">
                                 Hết hàng
                               </span>
