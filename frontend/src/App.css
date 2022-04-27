@@ -1,2 +1,7 @@
-.App {
+body {
+  font-family: "Roboto", sans-serif !important;
+}
+
+body * {
+  font-family: "Roboto", sans-serif !important;
 }
