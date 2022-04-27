@@ -8,6 +8,7 @@ import {
   updatePassword,
   updateProfile,
 } from "../../actions/userAction";
+import MyOrder from "../../components/MyOrder";
 import {
   UPDATE_PASSWORD_RESET,
   UPDATE_PROFILE_RESET,
@@ -90,7 +91,7 @@ function MyAccount() {
         <div className="container">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="index.html">Trang chủ</a>
+              <a href="/">Trang chủ</a>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Tài khoản của tôi
@@ -222,11 +223,7 @@ function MyAccount() {
                     role="tabpanel"
                     aria-labelledby="tab-orders-link"
                   >
-                    <p>Chưa có đơn hàng nào được tạo.</p>
-                    <a href="/products" className="btn btn-outline-primary-2">
-                      <span>Đi xem Shop</span>
-                      <i className="icon-long-arrow-right"></i>
-                    </a>
+                    <MyOrder />
                   </div>
                   {/* .End .tab-pane */}
 

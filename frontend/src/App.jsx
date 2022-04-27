@@ -25,6 +25,7 @@ import ScrollToTop from "react-scroll-to-top";
 import ProtectedRoute from "./components/Route/ProtectedRoute";
 import MenProducts from "./pages/MenProducts";
 import WomenProducts from "./pages/WomenProducts";
+import MyOrderDetail from "./components/MyOrderDetail";
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -52,6 +53,7 @@ function App() {
 
           <PublicRoute exact path="/login" component={Login} />
           <ProtectedRoute exact path="/my-account" component={MyAccount} />
+          <ProtectedRoute exact path="/order/:id" component={MyOrderDetail} />
 
           <PublicRoute exact path="/cart" component={Cart} />
           <PublicRoute exact path="/checkout" component={Checkout} />
