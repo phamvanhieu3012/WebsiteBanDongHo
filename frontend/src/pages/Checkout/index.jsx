@@ -20,6 +20,7 @@ import "./Checkout.scss";
 import { updateShippingInfo } from "../../actions/userAction.js";
 import { UPDATE_SHIP_RESET } from "../../constants/userConstants.js";
 import { getCart, saveShippingInfo } from "../../actions/cartAction.js";
+import { CREATE_ORDER_RESET } from "../../constants/orderConstants.js";
 
 const useStyles = makeStyles({
   root: {},
@@ -123,7 +124,6 @@ function Checkout() {
         shippingPrice: 0,
         totalPrice: cart && cart.totalPrice,
         paymentInfo: {
-          id: "abc",
           type: payment,
           status: "Chưa thanh toán",
         },
@@ -131,14 +131,25 @@ function Checkout() {
       };
       console.log(order);
 
-      sessionStorage.setItem("order", JSON.stringify(order));
-      sessionStorage.setItem(
-        "paidAt",
-        JSON.stringify(new Date().toLocaleDateString("en-GB"))
-      );
+      if (order.paymentInfo.type === "Chuyển khoản bằng Stripe") {
+        sessionStorage.setItem("order", JSON.stringify(order));
+        sessionStorage.setItem(
+          "paidAt",
+          JSON.stringify(new Date().toLocaleDateString("en-GB"))
+        );
 
-      dispatch(updateShippingInfo(shippingInfo));
-      dispatch(createOrder(order));
+        dispatch(updateShippingInfo(shippingInfo));
+        history.push("/payment");
+      } else {
+        sessionStorage.setItem("order", JSON.stringify(order));
+        sessionStorage.setItem(
+          "paidAt",
+          JSON.stringify(new Date().toLocaleDateString("en-GB"))
+        );
+
+        dispatch(updateShippingInfo(shippingInfo));
+        dispatch(createOrder(order));
+      }
     } else {
       const shippingInfo = {
         city: city,
@@ -171,20 +182,39 @@ function Checkout() {
       };
       console.log(order);
 
-      //Lưu thông tin ship vào user nếu đã đăng nhập
-      // Chưa đăng nhập thì lưu vào localStorage
-      dispatch(
-        saveShippingInfo({
-          name,
-          email,
-          address,
-          city,
-          state,
-          country,
-          phoneNo,
-        })
-      );
-      dispatch(createOrder(order));
+      if (order.paymentInfo.type === "Chuyển khoản bằng Stripe") {
+        //Lưu thông tin ship vào user nếu đã đăng nhập
+        // Chưa đăng nhập thì lưu vào localStorage
+        dispatch(
+          saveShippingInfo({
+            name,
+            email,
+            address,
+            city,
+            state,
+            country,
+            phoneNo,
+          })
+        );
+        sessionStorage.setItem("order", JSON.stringify(order));
+
+        history.push("/payment");
+      } else {
+        //Lưu thông tin ship vào user nếu đã đăng nhập
+        // Chưa đăng nhập thì lưu vào localStorage
+        dispatch(
+          saveShippingInfo({
+            name,
+            email,
+            address,
+            city,
+            state,
+            country,
+            phoneNo,
+          })
+        );
+        dispatch(createOrder(order));
+      }
     }
   };
 
@@ -207,6 +237,9 @@ function Checkout() {
       alert("Tạo đơn hàng thành công");
       localStorage.removeItem("cartItems");
       history.push("/");
+      dispatch({
+        type: CREATE_ORDER_RESET,
+      });
     }
   }, [dispatch, error, history, isSubmit]);
 

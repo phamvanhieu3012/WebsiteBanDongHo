@@ -17,7 +17,7 @@ import axios from "axios";
 import store from "./store";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { loadUser } from "./actions/userAction";
 import PublicRoute from "./components/Route/PublicRoute";
@@ -26,12 +26,39 @@ import ProtectedRoute from "./components/Route/ProtectedRoute";
 import MenProducts from "./pages/MenProducts";
 import WomenProducts from "./pages/WomenProducts";
 import MyOrderDetail from "./components/MyOrderDetail";
+import Payment from "./pages/Payment";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+// import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
+  const [stripeApiKey, setStripeApiKey] = useState("");
+
+  async function getStripeApiKey() {
+    // const token = localStorage.getItem("token");
+
+    // const config = {
+    //   headers: {
+    //     Authorization: `token ${token}`,
+    //   },
+    // };
+
+    const { data } = await axios.get(
+      "http://localhost:4000/api/v1/stripeapikey"
+      // config
+    );
+
+    console.log(data.stripeApiKey);
+    setStripeApiKey(data.stripeApiKey);
+  }
 
   useEffect(() => {
     store.dispatch(loadUser());
+
+    getStripeApiKey();
   }, []);
 
   return (
@@ -53,10 +80,25 @@ function App() {
 
           <PublicRoute exact path="/login" component={Login} />
           <ProtectedRoute exact path="/my-account" component={MyAccount} />
+          <PublicRoute
+            exact
+            path="/forgot-password"
+            component={ForgotPassword}
+          />
+          <PublicRoute
+            exact
+            path="/password/reset/:token"
+            component={ResetPassword}
+          />
           <ProtectedRoute exact path="/order/:id" component={MyOrderDetail} />
 
           <PublicRoute exact path="/cart" component={Cart} />
           <PublicRoute exact path="/checkout" component={Checkout} />
+          {stripeApiKey && (
+            <Elements stripe={loadStripe(stripeApiKey)}>
+              <PublicRoute exact path="/payment" component={Payment} />
+            </Elements>
+          )}
 
           <PublicRoute component={NotFound} />
         </Switch>

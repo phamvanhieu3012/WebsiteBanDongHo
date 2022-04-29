@@ -21,15 +21,6 @@ function HomePage() {
     <main className="main">
       <div className="intro-slider-container">
         <Carousel itemsToShow={1} pagination={false}>
-          {/*
-             <div className="container intro-content text-center">
-              <h3 className="intro-subtitle text-white">You're Looking Good</h3>
-              <h1 className="intro-title text-white">New Lookbook</h1>
-
-              <a href="/products" className="btn btn-outline-white-4">
-                <span>Discover More</span>
-              </a>
-          </div>*/}
           <img
             src="assets/images/banners/home/banner-dongho.png"
             alt="banner 1"

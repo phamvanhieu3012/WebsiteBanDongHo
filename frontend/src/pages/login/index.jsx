@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   clearErrors,
   loadUser,
@@ -242,9 +242,9 @@ function Login() {
                         <i className="icon-long-arrow-right"></i>
                       </button>
 
-                      <a href="#" className="forgot-link">
+                      <Link to="/forgot-password" className="forgot-link">
                         Quên mật khẩu?
-                      </a>
+                      </Link>
                     </div>
                   </form>
                   <div className="form-choice"></div>
