@@ -83,8 +83,6 @@ export const register = (userData) => async (dispatch) => {
 
     const config = { headers: { "Content-Type": "multipart/form-data" } };
 
-    console.log("hello world");
-
     const { data } = await axios.post(
       `http://localhost:4000/api/v1/register`,
       userData,
@@ -234,7 +232,11 @@ export const forgotPassword = (email) => async (dispatch) => {
 
     const config = { headers: { "Content-Type": "application/json" } };
 
-    const { data } = await axios.post(`/api/v1/password/forgot`, email, config);
+    const { data } = await axios.post(
+      `http://localhost:4000/api/v1/password/forgot`,
+      email,
+      config
+    );
 
     dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: data.message });
   } catch (error) {
@@ -253,7 +255,7 @@ export const resetPassword = (token, passwords) => async (dispatch) => {
     const config = { headers: { "Content-Type": "application/json" } };
 
     const { data } = await axios.put(
-      `/api/v1/password/reset/${token}`,
+      `http://localhost:4000/api/v1/password/reset/${token}`,
       passwords,
       config
     );

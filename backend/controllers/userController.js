@@ -77,7 +77,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
-    return next(new ErrorHander("User not found", 404));
+    return next(new ErrorHander("Không tìm thấy tài khoản", 404));
   }
 
   // Get ResetPassword Token
@@ -85,9 +85,10 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
   await user.save({ validateBeforeSave: false });
 
-  const resetPasswordUrl = `${req.protocol}://${req.get(
-    "host"
-  )}/password/reset/${resetToken}`;
+  // const resetPasswordUrl = `${req.protocol}://${req.get(
+  //   "host"
+  // )}/password/reset/${resetToken}`;
+  const resetPasswordUrl = `${req.protocol}://localhost:3000/password/reset/${resetToken}`;
 
   const message = `Reset token của bạn là :- \n\n ${resetPasswordUrl} \n\nNếu bạn không yêu cầu email này vui lòng bỏ qua nó.`;
 
