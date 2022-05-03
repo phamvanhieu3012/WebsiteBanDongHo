@@ -14,6 +14,9 @@ import Slider from "@mui/material/Slider";
 function WomenProducts() {
   const [close, setClose] = useState(false);
   const [category, setCategory] = useState("");
+  const [ropeMaterial, setRopeMaterial] = useState("");
+  const [glassMaterial, setGlassMaterial] = useState("");
+  const [dialSize, setDialSize] = useState([0, 43]);
   const [sort, setSort] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [openBrand, setOpenBrand] = React.useState(true);
@@ -70,8 +73,29 @@ function WomenProducts() {
   useEffect(() => {
     dispatch(getAllCategories());
     console.log(sort);
-    dispatch(getWomenProduct(currentPage, category, price, sort, keyword));
-  }, [dispatch, currentPage, category, price, sort, keyword]);
+    dispatch(
+      getWomenProduct(
+        currentPage,
+        category,
+        price,
+        sort,
+        keyword,
+        ropeMaterial,
+        glassMaterial,
+        dialSize
+      )
+    );
+  }, [
+    dispatch,
+    currentPage,
+    category,
+    price,
+    sort,
+    keyword,
+    ropeMaterial,
+    glassMaterial,
+    dialSize,
+  ]);
 
   return (
     <main className="main">
@@ -537,6 +561,13 @@ function WomenProducts() {
                               type="checkbox"
                               className="custom-control-input"
                               id="brand-1"
+                              onClick={(e) => {
+                                if (e.target.checked) {
+                                  setRopeMaterial("Thép không gỉ");
+                                } else {
+                                  setRopeMaterial("");
+                                }
+                              }}
                             />
                             <label
                               className="custom-control-label"
@@ -555,6 +586,13 @@ function WomenProducts() {
                               type="checkbox"
                               className="custom-control-input"
                               id="brand-2"
+                              onClick={(e) => {
+                                if (e.target.checked) {
+                                  setRopeMaterial("Dây da");
+                                } else {
+                                  setRopeMaterial("");
+                                }
+                              }}
                             />
                             <label
                               className="custom-control-label"
@@ -573,6 +611,13 @@ function WomenProducts() {
                               type="checkbox"
                               className="custom-control-input"
                               id="brand-3"
+                              onClick={(e) => {
+                                if (e.target.checked) {
+                                  setRopeMaterial("Dây vải");
+                                } else {
+                                  setRopeMaterial("");
+                                }
+                              }}
                             />
                             <label
                               className="custom-control-label"
@@ -591,6 +636,13 @@ function WomenProducts() {
                               type="checkbox"
                               className="custom-control-input"
                               id="brand-4"
+                              onClick={(e) => {
+                                if (e.target.checked) {
+                                  setRopeMaterial("Dây cao su");
+                                } else {
+                                  setRopeMaterial("");
+                                }
+                              }}
                             />
                             <label
                               className="custom-control-label"
@@ -609,6 +661,13 @@ function WomenProducts() {
                               type="checkbox"
                               className="custom-control-input"
                               id="brand-5"
+                              onClick={(e) => {
+                                if (e.target.checked) {
+                                  setRopeMaterial("Dây nhựa");
+                                } else {
+                                  setRopeMaterial("");
+                                }
+                              }}
                             />
                             <label
                               className="custom-control-label"
@@ -627,6 +686,13 @@ function WomenProducts() {
                               type="checkbox"
                               className="custom-control-input"
                               id="brand-6"
+                              onClick={(e) => {
+                                if (e.target.checked) {
+                                  setRopeMaterial("Titanium");
+                                } else {
+                                  setRopeMaterial("");
+                                }
+                              }}
                             />
                             <label
                               className="custom-control-label"
@@ -681,6 +747,13 @@ function WomenProducts() {
                               type="checkbox"
                               className="custom-control-input"
                               id="glass-1"
+                              onClick={(e) => {
+                                if (e.target.checked) {
+                                  setGlassMaterial("Kính cứng");
+                                } else {
+                                  setGlassMaterial("");
+                                }
+                              }}
                             />
                             <label
                               className="custom-control-label"
@@ -698,6 +771,13 @@ function WomenProducts() {
                               type="checkbox"
                               className="custom-control-input"
                               id="glass-2"
+                              onClick={(e) => {
+                                if (e.target.checked) {
+                                  setGlassMaterial("Kính Sapphire");
+                                } else {
+                                  setGlassMaterial("");
+                                }
+                              }}
                             />
                             <label
                               className="custom-control-label"
@@ -714,8 +794,14 @@ function WomenProducts() {
                             <input
                               type="checkbox"
                               className="custom-control-input"
-                              checked
                               id="glass-3"
+                              onClick={(e) => {
+                                if (e.target.checked) {
+                                  setGlassMaterial("Kính nhựa");
+                                } else {
+                                  setGlassMaterial("");
+                                }
+                              }}
                             />
                             <label
                               className="custom-control-label"
@@ -774,6 +860,13 @@ function WomenProducts() {
                               type="checkbox"
                               className="custom-control-input"
                               id="dial-1"
+                              onClick={(e) => {
+                                if (e.target.checked) {
+                                  setDialSize([0, 30]);
+                                } else {
+                                  setDialSize([0, 43]);
+                                }
+                              }}
                             />
                             <label
                               className="custom-control-label"
@@ -791,6 +884,13 @@ function WomenProducts() {
                               type="checkbox"
                               className="custom-control-input"
                               id="dial-2"
+                              onClick={(e) => {
+                                if (e.target.checked) {
+                                  setDialSize([30, 34]);
+                                } else {
+                                  setDialSize([0, 43]);
+                                }
+                              }}
                             />
                             <label
                               className="custom-control-label"
@@ -807,8 +907,14 @@ function WomenProducts() {
                             <input
                               type="checkbox"
                               className="custom-control-input"
-                              checked
                               id="dial-3"
+                              onClick={(e) => {
+                                if (e.target.checked) {
+                                  setDialSize([34, 39]);
+                                } else {
+                                  setDialSize([0, 43]);
+                                }
+                              }}
                             />
                             <label
                               className="custom-control-label"
@@ -826,6 +932,13 @@ function WomenProducts() {
                               type="checkbox"
                               className="custom-control-input"
                               id="dial-4"
+                              onClick={(e) => {
+                                if (e.target.checked) {
+                                  setDialSize([40, 43]);
+                                } else {
+                                  setDialSize([0, 43]);
+                                }
+                              }}
                             />
                             <label
                               className="custom-control-label"

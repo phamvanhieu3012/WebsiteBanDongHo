@@ -49,7 +49,10 @@ export const getProduct =
     price = [0, 40],
     // ratings = 0,
     sort,
-    keyword = ""
+    keyword = "",
+    ropeMaterial,
+    glassMaterial,
+    dialSize = [0, 43]
   ) =>
   async (dispatch) => {
     try {
@@ -65,10 +68,18 @@ export const getProduct =
       let priceSort1 = price[1] * 1000000;
       console.log("Category", category);
 
-      let link = `http://localhost:4000/api/v1/products?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&${sort}`;
+      let link = `http://localhost:4000/api/v1/products?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&${sort}&dialSize[gte]=${dialSize[0]}&dialSize[lte]=${dialSize[1]}`;
 
       if (category) {
-        link = `http://localhost:4000/api/v1/products?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&category=${category}&${sort}`;
+        link = `http://localhost:4000/api/v1/products?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&category=${category}&${sort}&dialSize[gte]=${dialSize[0]}&dialSize[lte]=${dialSize[1]}`;
+      }
+
+      if (ropeMaterial) {
+        link = `http://localhost:4000/api/v1/products?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&ropeMaterial=${ropeMaterial}&${sort}&dialSize[gte]=${dialSize[0]}&dialSize[lte]=${dialSize[1]}`;
+      }
+
+      if (glassMaterial) {
+        link = `http://localhost:4000/api/v1/products?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&glassMaterial=${glassMaterial}&${sort}&dialSize[gte]=${dialSize[0]}&dialSize[lte]=${dialSize[1]}`;
       }
 
       const { data } = await axios.get(link);
@@ -131,7 +142,10 @@ export const getMenProduct =
     price = [0, 40],
     // ratings = 0,
     sort,
-    keyword = ""
+    keyword = "",
+    ropeMaterial,
+    glassMaterial,
+    dialSize = [0, 43]
   ) =>
   async (dispatch) => {
     try {
@@ -146,10 +160,18 @@ export const getMenProduct =
       let priceSort0 = price[0] * 1000000;
       let priceSort1 = price[1] * 1000000;
 
-      let link = `http://localhost:4000/api/v1/menProducts?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&${sort}`;
+      let link = `http://localhost:4000/api/v1/menProducts?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&${sort}&dialSize[gte]=${dialSize[0]}&dialSize[lte]=${dialSize[1]}`;
 
       if (category) {
-        link = `http://localhost:4000/api/v1/menPoducts?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&category=${category}&${sort}`;
+        link = `http://localhost:4000/api/v1/menPoducts?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&category=${category}&${sort}&dialSize[gte]=${dialSize[0]}&dialSize[lte]=${dialSize[1]}`;
+      }
+
+      if (ropeMaterial) {
+        link = `http://localhost:4000/api/v1/menProducts?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&ropeMaterial=${ropeMaterial}&${sort}&dialSize[gte]=${dialSize[0]}&dialSize[lte]=${dialSize[1]}`;
+      }
+
+      if (glassMaterial) {
+        link = `http://localhost:4000/api/v1/menProducts?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&glassMaterial=${glassMaterial}&${sort}&dialSize[gte]=${dialSize[0]}&dialSize[lte]=${dialSize[1]}`;
       }
 
       const { data } = await axios.get(link);
@@ -174,7 +196,10 @@ export const getWomenProduct =
     price = [0, 40],
     // ratings = 0,
     sort,
-    keyword = ""
+    keyword = "",
+    ropeMaterial,
+    glassMaterial,
+    dialSize = [0, 43]
   ) =>
   async (dispatch) => {
     try {
@@ -189,10 +214,18 @@ export const getWomenProduct =
       let priceSort0 = price[0] * 1000000;
       let priceSort1 = price[1] * 1000000;
 
-      let link = `http://localhost:4000/api/v1/womenProducts?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&${sort}`;
+      let link = `http://localhost:4000/api/v1/womenProducts?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&${sort}&dialSize[gte]=${dialSize[0]}&dialSize[lte]=${dialSize[1]}`;
 
       if (category) {
-        link = `http://localhost:4000/api/v1/womenPoducts?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&category=${category}&${sort}`;
+        link = `http://localhost:4000/api/v1/womenPoducts?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&category=${category}&ropeMaterial=${ropeMaterial}&glassMaterial=${glassMaterial}&${sort}&dialSize[gte]=${dialSize[0]}&dialSize[lte]=${dialSize[1]}`;
+      }
+
+      if (ropeMaterial) {
+        link = `http://localhost:4000/api/v1/womenProducts?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&category=${category}&ropeMaterial=${ropeMaterial}&glassMaterial=${glassMaterial}&${sort}&dialSize[gte]=${dialSize[0]}&dialSize[lte]=${dialSize[1]}`;
+      }
+
+      if (glassMaterial) {
+        link = `http://localhost:4000/api/v1/womenProducts?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&category=${category}&ropeMaterial=${ropeMaterial}&glassMaterial=${glassMaterial}&${sort}&dialSize[gte]=${dialSize[0]}&dialSize[lte]=${dialSize[1]}`;
       }
 
       const { data } = await axios.get(link);

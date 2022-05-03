@@ -1,19 +1,23 @@
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import { Autocomplete, Avatar, Button, Grid, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Avatar,
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import { styled, useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -27,6 +31,8 @@ import Loader from "../../components/Common/Loader";
 import { NEW_PRODUCT_RESET } from "../../constants/productConstants";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
+import ReactQuill from "react-quill"; // ES6
+import "react-quill/dist/quill.snow.css"; // ES6
 
 const drawerWidth = 240;
 
@@ -109,6 +115,7 @@ export default function NewProduct() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [description, setDescription] = useState("");
+  const [moreDescription, setMoreDescription] = useState("");
   const [sex, setSex] = useState(sexOptions[0]);
   const [ropeMaterial, setRopeMaterial] = useState(ropeMaterialOptions[0]);
   const [glassMaterial, setGlassMaterial] = useState(glassMaterialOptions[0]);
@@ -124,6 +131,11 @@ export default function NewProduct() {
   const [inputRopeMaterialValue, setInputRopeMaterialValue] = useState("");
   const [inputGlassMaterialValue, setInputGlassMaterialValue] = useState("");
   const [inputCategoryValue, setCategoryValue] = useState("");
+
+  const [discountName, setDiscountName] = useState("");
+  const [discountDesc, setDiscountDesc] = useState("");
+  const [discountPercent, setDiscountPercent] = useState(0);
+  const [discountActive, setDiscountActive] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -154,6 +166,13 @@ export default function NewProduct() {
   const createProductSubmitHandler = (e) => {
     e.preventDefault();
 
+    const discount = {
+      name: discountName,
+      description: discountDesc,
+      percent: discountPercent,
+      discountActive: discountActive,
+    };
+
     const myForm = new FormData();
 
     myForm.set("name", name);
@@ -163,9 +182,11 @@ export default function NewProduct() {
     myForm.set("glassMaterial", glassMaterial);
     myForm.set("dialSize", dialSize);
     myForm.set("description", description);
+    myForm.set("moreDescription", moreDescription);
     myForm.set("sex", sex);
     myForm.set("category", category);
     myForm.set("Stock", Stock);
+    myForm.set("discount", discount);
 
     images.forEach((image) => {
       myForm.append("images", image);
@@ -428,6 +449,27 @@ export default function NewProduct() {
                   md={2}
                   sx={{ display: "flex", alignItems: "center" }}
                 >
+                  <p>Thông tin sản phẩm</p>
+                </Grid>
+                <Grid item xs={12} sm={8} md={10}>
+                  <ReactQuill
+                    theme="snow"
+                    value={moreDescription || ""}
+                    onChange={(html) => setMoreDescription(html)}
+                    style={{
+                      marginBottom: "50px",
+                      height: "200px",
+                    }}
+                  />
+                </Grid>
+
+                <Grid
+                  item
+                  xs={12}
+                  sm={4}
+                  md={2}
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
                   <p>Kích thước mặt đồng hồ</p>
                 </Grid>
                 <Grid item xs={12} sm={8} md={10}>
@@ -503,6 +545,74 @@ export default function NewProduct() {
                     variant="outlined"
                     sx={{ width: "50%" }}
                   />
+                </Grid>
+
+                <Grid
+                  item
+                  xs={12}
+                  sm={4}
+                  md={2}
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
+                  <p>Giảm giá</p>
+                </Grid>
+                <Grid item xs={12} sm={8} md={10}>
+                  <TextField
+                    label="Tên giảm giá"
+                    required
+                    value={discountName}
+                    onChange={(e) => setDiscountName(e.target.value)}
+                    variant="outlined"
+                    sx={{ width: "50%", marginBottom: "1.5rem" }}
+                  />
+                  <br />
+                  <TextField
+                    label="Giới thiệu về giảm giá"
+                    required
+                    value={discountDesc}
+                    onChange={(e) => setDiscountDesc(e.target.value)}
+                    variant="outlined"
+                    sx={{ width: "50%", marginBottom: "1.5rem" }}
+                  />
+                  <br />
+                  <TextField
+                    inputProps={{
+                      inputMode: "numeric",
+                      type: "number",
+                      pattern: "[0-9]*",
+                      min: "0",
+                    }}
+                    label="Giảm giá (%)"
+                    required
+                    value={discountPercent}
+                    onChange={(e) => setDiscountPercent(e.target.value)}
+                    variant="outlined"
+                    sx={{ width: "50%", marginBottom: "1.5rem" }}
+                  />
+                  <br />
+                  {/* <TextField
+                    label="Đang giảm giá"
+                    required
+                    value={discountActive}
+                    onChange={(e) => setDiscountActive(e.target.value)}
+                    variant="outlined"
+                    sx={{ width: "50%", marginBottom: "1.5rem" }}
+                  /> */}
+                  <FormControl sx={{ width: "50%", marginBottom: "1.5rem" }}>
+                    <InputLabel id="demo-simple-select-label">
+                      Đang giảm giá
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={discountActive}
+                      label="Đang giảm giá"
+                      onChange={(e) => setDiscountActive(e.target.value)}
+                    >
+                      <MenuItem value={true}>Có</MenuItem>
+                      <MenuItem value={false}>Không</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
 
                 <Grid

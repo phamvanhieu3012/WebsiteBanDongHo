@@ -224,35 +224,24 @@ function ProductDetail() {
                           id="product-zoom-gallery"
                           className="product-image-gallery"
                         >
-                          <a
-                            style={{
-                              height: "fit-content",
-                            }}
-                            className="product-gallery-item active"
-                            href="#"
-                            // data-image="assets/images/products/single/1.jpg"
-                            data-image={product.images && product.images[0].url}
-                            data-zoom-image={
-                              product.images && product.images[0].url
-                            }
-                          >
-                            <img
-                              src={product.images && product.images[0].url}
-                              alt="product img1"
-                            />
-                          </a>
-
-                          <a
-                            className="product-gallery-item"
-                            href="#"
-                            data-image="assets/images/products/single/2.jpg"
-                            data-zoom-image="assets/images/products/single/2-big.jpg"
-                          >
-                            <img
-                              src="assets/images/products/single/2-small.jpg"
-                              alt="product cross"
-                            />
-                          </a>
+                          {product.images &&
+                            product.images.map((image, index) => (
+                              <a
+                                style={{
+                                  height: "fit-content",
+                                }}
+                                className="product-gallery-item active"
+                                href="#!"
+                                // data-image="assets/images/products/single/1.jpg"
+                                data-image={product.images[index].url}
+                                data-zoom-image={product.images[index].url}
+                              >
+                                <img
+                                  src={product.images[index].url}
+                                  alt="product img1"
+                                />
+                              </a>
+                            ))}
                         </div>
                       </div>
                     </div>
@@ -495,7 +484,12 @@ function ProductDetail() {
                     }}
                   >
                     <h3 style={{ fontWeight: "bold" }}>Thông tin sản phẩm</h3>
-                    <p>{product && product.description}</p>
+                    {/* <p>{product && product.moreDescription}</p> */}
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: product.moreDescription,
+                      }}
+                    />
                   </TabPanel>
                   <TabPanel
                     value="2"
@@ -764,13 +758,11 @@ function ProductDetail() {
                 dotListClass="custom-dot-list-style"
                 itemClass="carousel-item-padding-40-px"
               >
-                {console.log(products)}
-                {console.log(product)}
                 {products &&
                   products
                     .filter(
                       (prod) =>
-                        product.category._id === prod.category &&
+                        product.category._id === prod.category._id &&
                         product._id !== prod._id
                     )
                     .map((prod) => (
@@ -779,14 +771,14 @@ function ProductDetail() {
                         key={prod._id}
                       >
                         <figure className="product-media">
-                          {product.Stock <= 0 ? (
+                          {prod.Stock <= 0 ? (
                             <span className="product-label label-out">
                               Hết hàng
                             </span>
                           ) : (
                             ""
                           )}
-                          <Link to={`/product/${product._id}`}>
+                          <Link to={`/product/${prod._id}`}>
                             <img
                               src={prod.images[0].url}
                               alt={prod.name}
@@ -820,9 +812,7 @@ function ProductDetail() {
                             <a href="#">{prod.category.name}</a>
                           </div>
                           <h3 className="product-title">
-                            <Link to={`/product/${product._id}`}>
-                              {prod.name}
-                            </Link>
+                            <Link to={`/product/${prod._id}`}>{prod.name}</Link>
                           </h3>
                           <div className="product-price">
                             <span className="out-price">

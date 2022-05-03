@@ -525,11 +525,19 @@ function HomePage() {
                             alt={product.name}
                             className="product-image"
                           />
-                          <img
-                            src="assets/images/demos/demo-6/products/product-1-2.jpg"
-                            alt="Product"
-                            className="product-image-hover"
-                          />
+                          {product.images[1] ? (
+                            <img
+                              src={product.images[1].url}
+                              alt={product.name}
+                              className="product-image-hover"
+                            />
+                          ) : (
+                            <img
+                              src={product.images[0].url}
+                              alt={product.name}
+                              className="product-image-hover"
+                            />
+                          )}
                         </Link>
 
                         <div className="product-action-vertical">

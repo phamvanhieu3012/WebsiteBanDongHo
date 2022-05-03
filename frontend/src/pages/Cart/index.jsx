@@ -340,12 +340,7 @@ function Cart() {
                       )}
                     </table>
 
-                    <div className="cart-bottom">
-                      <a href="#" className="btn btn-outline-dark-2">
-                        <span>CẬP NHẬT GIỎ HÀNG</span>
-                        <i className="icon-refresh"></i>
-                      </a>
-                    </div>
+                    <div className="cart-bottom"></div>
                     {/* End .cart-bottom */}
                   </div>
                   {/* End .col-lg-9 */}

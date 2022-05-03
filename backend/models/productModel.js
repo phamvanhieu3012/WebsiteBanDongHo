@@ -11,6 +11,9 @@ const productSchema = mongoose.Schema(
       type: String,
       required: [true, "Hãy nhập giới thiệu của sản phẩm"],
     },
+    moreDescription: {
+      type: String,
+    },
     sex: {
       type: String,
       required: [true, "Hãy nhập giới tính của sản phẩm dùng"],

@@ -1,9 +1,7 @@
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
-import AccountTreeIcon from "@mui/icons-material/AccountTree";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import {
   Avatar,
   Button,
@@ -12,7 +10,6 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  TextField,
 } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -20,10 +17,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import { styled, useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -31,18 +24,13 @@ import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory, useParams } from "react-router-dom";
-import {
-  getCategoryDetails,
-  updateCategory,
-} from "../../actions/categoryAction";
 import { getOrderDetails, updateOrder } from "../../actions/orderAction";
 import { clearErrors } from "../../actions/productAction";
 import Loader from "../../components/Common/Loader";
-import { UPDATE_CATEGORY_RESET } from "../../constants/categoryConstants";
 import { UPDATE_ORDER_RESET } from "../../constants/orderConstants";
+import formatPrice from "../../ultils/formatPrice";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
-import formatPrice from "../../ultils/formatPrice";
 
 const drawerWidth = 240;
 
@@ -349,11 +337,17 @@ export default function ProcessOrder() {
                       <Button
                         id="createProductBtn"
                         type="submit"
+                        variant="contained"
+                        sx={{
+                          marginTop: "10px",
+                          fontSize: "1.5rem",
+                          width: "20%",
+                        }}
                         disabled={
                           loading ? true : false || status === "" ? true : false
                         }
                       >
-                        Process
+                        Xử lý
                       </Button>
                     </form>
                   </div>
