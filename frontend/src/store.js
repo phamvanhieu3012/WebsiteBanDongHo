@@ -48,13 +48,20 @@ const reducer = combineReducers({
   nProducts: nProductsReducer,
   menProducts: menProductsReducer,
   womenProducts: womenProductsReducer,
+  newProduct: newProductReducer,
+  product: productReducer,
+  productReviews: productReviewsReducer,
   // User
   user: userReducer,
   profile: profileReducer,
   forgotPassword: forgotPasswordReducer,
+  allUsers: allUsersReducer,
+  userDetails: userDetailsReducer,
   // Category
   categories: categoriesReducer,
   categoryDetails: categoryDetailsReducer,
+  newCategory: newCategoryReducer,
+  category: categoryReducer,
   //Review
   newReview: newReviewReducer,
   review: reviewReducer,
@@ -65,6 +72,8 @@ const reducer = combineReducers({
   newOrder: newOrderReducer,
   myOrders: myOrdersReducer,
   orderDetails: orderDetailsReducer,
+  allOrders: allOrdersReducer,
+  order: orderReducer,
 });
 
 let initialState = {

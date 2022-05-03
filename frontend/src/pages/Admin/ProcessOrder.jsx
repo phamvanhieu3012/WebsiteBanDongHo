@@ -1,0 +1,369 @@
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import MailIcon from "@mui/icons-material/Mail";
+import MenuIcon from "@mui/icons-material/Menu";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import {
+  Avatar,
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+import MuiAppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import { styled, useTheme } from "@mui/material/styles";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import { makeStyles } from "@mui/styles";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory, useParams } from "react-router-dom";
+import {
+  getCategoryDetails,
+  updateCategory,
+} from "../../actions/categoryAction";
+import { getOrderDetails, updateOrder } from "../../actions/orderAction";
+import { clearErrors } from "../../actions/productAction";
+import Loader from "../../components/Common/Loader";
+import { UPDATE_CATEGORY_RESET } from "../../constants/categoryConstants";
+import { UPDATE_ORDER_RESET } from "../../constants/orderConstants";
+import "./Admin.scss";
+import Sidebar from "./components/Sidebar";
+import formatPrice from "../../ultils/formatPrice";
+
+const drawerWidth = 240;
+
+const useStyles = makeStyles({
+  root: {
+    fontSize: "100%",
+  },
+});
+
+const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
+  ({ theme, open }) => ({
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: `-${drawerWidth}px`,
+    ...(open && {
+      transition: theme.transitions.create("margin", {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
+    }),
+  })
+);
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  transition: theme.transitions.create(["margin", "width"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: `${drawerWidth}px`,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
+
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: "flex-end",
+}));
+
+const sexOptions = ["Nam", "Nữ"];
+const roleOptions = ["admin", "staff", "user"];
+
+export default function ProcessOrder() {
+  const theme = useTheme();
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(true);
+
+  const { user: userNow } = useSelector((state) => state.user);
+  const { order, error, loading } = useSelector((state) => state.orderDetails);
+  const { error: updateError, isUpdated } = useSelector((state) => state.order);
+
+  const [status, setStatus] = useState("");
+
+  let history = useHistory();
+  const dispatch = useDispatch();
+  let match = useParams();
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  const handleHistory = (his) => {
+    history.push(`/admin/${his}`);
+  };
+
+  useEffect(() => {
+    if (error) {
+      alert(error);
+      dispatch(clearErrors());
+    }
+    if (updateError) {
+      alert(updateError);
+      dispatch(clearErrors());
+    }
+    if (isUpdated) {
+      alert("Cập nhật đơn hàng thành công");
+      dispatch({ type: UPDATE_ORDER_RESET });
+    }
+
+    dispatch(getOrderDetails(match.id));
+  }, [dispatch, error, match.id, isUpdated, updateError]);
+
+  const updateOrderSubmitHandler = (e) => {
+    e.preventDefault();
+
+    const myForm = new FormData();
+
+    myForm.set("status", status);
+
+    dispatch(updateOrder(match.id, myForm));
+  };
+
+  return (
+    <Box sx={{ display: "flex" }} className={classes.root}>
+      <CssBaseline />
+      <AppBar position="fixed" open={open}>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: "none" }) }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap component="div">
+              Đồng hồ PVH
+            </Typography>
+          </div>
+          <Box sx={{ display: "flex", alignItems: "center", gap: "15px" }}>
+            <span>Hi, {userNow.name}</span>
+            <Avatar alt={userNow.name} src={userNow.avatar.url} />
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
+        }}
+        variant="persistent"
+        anchor="left"
+        open={open}
+      >
+        <DrawerHeader>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "ltr" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
+        </DrawerHeader>
+        <Divider />
+        <Sidebar handleHistory={handleHistory} />
+        <Divider />
+      </Drawer>
+      <Main open={open}>
+        <DrawerHeader />
+        <h3 id="productListHeading">Cập nhật đơn hàng</h3>
+        {loading ? (
+          <Loader />
+        ) : (
+          <div
+            className="confirmOrderPage"
+            style={{
+              display: order.orderStatus === "Delivered" ? "block" : "grid",
+            }}
+          >
+            <div>
+              <Grid container spacing={2} className="confirmshippingArea">
+                <Grid item xs={12} md={6}>
+                  <Typography variant="h4">Địa chỉ giao hàng</Typography>
+                  <div className="orderDetail">
+                    <div>
+                      <p>Họ tên:</p>
+                      <span>{order.name}</span>
+                    </div>
+                    <div>
+                      <p>Số điện thoại:</p>
+                      <span>
+                        {order.shippingInfo && order.shippingInfo.phoneNo}
+                      </span>
+                    </div>
+                    <div>
+                      <p>Địa chỉ:</p>
+                      <span>
+                        {order.shippingInfo &&
+                          `${order.shippingInfo.address}, ${order.shippingInfo.country}, ${order.shippingInfo.state}, ${order.shippingInfo.city}`}
+                      </span>
+                    </div>
+                  </div>
+                  <Typography variant="h4">Thanh toán</Typography>
+                  <div className="orderDetail">
+                    <div>
+                      <p>Trạng thái</p>
+                      <p
+                        className={
+                          order.paymentInfo &&
+                          order.paymentInfo.status === "succeeded"
+                            ? "greenColor"
+                            : "redColor"
+                        }
+                      >
+                        {order.paymentInfo &&
+                        order.paymentInfo.status === "succeeded"
+                          ? "Đã thanh toán"
+                          : "Chưa thanh toán"}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p>Tổng tiền:</p>
+                      <span>
+                        {order.totalPrice && formatPrice(order.totalPrice)}
+                      </span>
+                    </div>
+                  </div>
+
+                  <Typography variant="h4">Trạng thái đơn hàng</Typography>
+                  <div className="orderDetail">
+                    <div>
+                      <p
+                        className={
+                          order.orderStatus && order.orderStatus === "Delivered"
+                            ? "greenColor"
+                            : "redColor"
+                        }
+                      >
+                        {order.orderStatus}
+                      </p>
+                    </div>
+                  </div>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <div className="confirmCartItems">
+                    <Typography variant="h4">Giỏ hàng:</Typography>
+                    <div className="confirmCartItemsContainer">
+                      {order.orderItems &&
+                        order.orderItems.map((item) => (
+                          <div key={item.product}>
+                            <img src={item.image} alt={item.name} />
+                            <Link to={`/product/${item.product}`}>
+                              {item.name}
+                            </Link>{" "}
+                            <span>
+                              {item.quantity} X {formatPrice(item.price)} ={" "}
+                              <b>{formatPrice(item.price * item.quantity)}</b>
+                            </span>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      display:
+                        order.orderStatus === "Delivered" ? "none" : "block",
+                    }}
+                  >
+                    <form
+                      className="updateOrderForm"
+                      onSubmit={updateOrderSubmitHandler}
+                    >
+                      <Typography variant="h4" sx={{ marginBottom: "1rem" }}>
+                        Trạng thái đơn hàng
+                      </Typography>
+
+                      <div>
+                        <AccountTreeIcon />
+                        {/* <select onChange={(e) => setStatus(e.target.value)}>
+                          <option value="">Chọn trạng thái</option>
+                          {order.orderStatus === "Processing" && (
+                            <option value="Shipped">Shipped</option>
+                          )}
+
+                          {order.orderStatus === "Shipped" && (
+                            <option value="Delivered">Delivered</option>
+                          )}
+                        </select> */}
+                        <FormControl sx={{ width: "50%" }}>
+                          <InputLabel id="select-label">Trạng thái</InputLabel>
+                          <Select
+                            labelId="select-label"
+                            id="demo-simple-select"
+                            // value={age}
+                            label="Trạng thái"
+                            onChange={(e) => setStatus(e.target.value)}
+                          >
+                            {order.orderStatus === "Processing" && (
+                              <MenuItem value="Shipped">Shipped</MenuItem>
+                            )}
+                            {order.orderStatus === "Shipped" && (
+                              <MenuItem value="Delivered">Delivered</MenuItem>
+                            )}
+                          </Select>
+                        </FormControl>
+                      </div>
+
+                      <Button
+                        id="createProductBtn"
+                        type="submit"
+                        disabled={
+                          loading ? true : false || status === "" ? true : false
+                        }
+                      >
+                        Process
+                      </Button>
+                    </form>
+                  </div>
+                </Grid>
+              </Grid>
+            </div>
+            {/*  */}
+          </div>
+        )}
+      </Main>
+    </Box>
+  );
+}

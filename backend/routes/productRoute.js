@@ -30,12 +30,12 @@ router.route("/admin/products").get(getAdminProducts);
 
 router
   .route("/admin/product/new")
-  .post(isAuthenticatedUser, authorizeRoles("staff"), createProduct);
+  .post(isAuthenticatedUser, authorizeRoles("admin"), createProduct);
 
 router
   .route("/admin/product/:id")
-  .put(isAuthenticatedUser, authorizeRoles("staff"), updateProduct)
-  .delete(isAuthenticatedUser, authorizeRoles("staff"), deleteProduct);
+  .put(isAuthenticatedUser, authorizeRoles("admin"), updateProduct)
+  .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteProduct);
 
 router.route("/product/:id").get(getProductDetails);
 

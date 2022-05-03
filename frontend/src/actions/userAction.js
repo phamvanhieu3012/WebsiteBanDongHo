@@ -273,7 +273,20 @@ export const resetPassword = (token, passwords) => async (dispatch) => {
 export const getAllUsers = () => async (dispatch) => {
   try {
     dispatch({ type: ALL_USERS_REQUEST });
-    const { data } = await axios.get(`/api/v1/admin/users`);
+
+    const token = localStorage.getItem("token");
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `token ${token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      `http://localhost:4000/api/v1/admin/users`,
+      config
+    );
 
     dispatch({ type: ALL_USERS_SUCCESS, payload: data.users });
   } catch (error) {
@@ -285,7 +298,18 @@ export const getAllUsers = () => async (dispatch) => {
 export const getUserDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: USER_DETAILS_REQUEST });
-    const { data } = await axios.get(`/api/v1/admin/user/${id}`);
+    const token = localStorage.getItem("token");
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `token ${token}`,
+      },
+    };
+    const { data } = await axios.get(
+      `http://localhost:4000/api/v1/admin/user/${id}`,
+      config
+    );
 
     dispatch({ type: USER_DETAILS_SUCCESS, payload: data.user });
   } catch (error) {
@@ -298,10 +322,17 @@ export const updateUser = (id, userData) => async (dispatch) => {
   try {
     dispatch({ type: UPDATE_USER_REQUEST });
 
-    const config = { headers: { "Content-Type": "application/json" } };
+    const token = localStorage.getItem("token");
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `token ${token}`,
+      },
+    };
 
     const { data } = await axios.put(
-      `/api/v1/admin/user/${id}`,
+      `http://localhost:4000/api/v1/admin/user/${id}`,
       userData,
       config
     );
@@ -320,7 +351,19 @@ export const deleteUser = (id) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_USER_REQUEST });
 
-    const { data } = await axios.delete(`/api/v1/admin/user/${id}`);
+    const token = localStorage.getItem("token");
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `token ${token}`,
+      },
+    };
+
+    const { data } = await axios.delete(
+      `http://localhost:4000/api/v1/admin/user/${id}`,
+      config
+    );
 
     dispatch({ type: DELETE_USER_SUCCESS, payload: data });
   } catch (error) {

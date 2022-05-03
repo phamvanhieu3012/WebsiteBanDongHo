@@ -16,12 +16,12 @@ router.route("/category/:id").get(getCategoryDetails);
 
 router
   .route("/admin/category/new")
-  .post(isAuthenticatedUser, authorizeRoles("staff"), createCategory);
+  .post(isAuthenticatedUser, authorizeRoles("admin"), createCategory);
 
 router
   .route("/admin/category/:id")
-  .get(isAuthenticatedUser, authorizeRoles("staff"), getCategoryDetails)
-  .put(isAuthenticatedUser, authorizeRoles("staff"), updateCategory)
-  .delete(isAuthenticatedUser, authorizeRoles("staff"), deleteCategory);
+  .get(isAuthenticatedUser, authorizeRoles("admin"), getCategoryDetails)
+  .put(isAuthenticatedUser, authorizeRoles("admin"), updateCategory)
+  .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteCategory);
 
 module.exports = router;

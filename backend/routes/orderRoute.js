@@ -19,11 +19,11 @@ router.route("/orders/me").get(isAuthenticatedUser, myOrders);
 
 router
   .route("/admin/orders")
-  .get(isAuthenticatedUser, authorizeRoles("staff"), getAllOrders);
+  .get(isAuthenticatedUser, authorizeRoles("admin"), getAllOrders);
 
 router
   .route("/admin/order/:id")
-  .put(isAuthenticatedUser, authorizeRoles("staff"), updateOrder)
-  .delete(isAuthenticatedUser, authorizeRoles("staff"), deleteOrder);
+  .put(isAuthenticatedUser, authorizeRoles("admin"), updateOrder)
+  .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteOrder);
 
 module.exports = router;

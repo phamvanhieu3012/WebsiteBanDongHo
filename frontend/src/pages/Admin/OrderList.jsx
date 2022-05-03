@@ -1,0 +1,291 @@
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import MailIcon from "@mui/icons-material/Mail";
+import MenuIcon from "@mui/icons-material/Menu";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import { Avatar, Button } from "@mui/material";
+import MuiAppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import { styled, useTheme } from "@mui/material/styles";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import { makeStyles } from "@mui/styles";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import { deleteOrder, getAllOrders } from "../../actions/orderAction.js";
+import { clearErrors } from "../../actions/productAction";
+import { DELETE_ORDER_RESET } from "../../constants/orderConstants";
+import "./Admin.scss";
+import Sidebar from "./components/Sidebar";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+
+const drawerWidth = 240;
+
+const useStyles = makeStyles({
+  root: {
+    fontSize: "100%",
+  },
+});
+
+const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
+  ({ theme, open }) => ({
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: `-${drawerWidth}px`,
+    ...(open && {
+      transition: theme.transitions.create("margin", {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
+    }),
+  })
+);
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  transition: theme.transitions.create(["margin", "width"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: `${drawerWidth}px`,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
+
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: "flex-end",
+}));
+
+export default function ProductList() {
+  const theme = useTheme();
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(true);
+  const { user } = useSelector((state) => state.user);
+  const { error, orders } = useSelector((state) => state.allOrders);
+
+  const { error: deleteError, isDeleted } = useSelector((state) => state.order);
+
+  let history = useHistory();
+
+  const dispatch = useDispatch();
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  const handleHistory = (his) => {
+    history.push(`/admin/${his}`);
+  };
+
+  const deleteOrderHandler = (id) => {
+    dispatch(deleteOrder(id));
+  };
+
+  React.useEffect(() => {
+    if (error) {
+      alert(error);
+      dispatch(clearErrors());
+    }
+
+    if (deleteError) {
+      alert(deleteError);
+      dispatch(clearErrors());
+    }
+
+    if (isDeleted) {
+      alert("Xoá đơn hàng thành công");
+      history.push("/admin/orders");
+      dispatch({ type: DELETE_ORDER_RESET });
+    }
+
+    dispatch(getAllOrders());
+  }, [dispatch, error, deleteError, history, isDeleted]);
+
+  const columns = [
+    { field: "id", headerName: "Order ID", minWidth: 270, flex: 1 },
+
+    {
+      field: "status",
+      headerName: "Trạng thái",
+      minWidth: 150,
+      flex: 0.5,
+      cellClassName: (params) => {
+        return params.getValue(params.id, "status") === "Delivered"
+          ? "greenColor"
+          : "redColor";
+      },
+    },
+    {
+      field: "itemsQty",
+      headerName: "Số lượng sản phẩm",
+      type: "number",
+      minWidth: 100,
+      flex: 0.4,
+    },
+
+    {
+      field: "amount",
+      headerName: "Tổng tiền",
+      type: "number",
+      minWidth: 200,
+      flex: 0.5,
+    },
+
+    {
+      field: "actions",
+      flex: 0.3,
+      headerName: "Actions",
+      minWidth: 150,
+      type: "number",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <React.Fragment>
+            <Link to={`/admin/order/${params.getValue(params.id, "id")}`}>
+              <EditIcon color="info" />
+            </Link>
+
+            <Button
+              onClick={() => {
+                confirmAlert({
+                  title: "Xác nhận",
+                  message: "Bạn có muốn xóa sản phẩm này",
+                  buttons: [
+                    {
+                      label: "Có",
+                      onClick: () => {
+                        deleteOrderHandler(params.getValue(params.id, "id"));
+                      },
+                    },
+                    {
+                      label: "Không",
+                      onClick: () => {
+                        return;
+                      },
+                    },
+                  ],
+                });
+              }}
+            >
+              <DeleteIcon color="error" />
+            </Button>
+          </React.Fragment>
+        );
+      },
+    },
+  ];
+
+  const rows = [];
+
+  orders &&
+    orders.forEach((item) => {
+      rows.push({
+        id: item._id,
+        itemsQty: item.orderItems.length,
+        amount: item.totalPrice,
+        status: item.orderStatus,
+      });
+    });
+
+  return (
+    <Box sx={{ display: "flex" }} className={classes.root}>
+      <CssBaseline />
+      <AppBar position="fixed" open={open}>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: "none" }) }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap component="div">
+              Đồng hồ PVH
+            </Typography>
+          </div>
+          <Box sx={{ display: "flex", alignItems: "center", gap: "15px" }}>
+            <span>Hi, {user.name}</span>
+            <Avatar alt={user.name} src={user.avatar.url} />
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
+        }}
+        variant="persistent"
+        anchor="left"
+        open={open}
+      >
+        <DrawerHeader>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "ltr" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
+        </DrawerHeader>
+        <Divider />
+        <Sidebar handleHistory={handleHistory} />
+        {/* <Divider /> */}
+      </Drawer>
+      <Main open={open}>
+        <DrawerHeader />
+        <h3 id="productListHeading">Tất cả đơn hàng</h3>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={10}
+          disableSelectionOnClick
+          className="productListTable"
+          autoHeight
+          components={{
+            Toolbar: GridToolbar,
+          }}
+        />
+      </Main>
+    </Box>
+  );
+}

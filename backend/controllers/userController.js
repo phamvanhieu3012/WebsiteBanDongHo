@@ -265,6 +265,7 @@ exports.updateUserRole = catchAsyncErrors(async (req, res, next) => {
     name: req.body.name,
     email: req.body.email,
     role: req.body.role,
+    shippingInfo: req.body.shippingInfo,
   };
 
   await User.findByIdAndUpdate(req.params.id, newUserData, {

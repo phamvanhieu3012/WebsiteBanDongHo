@@ -1,36 +1,47 @@
-import "./App.css";
-import Header from "./components/Layout/Header";
-import Footer from "./components/Layout/Footer";
-import Login from "./pages/login";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import NotFound from "./components/NotFound";
-import FAQ from "./pages/FAQ";
-import Blog from "./pages/Blog";
-import HomePage from "./pages/HomePage";
-import ProductDetail from "./pages/ProductDetail";
-import Product from "./pages/Product";
-import Cart from "./pages/Cart";
-import MyAccount from "./pages/MyAccount";
-import Checkout from "./pages/Checkout";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
-import store from "./store";
-
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { loadUser } from "./actions/userAction";
-import PublicRoute from "./components/Route/PublicRoute";
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
-import ProtectedRoute from "./components/Route/ProtectedRoute";
-import MenProducts from "./pages/MenProducts";
-import WomenProducts from "./pages/WomenProducts";
+import { loadUser } from "./actions/userAction";
+import "./App.css";
 import MyOrderDetail from "./components/MyOrderDetail";
-import Payment from "./pages/Payment";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
+import NotFound from "./components/NotFound";
+import AdminRoute from "./components/Route/AdminRoute";
+import ProtectedRoute from "./components/Route/ProtectedRoute";
+import PublicRoute from "./components/Route/PublicRoute";
+import About from "./pages/About";
+import CategoryList from "./pages/Admin/CategoryList";
+import Dashboard from "./pages/Admin/Dashboard";
+import NewCategory from "./pages/Admin/NewCategory";
+import NewProduct from "./pages/Admin/NewProduct";
+import OrderList from "./pages/Admin/OrderList";
+import ProcessOrder from "./pages/Admin/ProcessOrder";
+import ProductList from "./pages/Admin/ProductList";
+import ProductReviews from "./pages/Admin/ProductReviews";
+import UpdateCategory from "./pages/Admin/UpdateCategory";
+import UpdateProduct from "./pages/Admin/UpdateProduct";
+import UpdateUser from "./pages/Admin/UpdateUser";
+import UserList from "./pages/Admin/UserList";
+import Blog from "./pages/Blog";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import Contact from "./pages/Contact";
+import FAQ from "./pages/FAQ";
 import ForgotPassword from "./pages/ForgotPassword";
+import HomePage from "./pages/HomePage";
+import Login from "./pages/login";
+import MenProducts from "./pages/MenProducts";
+import MyAccount from "./pages/MyAccount";
+import Payment from "./pages/Payment";
+import Product from "./pages/Product";
+import ProductDetail from "./pages/ProductDetail";
 import ResetPassword from "./pages/ResetPassword";
+import WomenProducts from "./pages/WomenProducts";
+import store from "./store";
+
 // import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
@@ -78,6 +89,79 @@ function App() {
           <PublicRoute exact path="/contact" component={Contact} />
           <PublicRoute exact path="/blog" component={Blog} />
 
+          <AdminRoute
+            isAdmin={true}
+            exact
+            path="/admin/dashboard"
+            component={Dashboard}
+          />
+          <AdminRoute
+            isAdmin={true}
+            exact
+            path="/admin/products"
+            component={ProductList}
+          />
+          <AdminRoute
+            isAdmin={true}
+            exact
+            path="/admin/categories"
+            component={CategoryList}
+          />
+          <AdminRoute
+            isAdmin={true}
+            exact
+            path="/admin/users"
+            component={UserList}
+          />
+          <AdminRoute
+            exact
+            path="/admin/reviews"
+            isAdmin={true}
+            component={ProductReviews}
+          />
+          <AdminRoute
+            exact
+            path="/admin/orders"
+            isAdmin={true}
+            component={OrderList}
+          />
+          <AdminRoute
+            isAdmin={true}
+            exact
+            path="/admin/newProduct"
+            component={NewProduct}
+          />
+          <AdminRoute
+            isAdmin={true}
+            exact
+            path="/admin/product/:id"
+            component={UpdateProduct}
+          />
+          <AdminRoute
+            isAdmin={true}
+            exact
+            path="/admin/newCategory"
+            component={NewCategory}
+          />
+          <AdminRoute
+            isAdmin={true}
+            exact
+            path="/admin/category/:id"
+            component={UpdateCategory}
+          />
+          <AdminRoute
+            exact
+            path="/admin/user/:id"
+            isAdmin={true}
+            component={UpdateUser}
+          />
+          <AdminRoute
+            exact
+            path="/admin/order/:id"
+            isAdmin={true}
+            component={ProcessOrder}
+          />
+
           <PublicRoute exact path="/login" component={Login} />
           <ProtectedRoute exact path="/my-account" component={MyAccount} />
           <PublicRoute
@@ -94,13 +178,13 @@ function App() {
 
           <PublicRoute exact path="/cart" component={Cart} />
           <PublicRoute exact path="/checkout" component={Checkout} />
+
+          <PublicRoute component={NotFound} />
           {stripeApiKey && (
             <Elements stripe={loadStripe(stripeApiKey)}>
               <PublicRoute exact path="/payment" component={Payment} />
             </Elements>
           )}
-
-          <PublicRoute component={NotFound} />
         </Switch>
         {/* <button id="scroll-top" title="Back to Top">
           <i className="icon-arrow-up"></i>

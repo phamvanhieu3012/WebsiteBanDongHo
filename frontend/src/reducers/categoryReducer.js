@@ -55,6 +55,7 @@ export const newCategoryReducer = (state = { category: {} }, action) => {
       return {
         ...state,
         loading: true,
+        success: false,
       };
     case NEW_CATEGORY_SUCCESS:
       return {

@@ -214,12 +214,16 @@ export const createProduct = (productData) => async (dispatch) => {
   try {
     dispatch({ type: NEW_PRODUCT_REQUEST });
 
+    const token = localStorage.getItem("token");
+
     const config = {
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `token ${token}`,
+      },
     };
 
     const { data } = await axios.post(
-      `/api/v1/admin/product/new`,
+      `http://localhost:4000/api/v1/admin/product/new`,
       productData,
       config
     );
@@ -241,12 +245,16 @@ export const updateProduct = (id, productData) => async (dispatch) => {
   try {
     dispatch({ type: UPDATE_PRODUCT_REQUEST });
 
+    const token = localStorage.getItem("token");
     const config = {
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `token ${token}`,
+      },
     };
 
     const { data } = await axios.put(
-      `/api/v1/admin/product/${id}`,
+      `http://localhost:4000/api/v1/admin/product/${id}`,
       productData,
       config
     );
@@ -268,7 +276,17 @@ export const deleteProduct = (id) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_PRODUCT_REQUEST });
 
-    const { data } = await axios.delete(`/api/v1/admin/product/${id}`);
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        Authorization: `token ${token}`,
+      },
+    };
+
+    const { data } = await axios.delete(
+      `http://localhost:4000/api/v1/admin/product/${id}`,
+      config
+    );
 
     dispatch({
       type: DELETE_PRODUCT_SUCCESS,

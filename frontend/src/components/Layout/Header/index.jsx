@@ -157,14 +157,17 @@ function Header() {
                       <div className="header-menu">
                         <ul>
                           <li>
-                            <a href="#">Edit Account</a>
+                            <Link to="/my-account">
+                              Chỉnh sửa thông tin cá nhân
+                            </Link>
                           </li>
-                          <li>
-                            <a href="#">French</a>
-                          </li>
-                          <li>
-                            <a href="#">Spanish</a>
-                          </li>
+                          {user.role === "staff" || user.role === "admin" ? (
+                            <li>
+                              <Link to="/admin/dashboard">Dashboard Admin</Link>
+                            </li>
+                          ) : (
+                            ""
+                          )}
                         </ul>
                       </div>
                     </div>

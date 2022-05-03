@@ -48,7 +48,7 @@ export const createCategory = (categoryData) => async (dispatch) => {
 
     const config = {
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
         Authorization: `token ${token}`,
       },
     };
