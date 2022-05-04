@@ -26,6 +26,7 @@ import {
   deleteProduct,
   getAdminProduct,
 } from "../../actions/productAction";
+import MetaData from "../../components/Layout/MetaData";
 import { DELETE_PRODUCT_RESET } from "../../constants/productConstants";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
@@ -249,6 +250,7 @@ export default function ProductList() {
 
   return (
     <Box sx={{ display: "flex" }} className={classes.root}>
+      <MetaData title="Admin - Sản phẩm" />;
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>

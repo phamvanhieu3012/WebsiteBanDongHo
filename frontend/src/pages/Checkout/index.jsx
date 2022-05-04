@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
-import { clearErrors, createOrder } from "../../actions/orderAction.js";
-import Loader from "../../components/Common/Loader/index.jsx";
-import formatPrice from "../../ultils/formatPrice.js";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Button,
   FormControlLabel,
   Radio,
   RadioGroup,
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import "./Checkout.scss";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import { saveShippingInfo } from "../../actions/cartAction.js";
+import { clearErrors, createOrder } from "../../actions/orderAction.js";
 import { updateShippingInfo } from "../../actions/userAction.js";
-import { UPDATE_SHIP_RESET } from "../../constants/userConstants.js";
-import { getCart, saveShippingInfo } from "../../actions/cartAction.js";
+import Loader from "../../components/Common/Loader/index.jsx";
+import MetaData from "../../components/Layout/MetaData.jsx";
 import { CREATE_ORDER_RESET } from "../../constants/orderConstants.js";
+import { UPDATE_SHIP_RESET } from "../../constants/userConstants.js";
+import formatPrice from "../../ultils/formatPrice.js";
+import "./Checkout.scss";
 
 const useStyles = makeStyles({
   root: {},
@@ -46,8 +46,6 @@ function Checkout() {
   const { cartItems, shippingInfo: shippingInfoLocal } = useSelector(
     (state) => state.cartLocal
   );
-
-  console.log(user);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -251,6 +249,7 @@ function Checkout() {
         <Loader />
       ) : (
         <main className="main">
+          <MetaData title="Thanh toán" />;
           <div
             className="page-header text-center"
             style={{
@@ -273,7 +272,6 @@ function Checkout() {
               </ol>
             </div>
           </nav>
-
           <div className="page-content">
             <div className="checkout">
               <div className="container">

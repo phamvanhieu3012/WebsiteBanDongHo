@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearErrors, createContact } from "../../actions/contactAction";
 import { useHistory } from "react-router-dom";
 import { NEW_CONTACT_RESET } from "../../constants/contactConstants";
+import MetaData from "../../components/Layout/MetaData";
 
 function Contact() {
   const form = useRef();
@@ -68,6 +69,7 @@ function Contact() {
 
   return (
     <main className="main">
+      <MetaData title="Liên hệ" />;
       <nav aria-label="breadcrumb" className="breadcrumb-nav border-0 mb-0">
         <div className="container">
           <ol className="breadcrumb">
@@ -93,7 +95,6 @@ function Contact() {
           </h1>
         </div>
       </div>
-
       <div className="page-content pb-0">
         <div className="container">
           <div className="row">

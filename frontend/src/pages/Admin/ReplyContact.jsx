@@ -19,6 +19,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { getContactDetails, updateContact } from "../../actions/contactAction";
 import { clearErrors } from "../../actions/productAction";
 import Loader from "../../components/Common/Loader";
+import MetaData from "../../components/Layout/MetaData";
 import { UPDATE_CONTACT_RESET } from "../../constants/contactConstants";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
@@ -155,6 +156,7 @@ export default function ReplyContact() {
 
   return (
     <Box sx={{ display: "flex" }} className={classes.root}>
+      <MetaData title="Admin - Trả lời email" />;
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>

@@ -90,6 +90,14 @@ const productSchema = mongoose.Schema(
         default: false,
       },
     },
+    discountPercent: {
+      type: Number,
+      default: 0,
+    },
+    discountActive: {
+      type: Boolean,
+      default: false,
+    },
     reviews: [
       {
         user: {

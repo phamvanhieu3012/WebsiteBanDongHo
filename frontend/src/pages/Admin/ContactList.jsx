@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { deleteContact, getAllContacts } from "../../actions/contactAction";
 import { clearErrors } from "../../actions/productAction";
+import MetaData from "../../components/Layout/MetaData";
 import { DELETE_CONTACT_RESET } from "../../constants/contactConstants";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
@@ -226,6 +227,7 @@ export default function ContactList() {
 
   return (
     <Box sx={{ display: "flex" }} className={classes.root}>
+      <MetaData title="Admin - Liên hệ" />;
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>

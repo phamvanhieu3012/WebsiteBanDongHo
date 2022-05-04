@@ -1,8 +1,10 @@
 import React from "react";
+import MetaData from "../../components/Layout/MetaData";
 
 function Blog() {
   return (
     <main className="main">
+      <MetaData title="Tin tức" />;
       <div
         className="page-header text-center"
         style={{
@@ -25,7 +27,6 @@ function Blog() {
           </ol>
         </div>
       </nav>
-
       <div className="page-content">
         <div className="container">
           <div className="row">

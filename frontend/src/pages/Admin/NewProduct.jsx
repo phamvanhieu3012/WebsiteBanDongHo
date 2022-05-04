@@ -33,6 +33,7 @@ import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
 import ReactQuill from "react-quill"; // ES6
 import "react-quill/dist/quill.snow.css"; // ES6
+import MetaData from "../../components/Layout/MetaData";
 
 const drawerWidth = 240;
 
@@ -132,8 +133,8 @@ export default function NewProduct() {
   const [inputGlassMaterialValue, setInputGlassMaterialValue] = useState("");
   const [inputCategoryValue, setCategoryValue] = useState("");
 
-  const [discountName, setDiscountName] = useState("");
-  const [discountDesc, setDiscountDesc] = useState("");
+  // const [discountName, setDiscountName] = useState("");
+  // const [discountDesc, setDiscountDesc] = useState("");
   const [discountPercent, setDiscountPercent] = useState(0);
   const [discountActive, setDiscountActive] = useState(false);
 
@@ -166,12 +167,12 @@ export default function NewProduct() {
   const createProductSubmitHandler = (e) => {
     e.preventDefault();
 
-    const discount = {
-      name: discountName,
-      description: discountDesc,
-      percent: discountPercent,
-      discountActive: discountActive,
-    };
+    // const discount = {
+    //   name: discountName,
+    //   description: discountDesc,
+    //   percent: discountPercent,
+    //   discountActive: discountActive,
+    // };
 
     const myForm = new FormData();
 
@@ -186,7 +187,8 @@ export default function NewProduct() {
     myForm.set("sex", sex);
     myForm.set("category", category);
     myForm.set("Stock", Stock);
-    myForm.set("discount", discount);
+    myForm.set("discountPercent", discountPercent);
+    myForm.set("discountActive", discountActive);
 
     images.forEach((image) => {
       myForm.append("images", image);
@@ -220,6 +222,7 @@ export default function NewProduct() {
         <Loader />
       ) : (
         <Box sx={{ display: "flex" }} className={classes.root}>
+          <MetaData title="Admin - Sản phẩm" />;
           <CssBaseline />
           <AppBar position="fixed" open={open}>
             <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -557,7 +560,7 @@ export default function NewProduct() {
                   <p>Giảm giá</p>
                 </Grid>
                 <Grid item xs={12} sm={8} md={10}>
-                  <TextField
+                  {/* <TextField
                     label="Tên giảm giá"
                     required
                     value={discountName}
@@ -573,7 +576,7 @@ export default function NewProduct() {
                     onChange={(e) => setDiscountDesc(e.target.value)}
                     variant="outlined"
                     sx={{ width: "50%", marginBottom: "1.5rem" }}
-                  />
+                  /> */}
                   <br />
                   <TextField
                     inputProps={{

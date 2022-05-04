@@ -1,8 +1,10 @@
 import React from "react";
+import MetaData from "../../components/Layout/MetaData";
 
 function About() {
   return (
     <main className="main">
+      <MetaData title="Về chúng tôi" />;
       <nav aria-label="breadcrumb" className="breadcrumb-nav border-0 mb-0">
         <div className="container">
           <ol className="breadcrumb">
@@ -25,7 +27,6 @@ function About() {
           </h1>
         </div>
       </div>
-
       <div className="page-content pb-0">
         <div className="container">
           <div className="row">

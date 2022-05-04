@@ -27,6 +27,7 @@ import { getAllUsers } from "../../actions/userAction";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
 import formatPrice from "../../ultils/formatPrice";
+import MetaData from "../../components/Layout/MetaData";
 
 const drawerWidth = 240;
 
@@ -160,6 +161,7 @@ export default function Dashboard() {
 
   return (
     <Box sx={{ display: "flex" }} className={classes.root}>
+      <MetaData title="Admin - Dashboard" />;
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>

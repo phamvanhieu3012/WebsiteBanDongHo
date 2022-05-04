@@ -1,22 +1,22 @@
-import React, { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  CardNumberElement,
-  CardCvcElement,
-  CardExpiryElement,
-  useStripe,
-  useElements,
-} from "@stripe/react-stripe-js";
-import { Typography } from "@mui/material";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import EventIcon from "@mui/icons-material/Event";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import { makeStyles } from "@mui/styles";
-import "./Payment.scss";
+import {
+  CardCvcElement,
+  CardExpiryElement,
+  CardNumberElement,
+  useElements,
+  useStripe,
+} from "@stripe/react-stripe-js";
 import axios from "axios";
-import { clearErrors, createOrder } from "../../actions/orderAction";
+import React, { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { clearErrors, createOrder } from "../../actions/orderAction";
+import MetaData from "../../components/Layout/MetaData";
 import { CREATE_ORDER_RESET } from "../../constants/orderConstants";
+import "./Payment.scss";
 
 const useStyles = makeStyles({
   root: {},
@@ -126,6 +126,7 @@ function Payment() {
 
   return (
     <main className="main">
+      <MetaData title="Thanh toán tiền" />;
       <div className="container">
         <form className="paymentForm" onSubmit={(e) => submitHandler(e)}>
           <h2>Thông tin thẻ</h2>

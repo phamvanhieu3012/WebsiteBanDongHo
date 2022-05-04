@@ -27,6 +27,7 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import { getOrderDetails, updateOrder } from "../../actions/orderAction";
 import { clearErrors } from "../../actions/productAction";
 import Loader from "../../components/Common/Loader";
+import MetaData from "../../components/Layout/MetaData";
 import { UPDATE_ORDER_RESET } from "../../constants/orderConstants";
 import formatPrice from "../../ultils/formatPrice";
 import "./Admin.scss";
@@ -144,6 +145,7 @@ export default function ProcessOrder() {
 
   return (
     <Box sx={{ display: "flex" }} className={classes.root}>
+      <MetaData title="Admin - Thông tin đơn hàng" />;
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>

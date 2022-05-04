@@ -23,6 +23,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { createCategory } from "../../actions/categoryAction";
 import { clearErrors } from "../../actions/productAction";
+import Loader from "../../components/Common/Loader";
+import MetaData from "../../components/Layout/MetaData";
 import { NEW_CATEGORY_RESET } from "../../constants/categoryConstants";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
@@ -130,120 +132,127 @@ export default function NewCategory() {
   };
 
   return (
-    <Box sx={{ display: "flex" }} className={classes.root}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{ mr: 2, ...(open && { display: "none" }) }}
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Box sx={{ display: "flex" }} className={classes.root}>
+          <MetaData title="Admin - Tạo danh mục" />;
+          <CssBaseline />
+          <AppBar position="fixed" open={open}>
+            <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start"
+                  sx={{ mr: 2, ...(open && { display: "none" }) }}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Typography variant="h6" noWrap component="div">
+                  Đồng hồ PVH
+                </Typography>
+              </div>
+              <Box sx={{ display: "flex", alignItems: "center", gap: "15px" }}>
+                <span>Hi, {user.name}</span>
+                <Avatar alt={user.name} src={user.avatar.url} />
+              </Box>
+            </Toolbar>
+          </AppBar>
+          <Drawer
+            sx={{
+              width: drawerWidth,
+              flexShrink: 0,
+              "& .MuiDrawer-paper": {
+                width: drawerWidth,
+                boxSizing: "border-box",
+              },
+            }}
+            variant="persistent"
+            anchor="left"
+            open={open}
+          >
+            <DrawerHeader>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === "ltr" ? (
+                  <ChevronLeftIcon />
+                ) : (
+                  <ChevronRightIcon />
+                )}
+              </IconButton>
+            </DrawerHeader>
+            <Divider />
+            <Sidebar handleHistory={handleHistory} />
+            {/* <Divider /> */}
+          </Drawer>
+          <Main open={open}>
+            <DrawerHeader />
+            <h3 id="productListHeading">Thêm danh mục</h3>
+            <form
+              className="flexDiv"
+              encType="multipart/form-data"
+              onSubmit={createCategorySubmitHandler}
             >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              Đồng hồ PVH
-            </Typography>
-          </div>
-          <Box sx={{ display: "flex", alignItems: "center", gap: "15px" }}>
-            <span>Hi, {user.name}</span>
-            <Avatar alt={user.name} src={user.avatar.url} />
-          </Box>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-      >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <Sidebar handleHistory={handleHistory} />
-        {/* <Divider /> */}
-      </Drawer>
-      <Main open={open}>
-        <DrawerHeader />
-        <h3 id="productListHeading">Thêm danh mục</h3>
-        <form
-          className="flexDiv"
-          encType="multipart/form-data"
-          onSubmit={createCategorySubmitHandler}
-        >
-          <Grid container spacing={2}>
-            {/* <div className="flexDiv"> */}
-            <Grid
-              item
-              xs={12}
-              sm={4}
-              md={2}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
-              <p>Tên danh mục</p>
-            </Grid>
-            <Grid item xs={12} sm={8} md={10}>
-              <TextField
-                type="text"
-                label="Tên danh mục"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                variant="outlined"
-                sx={{ width: "50%" }}
-              />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={4}
-              md={2}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
-              <p>Giới thiệu</p>
-            </Grid>
-            <Grid item xs={12} sm={8} md={10}>
-              <textarea
-                placeholder="Giới thiệu"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                cols="100"
-                rows="7"
-              ></textarea>
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                id="createCategoryBtn"
-                type="submit"
-                variant="contained"
-                disabled={loading ? true : false}
-                sx={{
-                  marginBottom: "50px",
-                }}
-              >
-                Tạo danh mục
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      </Main>
-    </Box>
+              <Grid container spacing={2}>
+                {/* <div className="flexDiv"> */}
+                <Grid
+                  item
+                  xs={12}
+                  sm={4}
+                  md={2}
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
+                  <p>Tên danh mục</p>
+                </Grid>
+                <Grid item xs={12} sm={8} md={10}>
+                  <TextField
+                    type="text"
+                    label="Tên danh mục"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    variant="outlined"
+                    sx={{ width: "50%" }}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={4}
+                  md={2}
+                  sx={{ display: "flex", alignItems: "center" }}
+                >
+                  <p>Giới thiệu</p>
+                </Grid>
+                <Grid item xs={12} sm={8} md={10}>
+                  <textarea
+                    placeholder="Giới thiệu"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    cols="100"
+                    rows="7"
+                  ></textarea>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    id="createCategoryBtn"
+                    type="submit"
+                    variant="contained"
+                    disabled={loading ? true : false}
+                    sx={{
+                      marginBottom: "50px",
+                    }}
+                  >
+                    Tạo danh mục
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </Main>
+        </Box>
+      )}
+    </>
   );
 }

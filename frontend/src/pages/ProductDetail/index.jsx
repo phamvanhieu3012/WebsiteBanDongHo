@@ -44,6 +44,7 @@ import { ADD_TO_CART_RESET } from "../../constants/cartConstants";
 import Loader from "../../components/Common/Loader";
 import moment from "moment";
 import "moment/locale/vi";
+import MetaData from "../../components/Layout/MetaData";
 moment.locale("vi");
 
 const responsive = {
@@ -216,6 +217,7 @@ function ProductDetail() {
         <Loader />
       ) : (
         <main className="main">
+          <MetaData title="Chi tiết sản phẩm" />;
           <nav aria-label="breadcrumb" className="breadcrumb-nav border-0 mb-0">
             <div className="container d-flex align-items-center">
               <ol className="breadcrumb">
@@ -233,7 +235,6 @@ function ProductDetail() {
             {/* End .container */}
           </nav>
           {/* End .breadcrumb-nav */}
-
           <div className="page-content">
             <div className="container">
               <div className="product-details-top">
@@ -297,10 +298,24 @@ function ProductDetail() {
                         </a>
                       </div>
                       {/* End .rating-container */}
+                      {product.discountActive ? (
+                        <div className="product-price">
+                          <span className="new-price">
+                            {formatPrice(
+                              product.price -
+                                product.price * (product.discountPercent / 100)
+                            )}
+                          </span>
+                          <span className="old-price">
+                            <del>{formatPrice(product.price)}</del>
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="product-price">
+                          {product.price && formatPrice(product.price)}
+                        </div>
+                      )}
 
-                      <div className="product-price">
-                        {product.price && formatPrice(product.price)}
-                      </div>
                       {/* End .product-price */}
 
                       <div className="product-content">

@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { deleteCategory, getAllCategories } from "../../actions/categoryAction";
 import { clearErrors } from "../../actions/productAction";
+import MetaData from "../../components/Layout/MetaData";
 import { DELETE_CATEGORY_RESET } from "../../constants/categoryConstants";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
@@ -130,8 +131,6 @@ export default function ProductList() {
       dispatch({ type: DELETE_CATEGORY_RESET });
     }
 
-    console.log("Hêlo");
-
     dispatch(getAllCategories());
   }, [dispatch, error, deleteError, history, isDeleted]);
 
@@ -207,6 +206,7 @@ export default function ProductList() {
 
   return (
     <Box sx={{ display: "flex" }} className={classes.root}>
+      <MetaData title="Admin - Danh mục" />;
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>

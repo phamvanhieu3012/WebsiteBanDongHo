@@ -5,3 +5,9 @@ body {
 body * {
   font-family: "Roboto", sans-serif !important;
 }
+
+@media only screen and (max-width: 600px) {
+  .intro-slider-container {
+    max-height: 150px;
+  }
+}

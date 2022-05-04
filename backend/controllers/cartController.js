@@ -44,7 +44,11 @@ exports.addCartItem = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHander("Không tìm thấy sản phẩm", 400));
   }
 
-  const price = item.price;
+  let price = item.price;
+
+  if (item.discountActive) {
+    price = item.price - item.price * (item.discountPercent / 100);
+  }
   const name = item.name;
   const image = item.images[0].url;
 

@@ -37,6 +37,7 @@ import Loader from "../../components/Common/Loader";
 import { UPDATE_PRODUCT_RESET } from "../../constants/productConstants";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
+import MetaData from "../../components/Layout/MetaData";
 
 const drawerWidth = 240;
 
@@ -146,8 +147,8 @@ export default function UpdateProduct() {
   const [inputGlassMaterialValue, setInputGlassMaterialValue] = useState("");
   const [inputCategoryValue, setCategoryValue] = useState("");
 
-  const [discountName, setDiscountName] = useState("");
-  const [discountDesc, setDiscountDesc] = useState("");
+  // const [discountName, setDiscountName] = useState("");
+  // const [discountDesc, setDiscountDesc] = useState("");
   const [discountPercent, setDiscountPercent] = useState(0);
   const [discountActive, setDiscountActive] = useState(false);
 
@@ -181,6 +182,8 @@ export default function UpdateProduct() {
       setCategory(product.category);
       setStock(product.Stock);
       setOldImages(product.images);
+      setDiscountPercent(product.discountPercent);
+      setDiscountActive(product.discountActive);
 
       // console.log(category);
       // const cate = categories.filter((cate) => cate._id === category._id);
@@ -192,12 +195,12 @@ export default function UpdateProduct() {
       setCategory(product.category._id);
       setCategoryName(product.category.name);
     }
-    if (product && product.discount) {
-      setDiscountName(product.discount.name);
-      setDiscountDesc(product.discount.description);
-      setDiscountPercent(product.discount.percent);
-      setDiscountActive(product.discount.discountActive);
-    }
+    // if (product && product.discount) {
+    //   setDiscountName(product.discount.name);
+    //   setDiscountDesc(product.discount.description);
+    //   setDiscountPercent(product.discount.percent);
+    //   setDiscountActive(product.discount.discountActive);
+    // }
     if (error) {
       alert(error);
       dispatch(clearErrors());
@@ -219,12 +222,13 @@ export default function UpdateProduct() {
   const updateProductSubmitHandler = (e) => {
     e.preventDefault();
 
-    const discount = {
-      name: discountName,
-      description: discountDesc,
-      percent: discountPercent,
-      discountActive: discountActive,
-    };
+    // const discount = {
+    //   name: discountName,
+    //   description: discountDesc,
+    //   percent: discountPercent,
+    //   discountActive: discountActive,
+    // };
+    // console.log(discount);
 
     const myForm = new FormData();
 
@@ -239,7 +243,8 @@ export default function UpdateProduct() {
     myForm.set("sex", sex);
     myForm.set("category", category);
     myForm.set("Stock", Stock);
-    myForm.set("discount", discount);
+    myForm.set("discountPercent", discountPercent);
+    myForm.set("discountActive", discountActive);
 
     images.forEach((image) => {
       myForm.append("images", image);
@@ -277,6 +282,7 @@ export default function UpdateProduct() {
         <Loader />
       ) : (
         <Box sx={{ display: "flex" }} className={classes.root}>
+          <MetaData title="Admin - Chỉnh sửa sản phẩm" />;
           <CssBaseline />
           <AppBar position="fixed" open={open}>
             <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -627,9 +633,9 @@ export default function UpdateProduct() {
                   <p>Giảm giá</p>
                 </Grid>
                 <Grid item xs={12} sm={8} md={10}>
-                  <TextField
+                  {/* <TextField
                     label="Tên giảm giá"
-                    required
+                    // required
                     value={discountName}
                     onChange={(e) => setDiscountName(e.target.value)}
                     variant="outlined"
@@ -638,12 +644,12 @@ export default function UpdateProduct() {
                   <br />
                   <TextField
                     label="Giới thiệu về giảm giá"
-                    required
+                    // required
                     value={discountDesc}
                     onChange={(e) => setDiscountDesc(e.target.value)}
                     variant="outlined"
                     sx={{ width: "50%", marginBottom: "1.5rem" }}
-                  />
+                  /> */}
                   <br />
                   <TextField
                     inputProps={{

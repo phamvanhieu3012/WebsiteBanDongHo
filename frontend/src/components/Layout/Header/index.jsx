@@ -420,7 +420,7 @@ function Header() {
                 <div className="header-left">
                   <nav className="main-nav">
                     <ul className="menu sf-arrows">
-                      <li className="megamenu-container active">
+                      <li className="megamenu-container">
                         <a href="/" className="">
                           Trang chủ
                         </a>

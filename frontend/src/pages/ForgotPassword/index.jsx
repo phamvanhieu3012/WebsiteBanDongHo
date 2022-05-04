@@ -63,6 +63,7 @@ function ForgotPassword() {
         <Loader />
       ) : (
         <main className="main">
+          <MetaData title="Quên mật khẩu" />;
           <div
             className="page-header text-center"
             style={{

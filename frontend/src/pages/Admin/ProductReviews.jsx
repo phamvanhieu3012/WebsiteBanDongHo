@@ -23,6 +23,7 @@ import {
   deleteReviews,
   getAllReviews,
 } from "../../actions/productAction";
+import MetaData from "../../components/Layout/MetaData";
 import { DELETE_REVIEW_RESET } from "../../constants/productConstants";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
@@ -209,6 +210,7 @@ export default function ProductReviews() {
 
   return (
     <Box sx={{ display: "flex" }} className={classes.root}>
+      <MetaData title="Admin - Đánh giá sản phẩm" />;
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>

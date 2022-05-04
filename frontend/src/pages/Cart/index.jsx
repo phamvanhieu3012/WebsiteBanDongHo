@@ -9,6 +9,7 @@ import {
   removeItemsFromCart,
 } from "../../actions/cartAction";
 import Loader from "../../components/Common/Loader";
+import MetaData from "../../components/Layout/MetaData";
 import {
   ADD_TO_CART_RESET,
   REMOVE_CART_ITEM_RESET,
@@ -93,6 +94,7 @@ function Cart() {
         <Loader />
       ) : (
         <main className="main">
+          <MetaData title="Giỏ hàng" />;
           <div
             className="page-header text-center"
             style={{
@@ -115,7 +117,6 @@ function Cart() {
               </ol>
             </div>
           </nav>
-
           <div className="page-content">
             <div className="cart">
               <div className="container">
