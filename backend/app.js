@@ -48,6 +48,8 @@ const user = require("./routes/userRoute");
 const cart = require("./routes/cartRoute");
 const order = require("./routes/orderRoute");
 const payment = require("./routes/paymentRoute");
+const blog = require("./routes/blogRoute");
+const contact = require("./routes/contactRoute");
 
 app.use("/api/v1", product);
 app.use("/api/v1", category);
@@ -55,6 +57,8 @@ app.use("/api/v1", user);
 app.use("/api/v1", cart);
 app.use("/api/v1", order);
 app.use("/api/v1", payment);
+app.use("/api/v1", blog);
+app.use("/api/v1", contact);
 
 // Middleware for Errors
 app.use(errorMiddleware);

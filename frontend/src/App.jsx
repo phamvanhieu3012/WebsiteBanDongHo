@@ -14,6 +14,7 @@ import ProtectedRoute from "./components/Route/ProtectedRoute";
 import PublicRoute from "./components/Route/PublicRoute";
 import About from "./pages/About";
 import CategoryList from "./pages/Admin/CategoryList";
+import ContactList from "./pages/Admin/ContactList";
 import Dashboard from "./pages/Admin/Dashboard";
 import NewCategory from "./pages/Admin/NewCategory";
 import NewProduct from "./pages/Admin/NewProduct";
@@ -21,6 +22,7 @@ import OrderList from "./pages/Admin/OrderList";
 import ProcessOrder from "./pages/Admin/ProcessOrder";
 import ProductList from "./pages/Admin/ProductList";
 import ProductReviews from "./pages/Admin/ProductReviews";
+import ReplyContact from "./pages/Admin/ReplyContact";
 import UpdateCategory from "./pages/Admin/UpdateCategory";
 import UpdateProduct from "./pages/Admin/UpdateProduct";
 import UpdateUser from "./pages/Admin/UpdateUser";
@@ -126,6 +128,12 @@ function App() {
             component={OrderList}
           />
           <AdminRoute
+            exact
+            path="/admin/contacts"
+            isAdmin={true}
+            component={ContactList}
+          />
+          <AdminRoute
             isAdmin={true}
             exact
             path="/admin/newProduct"
@@ -160,6 +168,12 @@ function App() {
             path="/admin/order/:id"
             isAdmin={true}
             component={ProcessOrder}
+          />
+          <AdminRoute
+            exact
+            path="/admin/contact/:id"
+            isAdmin={true}
+            component={ReplyContact}
           />
 
           <PublicRoute exact path="/login" component={Login} />

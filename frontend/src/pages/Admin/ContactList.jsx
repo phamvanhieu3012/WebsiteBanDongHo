@@ -1,10 +1,9 @@
-import AddIcon from "@mui/icons-material/Add";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Avatar, Button } from "@mui/material";
+import { Avatar, Button, Chip } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -21,9 +20,9 @@ import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import { deleteCategory, getAllCategories } from "../../actions/categoryAction";
+import { deleteContact, getAllContacts } from "../../actions/contactAction";
 import { clearErrors } from "../../actions/productAction";
-import { DELETE_CATEGORY_RESET } from "../../constants/categoryConstants";
+import { DELETE_CONTACT_RESET } from "../../constants/contactConstants";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
 
@@ -80,17 +79,15 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-export default function ProductList() {
+export default function ContactList() {
   const { user } = useSelector((state) => state.user);
   const theme = useTheme();
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const { loading, error, categories } = useSelector(
-    (state) => state.categories
-  );
+  const { loading, error, contacts } = useSelector((state) => state.contacts);
 
   const { error: deleteError, isDeleted } = useSelector(
-    (state) => state.category
+    (state) => state.contact
   );
 
   let history = useHistory();
@@ -109,8 +106,8 @@ export default function ProductList() {
     history.push(`/admin/${his}`);
   };
 
-  const deleteCategoryHandler = (id) => {
-    dispatch(deleteCategory(id));
+  const deleteContactHandler = (id) => {
+    dispatch(deleteContact(id));
   };
 
   React.useEffect(() => {
@@ -125,30 +122,50 @@ export default function ProductList() {
     }
 
     if (isDeleted) {
-      alert("Xóa danh mục thành công");
-      history.push("/admin/categories");
-      dispatch({ type: DELETE_CATEGORY_RESET });
+      alert("Xóa liên hệ thành công");
+      history.push("/admin/contacts");
+      dispatch({ type: DELETE_CONTACT_RESET });
     }
 
-    console.log("Hêlo");
-
-    dispatch(getAllCategories());
+    dispatch(getAllContacts());
   }, [dispatch, error, deleteError, history, isDeleted]);
 
   const columns = [
     { field: "id", headerName: "ID", minWidth: 200, flex: 0.5 },
-
     {
       field: "name",
-      headerName: "Tên danh mục",
+      headerName: "Họ tên khách hàng",
       minWidth: 280,
-      flex: 1,
+      flex: 0.5,
     },
     {
-      field: "desc",
-      headerName: "Giới thiệu",
+      field: "email",
+      headerName: "Email",
       minWidth: 100,
       flex: 0.5,
+    },
+    {
+      field: "title",
+      headerName: "Tiêu đề",
+      minWidth: 100,
+      flex: 0.5,
+    },
+    {
+      field: "status",
+      headerName: "Trạng thái",
+      minWidth: 100,
+      flex: 0.5,
+      renderCell: (params) => {
+        return (
+          <React.Fragment>
+            {params.value === false ? (
+              <Chip label="Chưa trả lời" color="error" />
+            ) : (
+              <Chip label="Đã trả lời" color="success" />
+            )}
+          </React.Fragment>
+        );
+      },
     },
     {
       field: "actions",
@@ -160,7 +177,7 @@ export default function ProductList() {
       renderCell: (params) => {
         return (
           <React.Fragment>
-            <Link to={`/admin/category/${params.getValue(params.id, "id")}`}>
+            <Link to={`/admin/contact/${params.getValue(params.id, "id")}`}>
               <EditIcon />
             </Link>
 
@@ -168,12 +185,12 @@ export default function ProductList() {
               onClick={() => {
                 confirmAlert({
                   title: "Xác nhận",
-                  message: "Bạn có muốn xóa danh mục này?",
+                  message: "Bạn có muốn xóa liên hệ này?",
                   buttons: [
                     {
                       label: "Có",
                       onClick: () => {
-                        deleteCategoryHandler(params.getValue(params.id, "id"));
+                        deleteContactHandler(params.getValue(params.id, "id"));
                       },
                     },
                     {
@@ -196,12 +213,14 @@ export default function ProductList() {
 
   const rows = [];
 
-  categories &&
-    categories.forEach((item) => {
+  contacts &&
+    contacts.forEach((item) => {
       rows.push({
         id: item._id,
         name: item.name,
-        desc: item.description,
+        email: item.email,
+        title: item.title,
+        status: item.status,
       });
     });
 
@@ -258,13 +277,7 @@ export default function ProductList() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        <h3 id="productListHeading">Tất cả danh mục</h3>
-        <div dir="rtl" className="addButton">
-          <span>Thêm danh mục</span>
-          <IconButton href="/admin/newCategory">
-            <AddIcon />
-          </IconButton>
-        </div>
+        <h3 id="productListHeading">Tất cả liên hệ</h3>
         <DataGrid
           rows={rows}
           columns={columns}

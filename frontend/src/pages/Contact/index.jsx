@@ -1,6 +1,71 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
+import { useDispatch, useSelector } from "react-redux";
+import { clearErrors, createContact } from "../../actions/contactAction";
+import { useHistory } from "react-router-dom";
+import { NEW_CONTACT_RESET } from "../../constants/contactConstants";
 
 function Contact() {
+  const form = useRef();
+  const dispatch = useDispatch();
+  let history = useHistory();
+
+  const { loading, error, success } = useSelector((state) => state.newContact);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [title, setTitle] = useState("");
+  const [detail, setDetail] = useState("");
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .sendForm(
+        "service_pvsg1up",
+        "template_lgkhn5s",
+        form.current,
+        "a0yKVEz_2_0NaPTQu"
+      )
+      .then(
+        (result) => {
+          console.log(name, email, title, detail);
+          const myForm = {
+            name,
+            email,
+            title,
+            detail,
+          };
+
+          // myForm.set("name", name);
+          // myForm.set("email", email);
+          // myForm.set("title", title);
+          // myForm.set("detail", detail);
+
+          dispatch(createContact(myForm));
+        },
+        (error) => {
+          alert(error.text);
+        }
+      );
+  };
+
+  useEffect(() => {
+    if (error) {
+      alert(error);
+      dispatch(clearErrors());
+    }
+
+    if (success) {
+      alert("Gửi email thành công");
+      dispatch({ type: NEW_CONTACT_RESET });
+      setName("");
+      setEmail("");
+      setTitle("");
+      setDetail("");
+    }
+  }, [dispatch, error, history, success]);
+
   return (
     <main className="main">
       <nav aria-label="breadcrumb" className="breadcrumb-nav border-0 mb-0">
@@ -89,7 +154,11 @@ function Contact() {
                 Điền vào form bên dưới để liên hệ với đội ngũ chúng tôi
               </p>
 
-              <form action="#" className="contact-form mb-3">
+              <form
+                className="contact-form mb-3"
+                ref={form}
+                onSubmit={sendEmail}
+              >
                 <div className="row">
                   <div className="col-sm-6">
                     <label htmlFor="cname" className="sr-only">
@@ -101,6 +170,9 @@ function Contact() {
                       id="cname"
                       placeholder="Tên *"
                       required
+                      name="user_name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                     />
                   </div>
 
@@ -114,12 +186,15 @@ function Contact() {
                       id="cemail"
                       placeholder="Email *"
                       required
+                      name="user_email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
                 </div>
 
                 <div className="row">
-                  <div className="col-sm-6">
+                  {/* <div className="col-sm-6">
                     <label htmlFor="cphone" className="sr-only">
                       Số điện thoại
                     </label>
@@ -129,17 +204,21 @@ function Contact() {
                       id="cphone"
                       placeholder="Số điện thoại"
                     />
-                  </div>
+                  </div> */}
 
-                  <div className="col-sm-6">
+                  <div className="col-sm-12">
                     <label htmlFor="csubject" className="sr-only">
-                      Vấn đề
+                      Tiêu đề *
                     </label>
                     <input
                       type="text"
                       className="form-control"
                       id="csubject"
-                      placeholder="Vấn đề"
+                      placeholder="Tiêu đề"
+                      required
+                      name="title"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
                     />
                   </div>
                 </div>
@@ -154,6 +233,9 @@ function Contact() {
                   id="cmessage"
                   required
                   placeholder="Lời nhắn *"
+                  name="message"
+                  value={detail}
+                  onChange={(e) => setDetail(e.target.value)}
                 ></textarea>
 
                 <button

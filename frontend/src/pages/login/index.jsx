@@ -84,14 +84,10 @@ function Login() {
 
     const myForm = new FormData();
 
-    console.log(avatar);
-
     myForm.set("name", name);
     myForm.set("email", email);
     myForm.set("password", password);
     myForm.set("avatar", avatar);
-
-    console.log(myForm);
 
     dispatch(register(myForm));
   };

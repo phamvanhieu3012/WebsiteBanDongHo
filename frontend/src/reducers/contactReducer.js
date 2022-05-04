@@ -1,39 +1,39 @@
+import { DELETE_CATEGORY_REQUEST } from "../constants/categoryConstants.js";
 import {
-  ALL_CATEGORY_FAIL,
-  ALL_CATEGORY_REQUEST,
-  ALL_CATEGORY_SUCCESS,
-  NEW_CATEGORY_REQUEST,
-  NEW_CATEGORY_SUCCESS,
-  NEW_CATEGORY_FAIL,
-  UPDATE_CATEGORY_REQUEST,
-  UPDATE_CATEGORY_SUCCESS,
-  UPDATE_CATEGORY_FAIL,
-  DELETE_CATEGORY_REQUEST,
-  DELETE_CATEGORY_SUCCESS,
-  DELETE_CATEGORY_FAIL,
-  CATEGORY_DETAILS_REQUEST,
-  CATEGORY_DETAILS_FAIL,
-  CATEGORY_DETAILS_SUCCESS,
+  ALL_CONTACT_FAIL,
+  ALL_CONTACT_REQUEST,
+  ALL_CONTACT_SUCCESS,
   CLEAR_ERRORS,
-  NEW_CATEGORY_RESET,
-  DELETE_CATEGORY_RESET,
-  UPDATE_CATEGORY_RESET,
-} from "../constants/categoryConstants.js";
+  CONTACT_DETAILS_FAIL,
+  CONTACT_DETAILS_REQUEST,
+  CONTACT_DETAILS_SUCCESS,
+  DELETE_CONTACT_FAIL,
+  DELETE_CONTACT_RESET,
+  DELETE_CONTACT_SUCCESS,
+  NEW_CONTACT_FAIL,
+  NEW_CONTACT_REQUEST,
+  NEW_CONTACT_RESET,
+  NEW_CONTACT_SUCCESS,
+  UPDATE_CONTACT_FAIL,
+  UPDATE_CONTACT_REQUEST,
+  UPDATE_CONTACT_RESET,
+  UPDATE_CONTACT_SUCCESS,
+} from "../constants/contactConstants.js";
 
-export const categoriesReducer = (state = { categories: [] }, action) => {
+export const contactsReducer = (state = { contacts: [] }, action) => {
   switch (action.type) {
-    case ALL_CATEGORY_REQUEST:
+    case ALL_CONTACT_REQUEST:
       return {
         loading: true,
-        categories: [],
+        contacts: [],
       };
 
-    case ALL_CATEGORY_SUCCESS:
+    case ALL_CONTACT_SUCCESS:
       return {
         loading: false,
-        categories: action.payload,
+        contacts: action.payload,
       };
-    case ALL_CATEGORY_FAIL:
+    case ALL_CONTACT_FAIL:
       return {
         loading: false,
         error: action.payload,
@@ -49,27 +49,27 @@ export const categoriesReducer = (state = { categories: [] }, action) => {
   }
 };
 
-export const newCategoryReducer = (state = { category: {} }, action) => {
+export const newContactReducer = (state = { contact: {} }, action) => {
   switch (action.type) {
-    case NEW_CATEGORY_REQUEST:
+    case NEW_CONTACT_REQUEST:
       return {
         ...state,
         loading: true,
         success: false,
       };
-    case NEW_CATEGORY_SUCCESS:
+    case NEW_CONTACT_SUCCESS:
       return {
         loading: false,
         success: action.payload.success,
-        category: action.payload.category,
+        contact: action.payload.contact,
       };
-    case NEW_CATEGORY_FAIL:
+    case NEW_CONTACT_FAIL:
       return {
         ...state,
         loading: false,
         error: action.payload,
       };
-    case NEW_CATEGORY_RESET:
+    case NEW_CONTACT_RESET:
       return {
         ...state,
         success: false,
@@ -84,40 +84,40 @@ export const newCategoryReducer = (state = { category: {} }, action) => {
   }
 };
 
-export const categoryReducer = (state = {}, action) => {
+export const contactReducer = (state = {}, action) => {
   switch (action.type) {
     case DELETE_CATEGORY_REQUEST:
-    case UPDATE_CATEGORY_REQUEST:
+    case UPDATE_CONTACT_REQUEST:
       return {
         ...state,
         loading: true,
       };
-    case DELETE_CATEGORY_SUCCESS:
+    case DELETE_CONTACT_SUCCESS:
       return {
         ...state,
         loading: false,
         isDeleted: action.payload,
       };
 
-    case UPDATE_CATEGORY_SUCCESS:
+    case UPDATE_CONTACT_SUCCESS:
       return {
         ...state,
         loading: false,
         isUpdated: action.payload,
       };
-    case DELETE_CATEGORY_FAIL:
-    case UPDATE_CATEGORY_FAIL:
+    case DELETE_CONTACT_FAIL:
+    case UPDATE_CONTACT_FAIL:
       return {
         ...state,
         loading: false,
         error: action.payload,
       };
-    case DELETE_CATEGORY_RESET:
+    case DELETE_CONTACT_RESET:
       return {
         ...state,
         isDeleted: false,
       };
-    case UPDATE_CATEGORY_RESET:
+    case UPDATE_CONTACT_RESET:
       return {
         ...state,
         isUpdated: false,
@@ -132,19 +132,19 @@ export const categoryReducer = (state = {}, action) => {
   }
 };
 
-export const categoryDetailsReducer = (state = { category: {} }, action) => {
+export const contactDetailsReducer = (state = { contact: {} }, action) => {
   switch (action.type) {
-    case CATEGORY_DETAILS_REQUEST:
+    case CONTACT_DETAILS_REQUEST:
       return {
         loading: true,
         ...state,
       };
-    case CATEGORY_DETAILS_SUCCESS:
+    case CONTACT_DETAILS_SUCCESS:
       return {
         loading: false,
-        category: action.payload,
+        contact: action.payload,
       };
-    case CATEGORY_DETAILS_FAIL:
+    case CONTACT_DETAILS_FAIL:
       return {
         loading: false,
         error: action.payload,

@@ -1,15 +1,12 @@
+import CategoryIcon from "@mui/icons-material/Category";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PeopleIcon from "@mui/icons-material/People";
+import ReviewsIcon from "@mui/icons-material/Reviews";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import ContactMailIcon from "@mui/icons-material/ContactMail";
 import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import React from "react";
-import PeopleIcon from "@mui/icons-material/People";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import FolderIcon from "@mui/icons-material/Folder";
-import PersonIcon from "@mui/icons-material/Person";
-import CommentIcon from "@mui/icons-material/Comment";
-import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
-import CategoryIcon from "@mui/icons-material/Category";
-import ReviewsIcon from "@mui/icons-material/Reviews";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import { useHistory } from "react-router-dom";
 
 function Sidebar(props) {
   // console.log("props", props);
@@ -53,6 +50,12 @@ function Sidebar(props) {
           <ShoppingBagIcon />
         </ListItemIcon>
         <ListItemText primary="Đơn hàng" />
+      </ListItem>
+      <ListItem button onClick={() => handleHistory("contacts")}>
+        <ListItemIcon>
+          <ContactMailIcon />
+        </ListItemIcon>
+        <ListItemText primary="Liên hệ" />
       </ListItem>
     </List>
   );
