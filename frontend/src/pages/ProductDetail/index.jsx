@@ -5,13 +5,15 @@ import {
   DialogContent,
   DialogTitle,
   Rating,
+  Tooltip,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import formatPrice from "../../ultils/formatPrice";
 import {
   clearErrors,
+  deleteReviews,
   getAdminProduct,
   getProductDetails,
   newReview,
@@ -28,7 +30,10 @@ import "react-multi-carousel/lib/styles.css";
 import { makeStyles } from "@mui/styles";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { NEW_REVIEW_RESET } from "../../constants/productConstants";
+import {
+  DELETE_REVIEW_RESET,
+  NEW_REVIEW_RESET,
+} from "../../constants/productConstants";
 import "./ProductDetail.scss";
 import {
   addItemsToCartLocal,
@@ -37,6 +42,9 @@ import {
 } from "../../actions/cartAction";
 import { ADD_TO_CART_RESET } from "../../constants/cartConstants";
 import Loader from "../../components/Common/Loader";
+import moment from "moment";
+import "moment/locale/vi";
+moment.locale("vi");
 
 const responsive = {
   desktop: {
@@ -100,6 +108,10 @@ function ProductDetail() {
     (state) => state.newReview
   );
 
+  const { error: deleteError, isDeleted } = useSelector(
+    (state) => state.review
+  );
+
   const { error: cartError, isUpdated } = useSelector((state) => state.cart);
 
   const { products } = useSelector((state) => state.productsAdmin);
@@ -139,6 +151,26 @@ function ProductDetail() {
     dispatch(newReview(myForm));
     setOpen(false);
   };
+
+  const deleteReviewHandler = (reviewId) => {
+    let productId = match.id;
+    dispatch(deleteReviews(reviewId, productId));
+  };
+
+  let history = useHistory();
+
+  React.useEffect(() => {
+    if (deleteError) {
+      alert(deleteError);
+      dispatch(clearErrors());
+    }
+
+    if (isDeleted) {
+      alert("Xóa bình luận thành công");
+      history.push(`/products`);
+      dispatch({ type: DELETE_REVIEW_RESET });
+    }
+  }, [dispatch, deleteError, history, isDeleted]);
 
   //Handle cart
 
@@ -604,7 +636,9 @@ function ProductDetail() {
                                   readOnly
                                 />
                               </div>
-                              <span className="review-date">6 days ago</span>
+                              <span className="review-date">
+                                {review && moment(review.createAt).fromNow()}
+                              </span>
                             </div>
                             {/* End .col */}
                             <div className="col">
@@ -619,17 +653,11 @@ function ProductDetail() {
                                   <span
                                     style={{
                                       fontSize: "1.5rem",
-                                      marginRight: "1rem",
                                       cursor: "pointer",
                                     }}
-                                  >
-                                    <EditIcon /> Sửa
-                                  </span>
-                                  <span
-                                    style={{
-                                      fontSize: "1.5rem",
-                                      cursor: "pointer",
-                                    }}
+                                    onClick={() =>
+                                      deleteReviewHandler(review._id)
+                                    }
                                   >
                                     <DeleteIcon /> Xóa
                                   </span>

@@ -412,8 +412,18 @@ export const deleteReviews = (reviewId, productId) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_REVIEW_REQUEST });
 
-    const data = await axiosClient.delete(
-      `/api/v1/reviews?id=${reviewId}&productId=${productId}`
+    const token = localStorage.getItem("token");
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `token ${token}`,
+      },
+    };
+
+    const { data } = await axios.delete(
+      `http://localhost:4000/api/v1/reviews?id=${reviewId}&productId=${productId}`,
+      config
     );
 
     dispatch({

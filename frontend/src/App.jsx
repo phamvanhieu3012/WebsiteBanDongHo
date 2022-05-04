@@ -3,7 +3,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ScrollToTop from "react-scroll-to-top";
 import { loadUser } from "./actions/userAction";
 import "./App.css";
@@ -183,7 +183,7 @@ function App() {
             path="/forgot-password"
             component={ForgotPassword}
           />
-          <PublicRoute
+          <Route
             exact
             path="/password/reset/:token"
             component={ResetPassword}
