@@ -109,7 +109,12 @@ const productSchema = mongoose.Schema(
           type: String,
           required: true,
         },
+        createAt: {
+          type: Date,
+          default: Date.now(),
+        },
       },
+      { timestamps: true },
     ],
 
     user: {

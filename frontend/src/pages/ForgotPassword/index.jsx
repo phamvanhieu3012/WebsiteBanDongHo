@@ -4,8 +4,31 @@ import { clearErrors, forgotPassword } from "../../actions/userAction";
 import Loader from "../../components/Common/Loader";
 import MetaData from "../../components/Layout/MetaData";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import { makeStyles } from "@mui/styles";
+import { Button } from "@mui/material";
+
+const useStyles = makeStyles({
+  root: {
+    fontSize: "100%",
+  },
+  forgotPasswordForm: {
+    display: "flex",
+    gap: "1.5rem",
+    alignItems: "center",
+    marginBottom: "2rem",
+  },
+  forgotPasswordEmail: {
+    display: "flex",
+    gap: "1.5rem",
+    alignItems: "center",
+  },
+  forgotPasswordBtn: {
+    fontSize: "1.4rem !important",
+  },
+});
 
 function ForgotPassword() {
+  const classes = useStyles();
   const dispatch = useDispatch();
 
   const { error, message, loading } = useSelector(
@@ -68,13 +91,11 @@ function ForgotPassword() {
           <MetaData title="Forgot Password" />
           <div className="container">
             <div className="forgotPasswordBox">
-              <h2 className="forgotPasswordHeading">Forgot Password</h2>
-
               <form
-                className="forgotPasswordForm"
+                className={classes.forgotPasswordForm}
                 onSubmit={forgotPasswordSubmit}
               >
-                <div className="forgotPasswordEmail">
+                <div className={classes.forgotPasswordEmail}>
                   <MailOutlineIcon />
                   <input
                     type="email"
@@ -83,14 +104,18 @@ function ForgotPassword() {
                     name="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    style={{ width: "200px", outline: "none" }}
                   />
                 </div>
 
-                <input
+                <Button
                   type="submit"
-                  value="Send"
-                  className="forgotPasswordBtn"
-                />
+                  variant="outlined"
+                  color="warning"
+                  className={classes.forgotPasswordBtn}
+                >
+                  Gửi
+                </Button>
               </form>
             </div>
           </div>

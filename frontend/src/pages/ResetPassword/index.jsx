@@ -6,6 +6,8 @@ import LockIcon from "@mui/icons-material/Lock";
 import Loader from "../../components/Common/Loader";
 import MetaData from "../../components/Layout/MetaData";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
+import "./ResetPassword.scss";
+import { Box, Button, Container, Paper } from "@mui/material";
 
 function ResetPassword() {
   let history = useHistory();
@@ -52,43 +54,47 @@ function ResetPassword() {
         <Loader />
       ) : (
         <Fragment>
-          <MetaData title="Quên mật khẩu" />
-          <div className="resetPasswordContainer">
-            <div className="resetPasswordBox">
-              <h2 className="resetPasswordHeading">Update Profile</h2>
+          <MetaData title="Đặt lại mật khẩu" />
+          <Container className="resetPasswordContainer">
+            <Box className="resetPasswordBox">
+              <Paper className="resetPasswordPaper" elevation={3}>
+                <h4 className="resetPasswordHeading">Cập nhật mật khẩu</h4>
 
-              <form
-                className="resetPasswordForm"
-                onSubmit={resetPasswordSubmit}
-              >
-                <div>
-                  <LockOpenIcon />
-                  <input
-                    type="password"
-                    placeholder="New Password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                <div className="loginPassword">
-                  <LockIcon />
-                  <input
-                    type="password"
-                    placeholder="Confirm Password"
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                </div>
-                <input
-                  type="submit"
-                  value="Update"
-                  className="resetPasswordBtn"
-                />
-              </form>
-            </div>
-          </div>
+                <form
+                  className="resetPasswordForm"
+                  onSubmit={resetPasswordSubmit}
+                >
+                  <div>
+                    <LockOpenIcon />
+                    <input
+                      type="password"
+                      placeholder="Mật khẩu mới"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+                  <div className="loginPassword">
+                    <LockIcon />
+                    <input
+                      type="password"
+                      placeholder="Nhập lại mật khẩu"
+                      required
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    className="resetPasswordBtn"
+                    variant="contained"
+                  >
+                    Cập nhật
+                  </Button>
+                </form>
+              </Paper>
+            </Box>
+          </Container>
         </Fragment>
       )}
     </Fragment>
