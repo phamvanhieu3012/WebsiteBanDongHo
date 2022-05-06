@@ -13,9 +13,11 @@ import AdminRoute from "./components/Route/AdminRoute";
 import ProtectedRoute from "./components/Route/ProtectedRoute";
 import PublicRoute from "./components/Route/PublicRoute";
 import About from "./pages/About";
+import BlogList from "./pages/Admin/BlogList";
 import CategoryList from "./pages/Admin/CategoryList";
 import ContactList from "./pages/Admin/ContactList";
 import Dashboard from "./pages/Admin/Dashboard";
+import NewBlog from "./pages/Admin/NewBlog";
 import NewCategory from "./pages/Admin/NewCategory";
 import NewProduct from "./pages/Admin/NewProduct";
 import OrderList from "./pages/Admin/OrderList";
@@ -23,11 +25,13 @@ import ProcessOrder from "./pages/Admin/ProcessOrder";
 import ProductList from "./pages/Admin/ProductList";
 import ProductReviews from "./pages/Admin/ProductReviews";
 import ReplyContact from "./pages/Admin/ReplyContact";
+import UpdateBlog from "./pages/Admin/UpdateBlog";
 import UpdateCategory from "./pages/Admin/UpdateCategory";
 import UpdateProduct from "./pages/Admin/UpdateProduct";
 import UpdateUser from "./pages/Admin/UpdateUser";
 import UserList from "./pages/Admin/UserList";
 import Blog from "./pages/Blog";
+import BlogDetail from "./pages/BlogDetail/BlogDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Contact from "./pages/Contact";
@@ -90,6 +94,7 @@ function App() {
           <PublicRoute exact path="/faq" component={FAQ} />
           <PublicRoute exact path="/contact" component={Contact} />
           <PublicRoute exact path="/blog" component={Blog} />
+          <PublicRoute exact path="/blog/:id" component={BlogDetail} />
 
           <AdminRoute
             isAdmin={true}
@@ -134,6 +139,12 @@ function App() {
             component={ContactList}
           />
           <AdminRoute
+            exact
+            path="/admin/blogs"
+            isAdmin={true}
+            component={BlogList}
+          />
+          <AdminRoute
             isAdmin={true}
             exact
             path="/admin/newProduct"
@@ -174,6 +185,18 @@ function App() {
             path="/admin/contact/:id"
             isAdmin={true}
             component={ReplyContact}
+          />
+          <AdminRoute
+            isAdmin={true}
+            exact
+            path="/admin/newBlog"
+            component={NewBlog}
+          />
+          <AdminRoute
+            isAdmin={true}
+            exact
+            path="/admin/blog/:id"
+            component={UpdateBlog}
           />
 
           <PublicRoute exact path="/login" component={Login} />

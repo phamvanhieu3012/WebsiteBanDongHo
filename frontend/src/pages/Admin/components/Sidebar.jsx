@@ -2,16 +2,17 @@ import CategoryIcon from "@mui/icons-material/Category";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import ReviewsIcon from "@mui/icons-material/Reviews";
+import NewspaperIcon from "@mui/icons-material/Newspaper";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import React from "react";
+import { useSelector } from "react-redux";
 
 function Sidebar(props) {
-  // console.log("props", props);
   const { handleHistory } = props;
-  // console.log(handleHistory);
+  const { user, loading } = useSelector((state) => state.user);
 
   return (
     <List>
@@ -33,12 +34,16 @@ function Sidebar(props) {
         </ListItemIcon>
         <ListItemText primary="Sản phẩm" />
       </ListItem>
-      <ListItem button onClick={() => handleHistory("users")}>
-        <ListItemIcon>
-          <PeopleIcon />
-        </ListItemIcon>
-        <ListItemText primary="Tài khoản" />
-      </ListItem>
+      {user.role === "admin" ? (
+        <ListItem button onClick={() => handleHistory("users")}>
+          <ListItemIcon>
+            <PeopleIcon />
+          </ListItemIcon>
+          <ListItemText primary="Tài khoản" />
+        </ListItem>
+      ) : (
+        ""
+      )}
       <ListItem button onClick={() => handleHistory("reviews")}>
         <ListItemIcon>
           <ReviewsIcon />
@@ -56,6 +61,12 @@ function Sidebar(props) {
           <ContactMailIcon />
         </ListItemIcon>
         <ListItemText primary="Liên hệ" />
+      </ListItem>
+      <ListItem button onClick={() => handleHistory("blogs")}>
+        <ListItemIcon>
+          <NewspaperIcon />
+        </ListItemIcon>
+        <ListItemText primary="Tin tức" />
       </ListItem>
     </List>
   );

@@ -45,6 +45,15 @@ import {
   contactsReducer,
   newContactReducer,
 } from "./reducers/contactReducer";
+import {
+  blogDetailsReducer,
+  blogReducer,
+  blogReviewsReducer,
+  blogsReducer,
+  newBlogReducer,
+  newReviewBlogReducer,
+  reviewBlogReducer,
+} from "./reducers/blogReducer";
 
 const reducer = combineReducers({
   // Product
@@ -85,6 +94,14 @@ const reducer = combineReducers({
   contactDetails: contactDetailsReducer,
   newContact: newContactReducer,
   contact: contactReducer,
+  //Blog
+  blogs: blogsReducer,
+  blogDetails: blogDetailsReducer,
+  newBlog: newBlogReducer,
+  blog: blogReducer,
+  blogReviews: blogReviewsReducer,
+  newReviewBlog: newReviewBlogReducer,
+  reviewBlog: reviewBlogReducer,
 });
 
 let initialState = {
