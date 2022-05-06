@@ -1,8 +1,6 @@
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import { Avatar, Button, Grid, TextField } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -10,10 +8,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
 import { styled, useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -28,6 +22,8 @@ import MetaData from "../../components/Layout/MetaData";
 import { NEW_CATEGORY_RESET } from "../../constants/categoryConstants";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const drawerWidth = 240;
 
@@ -35,6 +31,10 @@ const useStyles = makeStyles({
   root: {
     fontSize: "100%",
   },
+});
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -83,6 +83,23 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function NewCategory() {
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
   const { user } = useSelector((state) => state.user);
   const theme = useTheme();
   const classes = useStyles();
@@ -109,12 +126,15 @@ export default function NewCategory() {
 
   useEffect(() => {
     if (error) {
-      alert(error);
+      setOpenError(true);
+      setErrorAlert(error);
       dispatch(clearErrors());
     }
 
     if (success) {
-      alert("Tạo danh mục thành công");
+      // alert("Tạo danh mục thành công");
+      setOpenSuccess(true);
+      setSuccessAlert("Tạo danh mục thành công");
       history.push("/admin/categories");
       dispatch({ type: NEW_CATEGORY_RESET });
     }
@@ -138,6 +158,32 @@ export default function NewCategory() {
       ) : (
         <Box sx={{ display: "flex" }} className={classes.root}>
           <MetaData title="Admin - Tạo danh mục" />;
+          <Snackbar
+            open={openError}
+            autoHideDuration={5000}
+            onClose={handleCloseError}
+          >
+            <Alert
+              onClose={handleCloseError}
+              severity="warning"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {errorAlert}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={openSuccess}
+            autoHideDuration={3000}
+            onClose={handleCloseSuccess}
+          >
+            <Alert
+              onClose={handleCloseSuccess}
+              severity="success"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {successAlert}
+            </Alert>
+          </Snackbar>
           <CssBaseline />
           <AppBar position="fixed" open={open}>
             <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>

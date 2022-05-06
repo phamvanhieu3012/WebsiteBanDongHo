@@ -5,8 +5,32 @@ import { clearErrors, createContact } from "../../actions/contactAction";
 import { useHistory } from "react-router-dom";
 import { NEW_CONTACT_RESET } from "../../constants/contactConstants";
 import MetaData from "../../components/Layout/MetaData";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function Contact() {
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
+
   const form = useRef();
   const dispatch = useDispatch();
   let history = useHistory();
@@ -46,19 +70,24 @@ function Contact() {
           dispatch(createContact(myForm));
         },
         (error) => {
-          alert(error.text);
+          // alert(error.text);
+          setOpenError(true);
+          setErrorAlert(error.text);
         }
       );
   };
 
   useEffect(() => {
     if (error) {
-      alert(error);
+      setOpenError(true);
+      setErrorAlert(error);
       dispatch(clearErrors());
     }
 
     if (success) {
-      alert("Gửi email thành công");
+      // alert("Gửi email thành công");
+      setOpenSuccess(true);
+      setSuccessAlert("Gửi email thành công");
       dispatch({ type: NEW_CONTACT_RESET });
       setName("");
       setEmail("");
@@ -70,6 +99,32 @@ function Contact() {
   return (
     <main className="main">
       <MetaData title="Liên hệ" />;
+      <Snackbar
+        open={openError}
+        autoHideDuration={5000}
+        onClose={handleCloseError}
+      >
+        <Alert
+          onClose={handleCloseError}
+          severity="warning"
+          sx={{ width: "100%", fontSize: "0.85em" }}
+        >
+          {errorAlert}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openSuccess}
+        autoHideDuration={3000}
+        onClose={handleCloseSuccess}
+      >
+        <Alert
+          onClose={handleCloseSuccess}
+          severity="success"
+          sx={{ width: "100%", fontSize: "0.85em" }}
+        >
+          {successAlert}
+        </Alert>
+      </Snackbar>
       <nav aria-label="breadcrumb" className="breadcrumb-nav border-0 mb-0">
         <div className="container">
           <ol className="breadcrumb">
@@ -242,6 +297,7 @@ function Contact() {
                 <button
                   type="submit"
                   className="btn btn-outline-primary-2 btn-minwidth-sm"
+                  disabled={loading ? true : false}
                 >
                   <span>GỬI</span>
                   <i className="icon-long-arrow-right"></i>

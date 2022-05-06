@@ -6,8 +6,6 @@ const AdminRoute = ({ isAdmin, component: Component, ...rest }) => {
   const { loading, isAuthenticated, user } = useSelector((state) => state.user);
   let history = useHistory();
 
-  console.log("Hwllo ");
-
   return (
     <>
       {loading === false && (
@@ -19,12 +17,12 @@ const AdminRoute = ({ isAdmin, component: Component, ...rest }) => {
               history.push("/login");
             }
 
-            if (
-              (isAdmin === true && user.role !== "admin") ||
-              (isAdmin === true && user.role === "staff")
-            ) {
+            //Nếu user.role === admin hoặc staff thì về login
+            if (isAdmin === true && user.role !== "admin") {
               // return <Redirect to="/login" />;
-              history.push("/login");
+              if (user.role !== "staff") {
+                history.push("/login");
+              }
             }
             return <Component {...props} />;
           }}

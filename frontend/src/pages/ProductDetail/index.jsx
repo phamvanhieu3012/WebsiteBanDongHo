@@ -45,6 +45,8 @@ import Loader from "../../components/Common/Loader";
 import moment from "moment";
 import "moment/locale/vi";
 import MetaData from "../../components/Layout/MetaData";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 moment.locale("vi");
 
 const responsive = {
@@ -78,9 +80,31 @@ const useStyles = makeStyles({
   },
 });
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 function ProductDetail() {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
 
   const [valueTab, setValueTab] = useState(1);
   const [open, setOpen] = useState(false);
@@ -121,11 +145,13 @@ function ProductDetail() {
 
   useEffect(() => {
     if (reviewError) {
-      alert(reviewError);
+      setOpenError(true);
+      setErrorAlert(reviewError);
       dispatch(clearErrors());
     }
     if (success) {
-      alert("Bình luận thành công");
+      setOpenSuccess(true);
+      setSuccessAlert("Bình luận thành công");
       dispatch({ type: NEW_REVIEW_RESET });
     }
     dispatch(getProductDetails(match.id));
@@ -162,12 +188,16 @@ function ProductDetail() {
 
   React.useEffect(() => {
     if (deleteError) {
-      alert(deleteError);
+      // alert(deleteError);
+      setOpenError(true);
+      setErrorAlert(deleteError);
       dispatch(clearErrors());
     }
 
     if (isDeleted) {
-      alert("Xóa bình luận thành công");
+      // alert("Xóa bình luận thành công");
+      setOpenSuccess(true);
+      setSuccessAlert("Xóa bình luận thành công");
       history.push(`/products`);
       dispatch({ type: DELETE_REVIEW_RESET });
     }
@@ -191,17 +221,22 @@ function ProductDetail() {
 
   const addToCartHandler = () => {
     if (cartError) {
-      alert(cartError);
+      setOpenError(true);
+      setErrorAlert(cartError);
       return;
     }
     dispatch(addToCart(product._id, quantity));
-    alert("Thêm sản phẩm vào giỏ hàng thành công");
-    dispatch(getProductDetails(match.id));
+    // alert("Thêm sản phẩm vào giỏ hàng thành công");
+    setOpenSuccess(true);
+    setSuccessAlert("Thêm sản phẩm vào giỏ hàng thành công");
+    // dispatch(getProductDetails(match.id));
   };
 
   const addToCartLocalHandler = () => {
     dispatch(addItemsToCartLocal(match.id, quantity));
-    alert("Thêm sản phẩm vào giỏ hàng thành công");
+    // alert("Thêm sản phẩm vào giỏ hàng thành công");
+    setOpenSuccess(true);
+    setSuccessAlert("Thêm sản phẩm vào giỏ hàng thành công");
   };
 
   useEffect(() => {
@@ -218,6 +253,32 @@ function ProductDetail() {
       ) : (
         <main className="main">
           <MetaData title="Chi tiết sản phẩm" />;
+          <Snackbar
+            open={openError}
+            autoHideDuration={5000}
+            onClose={handleCloseError}
+          >
+            <Alert
+              onClose={handleCloseError}
+              severity="warning"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {errorAlert}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={openSuccess}
+            autoHideDuration={3000}
+            onClose={handleCloseSuccess}
+          >
+            <Alert
+              onClose={handleCloseSuccess}
+              severity="success"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {successAlert}
+            </Alert>
+          </Snackbar>
           <nav aria-label="breadcrumb" className="breadcrumb-nav border-0 mb-0">
             <div className="container d-flex align-items-center">
               <ol className="breadcrumb">
@@ -632,7 +693,6 @@ function ProductDetail() {
                       Đánh giá ({product && product.numOfReviews})
                     </h3>
                     <div className="review">
-                      {console.log(product)}
                       {product.reviews && product.reviews[0] ? (
                         product.reviews &&
                         product.reviews.map((review) => (

@@ -38,6 +38,8 @@ import { UPDATE_PRODUCT_RESET } from "../../constants/productConstants";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
 import MetaData from "../../components/Layout/MetaData";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const drawerWidth = 240;
 
@@ -45,6 +47,10 @@ const useStyles = makeStyles({
   root: {
     fontSize: "100%",
   },
+});
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -104,6 +110,24 @@ const ropeMaterialOptions = [
 const glassMaterialOptions = ["Kính cứng", "Kính Sapphire", "Kính nhựa"];
 
 export default function UpdateProduct() {
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
+
   const theme = useTheme();
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -202,17 +226,21 @@ export default function UpdateProduct() {
     //   setDiscountActive(product.discount.discountActive);
     // }
     if (error) {
-      alert(error);
+      setOpenError(true);
+      setErrorAlert(error);
       dispatch(clearErrors());
     }
 
     if (updateError) {
-      alert(updateError);
+      setOpenError(true);
+      setErrorAlert(updateError);
       dispatch(clearErrors());
     }
 
     if (isUpdated) {
-      alert("Chỉnh sửa thông tin sản phẩm thành công");
+      // alert("Chỉnh sửa thông tin sản phẩm thành công");
+      setOpenSuccess(true);
+      setSuccessAlert("Chỉnh sửa thông tin sản phẩm thành công");
       history.push("/admin/products");
       dispatch({ type: UPDATE_PRODUCT_RESET });
     }
@@ -284,6 +312,32 @@ export default function UpdateProduct() {
         <Box sx={{ display: "flex" }} className={classes.root}>
           <MetaData title="Admin - Chỉnh sửa sản phẩm" />;
           <CssBaseline />
+          <Snackbar
+            open={openError}
+            autoHideDuration={5000}
+            onClose={handleCloseError}
+          >
+            <Alert
+              onClose={handleCloseError}
+              severity="warning"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {errorAlert}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={openSuccess}
+            autoHideDuration={3000}
+            onClose={handleCloseSuccess}
+          >
+            <Alert
+              onClose={handleCloseSuccess}
+              severity="success"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {successAlert}
+            </Alert>
+          </Snackbar>
           <AppBar position="fixed" open={open}>
             <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
               <div style={{ display: "flex", alignItems: "center" }}>

@@ -8,8 +8,31 @@ import MetaData from "../../components/Layout/MetaData";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import "./ResetPassword.scss";
 import { Box, Button, Container, Paper } from "@mui/material";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function ResetPassword() {
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
   let history = useHistory();
   const dispatch = useDispatch();
   let match = useParams();
@@ -37,12 +60,15 @@ function ResetPassword() {
 
   useEffect(() => {
     if (error) {
-      alert(error);
+      setOpenError(true);
+      setErrorAlert(error);
       dispatch(clearErrors());
     }
 
     if (success) {
-      alert("Cập nhật mật khẩu thành công");
+      // alert("Cập nhật mật khẩu thành công");
+      setOpenSuccess(true);
+      setSuccessAlert("Cập nhật mật khẩu thành công");
 
       history.push("/login");
     }
@@ -55,6 +81,32 @@ function ResetPassword() {
       ) : (
         <Fragment>
           <MetaData title="Đặt lại mật khẩu" />
+          <Snackbar
+            open={openError}
+            autoHideDuration={5000}
+            onClose={handleCloseError}
+          >
+            <Alert
+              onClose={handleCloseError}
+              severity="warning"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {errorAlert}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={openSuccess}
+            autoHideDuration={3000}
+            onClose={handleCloseSuccess}
+          >
+            <Alert
+              onClose={handleCloseSuccess}
+              severity="success"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {successAlert}
+            </Alert>
+          </Snackbar>
           <Container className="resetPasswordContainer">
             <Box className="resetPasswordBox">
               <Paper className="resetPasswordPaper" elevation={3}>

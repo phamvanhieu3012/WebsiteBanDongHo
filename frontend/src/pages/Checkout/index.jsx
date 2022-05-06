@@ -20,6 +20,10 @@ import MetaData from "../../components/Layout/MetaData.jsx";
 import { CREATE_ORDER_RESET } from "../../constants/orderConstants.js";
 import { UPDATE_SHIP_RESET } from "../../constants/userConstants.js";
 import formatPrice from "../../ultils/formatPrice.js";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
 import "./Checkout.scss";
 
 const useStyles = makeStyles({
@@ -33,7 +37,29 @@ const useStyles = makeStyles({
   radioButton: {},
 });
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 function Checkout() {
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
+
   const classes = useStyles();
   const { cart, loading: cartLoading } = useSelector((state) => state.cart);
   const { isAuthenticated, user, loading } = useSelector((state) => state.user);
@@ -92,7 +118,9 @@ function Checkout() {
     e.preventDefault();
 
     if (phoneNo.length < 7 || phoneNo.length > 11) {
-      alert("Số điện thoại cần từ 8 -> 10 số");
+      // alert("Số điện thoại cần từ 8 -> 10 số");
+      setOpenError(true);
+      setErrorAlert("Số điện thoại cần từ 8 -> 10 số");
       return;
     }
 
@@ -126,6 +154,7 @@ function Checkout() {
           status: "Chưa thanh toán",
         },
         orderComments: comments,
+        // user: user,
       };
       console.log(order);
 
@@ -144,6 +173,8 @@ function Checkout() {
           "paidAt",
           JSON.stringify(new Date().toLocaleDateString("en-GB"))
         );
+
+        order.paymentInfo.id = "abc";
 
         dispatch(updateShippingInfo(shippingInfo));
         dispatch(createOrder(order));
@@ -218,7 +249,8 @@ function Checkout() {
 
   useEffect(() => {
     if (errorProfile) {
-      alert(errorProfile);
+      setOpenError(true);
+      setErrorAlert(errorProfile);
       dispatch(clearErrors());
     }
     if (isUpdated) {
@@ -228,11 +260,14 @@ function Checkout() {
 
   useEffect(() => {
     if (error) {
-      alert(error);
+      setOpenError(true);
+      setErrorAlert(error);
       dispatch(clearErrors());
     }
     if (isSubmit) {
-      alert("Tạo đơn hàng thành công");
+      // setOpenSuccess(true);
+      // setSuccessAlert("Tạo đơn hàng thành công");
+      Swal.fire("Thành công!", "Tạo đơn hàng thành công!", "success");
       localStorage.removeItem("cartItems");
       history.push("/");
       dispatch({
@@ -241,7 +276,7 @@ function Checkout() {
     }
   }, [dispatch, error, history, isSubmit]);
 
-  console.log(payment);
+  console.log(user);
 
   return (
     <>
@@ -250,6 +285,32 @@ function Checkout() {
       ) : (
         <main className="main">
           <MetaData title="Thanh toán" />;
+          <Snackbar
+            open={openError}
+            autoHideDuration={5000}
+            onClose={handleCloseError}
+          >
+            <Alert
+              onClose={handleCloseError}
+              severity="warning"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {errorAlert}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={openSuccess}
+            autoHideDuration={3000}
+            onClose={handleCloseSuccess}
+          >
+            <Alert
+              onClose={handleCloseSuccess}
+              severity="success"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {successAlert}
+            </Alert>
+          </Snackbar>
           <div
             className="page-header text-center"
             style={{

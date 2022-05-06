@@ -6,6 +6,8 @@ import MetaData from "../../components/Layout/MetaData";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import { makeStyles } from "@mui/styles";
 import { Button } from "@mui/material";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const useStyles = makeStyles({
   root: {
@@ -27,7 +29,28 @@ const useStyles = makeStyles({
   },
 });
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 function ForgotPassword() {
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -48,12 +71,14 @@ function ForgotPassword() {
 
   useEffect(() => {
     if (error) {
-      alert(error);
+      setOpenError(true);
+      setErrorAlert(error);
       dispatch(clearErrors());
     }
 
     if (message) {
-      alert(message);
+      setOpenSuccess(true);
+      setSuccessAlert(message);
     }
   }, [dispatch, error, message]);
 
@@ -64,6 +89,32 @@ function ForgotPassword() {
       ) : (
         <main className="main">
           <MetaData title="Quên mật khẩu" />;
+          <Snackbar
+            open={openError}
+            autoHideDuration={5000}
+            onClose={handleCloseError}
+          >
+            <Alert
+              onClose={handleCloseError}
+              severity="warning"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {errorAlert}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={openSuccess}
+            autoHideDuration={3000}
+            onClose={handleCloseSuccess}
+          >
+            <Alert
+              onClose={handleCloseSuccess}
+              severity="success"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {successAlert}
+            </Alert>
+          </Snackbar>
           <div
             className="page-header text-center"
             style={{

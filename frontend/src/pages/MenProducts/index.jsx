@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Rating from "@mui/material/Rating";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { getMenProduct } from "../../actions/productAction";
+import { clearErrors, getMenProduct } from "../../actions/productAction";
 import { Collapse } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
@@ -12,8 +12,32 @@ import Pagination from "react-js-pagination";
 import Slider from "@mui/material/Slider";
 import MetaData from "../../components/Layout/MetaData";
 import Loader from "../../components/Common/Loader";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function MenProducts() {
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
+
   const [close, setClose] = useState(false);
   const [category, setCategory] = useState("");
   const [sort, setSort] = useState("");
@@ -70,9 +94,15 @@ function MenProducts() {
   };
 
   useEffect(() => {
+    if (error) {
+      setOpenError(true);
+      setErrorAlert(error);
+      dispatch(clearErrors());
+    }
+
     dispatch(getAllCategories());
     dispatch(getMenProduct(currentPage, category, price, sort, keyword));
-  }, [dispatch, currentPage, category, price, sort, keyword]);
+  }, [dispatch, error, currentPage, category, price, sort, keyword]);
 
   return (
     <>
@@ -81,6 +111,32 @@ function MenProducts() {
       ) : (
         <main className="main">
           <MetaData title="Đồng hồ nam" />;
+          <Snackbar
+            open={openError}
+            autoHideDuration={5000}
+            onClose={handleCloseError}
+          >
+            <Alert
+              onClose={handleCloseError}
+              severity="warning"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {errorAlert}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={openSuccess}
+            autoHideDuration={3000}
+            onClose={handleCloseSuccess}
+          >
+            <Alert
+              onClose={handleCloseSuccess}
+              severity="success"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {successAlert}
+            </Alert>
+          </Snackbar>
           <div
             className="page-header text-center"
             style={{
@@ -186,13 +242,11 @@ function MenProducts() {
                                   <a href="#" className="btn-product btn-cart">
                                     <span>
                                       <span
-                                        style={{
-                                          textTransform: "uppercase",
-                                        }}
+                                        style={{ textTransform: "uppercase" }}
                                       >
-                                        T
+                                        C
                                       </span>
-                                      hêm vào giỏ hàng
+                                      lick để xem chi tiết
                                     </span>
                                   </a>
                                 </div>

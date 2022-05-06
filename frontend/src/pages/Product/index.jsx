@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Rating from "@mui/material/Rating";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { getProduct } from "../../actions/productAction";
+import { clearErrors, getProduct } from "../../actions/productAction";
 import { Collapse } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
@@ -13,8 +13,31 @@ import Slider from "@mui/material/Slider";
 import "./Product.scss";
 import MetaData from "../../components/Layout/MetaData";
 import Loader from "../../components/Common/Loader";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function Product() {
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
   const [close, setClose] = useState(false);
   const [category, setCategory] = useState("");
   const [ropeMaterial, setRopeMaterial] = useState("");
@@ -72,8 +95,12 @@ function Product() {
   };
 
   useEffect(() => {
+    if (error) {
+      setOpenError(true);
+      setErrorAlert(error);
+      dispatch(clearErrors());
+    }
     dispatch(getAllCategories());
-    console.log(sort);
     dispatch(
       getProduct(
         currentPage,
@@ -88,6 +115,7 @@ function Product() {
     );
   }, [
     dispatch,
+    error,
     currentPage,
     category,
     price,
@@ -105,6 +133,32 @@ function Product() {
       ) : (
         <main className="main">
           <MetaData title="Tất cả sản phẩm" />;
+          <Snackbar
+            open={openError}
+            autoHideDuration={5000}
+            onClose={handleCloseError}
+          >
+            <Alert
+              onClose={handleCloseError}
+              severity="warning"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {errorAlert}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={openSuccess}
+            autoHideDuration={3000}
+            onClose={handleCloseSuccess}
+          >
+            <Alert
+              onClose={handleCloseSuccess}
+              severity="success"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {successAlert}
+            </Alert>
+          </Snackbar>
           <div
             className="page-header text-center"
             style={{
@@ -172,7 +226,7 @@ function Product() {
 
                   <div className="products mb-3">
                     <div className="row justify-content-center">
-                      {products &&
+                      {products ? (
                         products.map((product) => (
                           <div
                             className="col-6 col-md-4 col-lg-4"
@@ -217,13 +271,11 @@ function Product() {
                                   <a href="#" className="btn-product btn-cart">
                                     <span>
                                       <span
-                                        style={{
-                                          textTransform: "uppercase",
-                                        }}
+                                        style={{ textTransform: "uppercase" }}
                                       >
-                                        T
+                                        C
                                       </span>
-                                      hêm vào giỏ hàng
+                                      lick để xem chi tiết
                                     </span>
                                   </a>
                                 </div>
@@ -291,7 +343,10 @@ function Product() {
                             </div>
                             {/* End .product */}
                           </div>
-                        ))}
+                        ))
+                      ) : (
+                        <p>Không có sản phẩm nào</p>
+                      )}
                     </div>
                   </div>
                   {/* End .products */}

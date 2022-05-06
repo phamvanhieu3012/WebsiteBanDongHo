@@ -16,7 +16,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { makeStyles } from "@mui/styles";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { useDispatch, useSelector } from "react-redux";
@@ -30,8 +30,13 @@ import MetaData from "../../components/Layout/MetaData";
 import { DELETE_PRODUCT_RESET } from "../../constants/productConstants";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const drawerWidth = 240;
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const useStyles = makeStyles({
   root: {
@@ -85,6 +90,25 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function ProductList() {
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const [pageSize, setPageSize] = React.useState(5);
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
   const { user } = useSelector((state) => state.user);
   const theme = useTheme();
   const classes = useStyles();
@@ -120,17 +144,21 @@ export default function ProductList() {
 
   React.useEffect(() => {
     if (error) {
-      alert(error);
+      setOpenError(true);
+      setErrorAlert(error);
       dispatch(clearErrors());
     }
 
     if (deleteError) {
-      alert(deleteError);
+      setOpenError(true);
+      setErrorAlert(deleteError);
       dispatch(clearErrors);
     }
 
     if (isDeleted) {
-      alert("Xóa sản phẩm thành công");
+      // alert("Xóa sản phẩm thành công");
+      setOpenSuccess(true);
+      setSuccessAlert("Xóa sản phẩm thành công");
       history.push("/admin/products");
       dispatch({ type: DELETE_PRODUCT_RESET });
     }
@@ -252,6 +280,32 @@ export default function ProductList() {
     <Box sx={{ display: "flex" }} className={classes.root}>
       <MetaData title="Admin - Sản phẩm" />;
       <CssBaseline />
+      <Snackbar
+        open={openError}
+        autoHideDuration={5000}
+        onClose={handleCloseError}
+      >
+        <Alert
+          onClose={handleCloseError}
+          severity="warning"
+          sx={{ width: "100%", fontSize: "0.85em" }}
+        >
+          {errorAlert}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openSuccess}
+        autoHideDuration={3000}
+        onClose={handleCloseSuccess}
+      >
+        <Alert
+          onClose={handleCloseSuccess}
+          severity="success"
+          sx={{ width: "100%", fontSize: "0.85em" }}
+        >
+          {successAlert}
+        </Alert>
+      </Snackbar>
       <AppBar position="fixed" open={open}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -312,7 +366,11 @@ export default function ProductList() {
         <DataGrid
           rows={rows}
           columns={columns}
-          pageSize={10}
+          pageSize={pageSize}
+          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+          rowsPerPageOptions={[5, 10, 20]}
+          pagination
+          // pageSize={10}
           disableSelectionOnClick
           className="productListTable"
           autoHeight

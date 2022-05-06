@@ -1,10 +1,18 @@
+import { Button, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
-import { clearErrors, getOrderDetails } from "../../actions/orderAction";
+import { Link, useParams, useHistory } from "react-router-dom";
+import {
+  clearErrors,
+  getOrderDetails,
+  updateOrder,
+} from "../../actions/orderAction";
 import formatPrice from "../../ultils/formatPrice";
 import Loader from "../Common/Loader";
 import "./MyOrderDetail.scss";
+import Swal from "sweetalert2/dist/sweetalert2.js";
+
+import "sweetalert2/src/sweetalert2.scss";
 
 function MyOrderDetail() {
   const { order, error, loading } = useSelector((state) => state.orderDetails);
@@ -12,7 +20,7 @@ function MyOrderDetail() {
   const dispatch = useDispatch();
   const match = useParams();
 
-  console.log(match);
+  let history = useHistory();
 
   useEffect(() => {
     if (error) {
@@ -22,6 +30,34 @@ function MyOrderDetail() {
 
     dispatch(getOrderDetails(match.id));
   }, [dispatch, error, match.id]);
+
+  const cancelOrderSubmitHandler = (e) => {
+    e.preventDefault();
+
+    Swal.fire({
+      title: "Bạn có chắc chắn?",
+      text: "Bạn sẽ không thể quay trở lại!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Hủy đơn hàng!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          "Hủy thành công!",
+          "Đơn hàng của bạn đã được hủy.",
+          "success"
+        );
+        const myForm = new FormData();
+
+        myForm.set("status", "Canceled");
+
+        dispatch(updateOrder(match.id, myForm));
+        history.push("/my-account");
+      }
+    });
+  };
 
   return (
     <>
@@ -83,15 +119,21 @@ function MyOrderDetail() {
                   <h4>Thông tin thanh toán</h4>
                   <div className="orderDetailsContainerBox">
                     <div>
+                      <p>Phương thức thanh toán:</p>
+                      <span>{order.paymentInfo && order.paymentInfo.type}</span>
+                    </div>
+
+                    <div>
+                      <span>Trạng thái thanh toán:</span>
                       <p
                         className={
                           order.paymentInfo &&
-                          order.paymentInfo.status === "Chuyển khoản ngân hàng"
+                          order.paymentInfo.type === "Đã thanh toán"
                             ? "greenColor"
                             : "redColor"
                         }
                       >
-                        Phương thức thanh toán:<span> </span>
+                        <span> </span>
                         {order.paymentInfo && order.paymentInfo.status}
                       </p>
                     </div>
@@ -168,6 +210,52 @@ function MyOrderDetail() {
                     </tbody>
                   </table>
                 </div>
+
+                {order.orderStatus === "Processing" ? (
+                  <form
+                    className="updateOrderForm"
+                    onSubmit={cancelOrderSubmitHandler}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "2rem",
+                    }}
+                  >
+                    <Typography variant="h4" sx={{ marginBottom: "1rem" }}>
+                      Hủy đơn hàng
+                    </Typography>
+
+                    <div>
+                      {/* <select onChange={(e) => setStatus(e.target.value)}>
+                          <option value="">Chọn trạng thái</option>
+                          {order.orderStatus === "Processing" && (
+                            <option value="Shipped">Shipped</option>
+                          )}
+
+                          {order.orderStatus === "Shipped" && (
+                            <option value="Delivered">Delivered</option>
+                          )}
+                        </select> */}
+                    </div>
+
+                    <Button
+                      id="createProductBtn"
+                      type="submit"
+                      color="error"
+                      variant="contained"
+                      sx={{
+                        marginTop: "10px",
+                        fontSize: "1.5rem",
+                        width: "20%",
+                      }}
+                      disabled={loading ? true : false}
+                    >
+                      Hủy đơn hàng
+                    </Button>
+                  </form>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>

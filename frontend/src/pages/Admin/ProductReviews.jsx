@@ -15,7 +15,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { makeStyles } from "@mui/styles";
 import { DataGrid } from "@mui/x-data-grid";
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import {
@@ -27,6 +27,8 @@ import MetaData from "../../components/Layout/MetaData";
 import { DELETE_REVIEW_RESET } from "../../constants/productConstants";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const drawerWidth = 240;
 
@@ -34,6 +36,10 @@ const useStyles = makeStyles({
   root: {
     fontSize: "100%",
   },
+});
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -82,6 +88,24 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function ProductReviews() {
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
+
   const { user } = useSelector((state) => state.user);
   const theme = useTheme();
   const classes = useStyles();
@@ -126,17 +150,21 @@ export default function ProductReviews() {
       dispatch(getAllReviews(productId));
     }
     if (error) {
-      alert(error);
+      setOpenError(true);
+      setErrorAlert(error);
       dispatch(clearErrors());
     }
 
     if (deleteError) {
-      alert(deleteError);
+      setOpenError(true);
+      setErrorAlert(deleteError);
       dispatch(clearErrors());
     }
 
     if (isDeleted) {
-      alert("Xóa bình luận thành công");
+      // alert("Xóa bình luận thành công");
+      setOpenSuccess(true);
+      setSuccessAlert("Xóa bình luận thành công");
       history.push("/admin/reviews");
       dispatch({ type: DELETE_REVIEW_RESET });
     }
@@ -212,6 +240,32 @@ export default function ProductReviews() {
     <Box sx={{ display: "flex" }} className={classes.root}>
       <MetaData title="Admin - Đánh giá sản phẩm" />;
       <CssBaseline />
+      <Snackbar
+        open={openError}
+        autoHideDuration={5000}
+        onClose={handleCloseError}
+      >
+        <Alert
+          onClose={handleCloseError}
+          severity="warning"
+          sx={{ width: "100%", fontSize: "0.85em" }}
+        >
+          {errorAlert}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openSuccess}
+        autoHideDuration={3000}
+        onClose={handleCloseSuccess}
+      >
+        <Alert
+          onClose={handleCloseSuccess}
+          severity="success"
+          sx={{ width: "100%", fontSize: "0.85em" }}
+        >
+          {successAlert}
+        </Alert>
+      </Snackbar>
       <AppBar position="fixed" open={open}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center" }}>

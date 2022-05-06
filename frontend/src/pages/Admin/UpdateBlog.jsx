@@ -13,12 +13,14 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
+import ReactQuill from "react-quill"; // ES6
+import "react-quill/dist/quill.snow.css"; // ES6
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
+import { getBlogDetails, updateBlog } from "../../actions/blogAction";
 import { clearErrors } from "../../actions/productAction";
-import { getUserDetails, updateUser } from "../../actions/userAction";
 import MetaData from "../../components/Layout/MetaData";
-import { UPDATE_USER_RESET } from "../../constants/userConstants";
+import { UPDATE_BLOG_RESET } from "../../constants/blogConstants";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
 import Snackbar from "@mui/material/Snackbar";
@@ -81,10 +83,9 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-const sexOptions = ["Nam", "Nữ"];
-const roleOptions = ["admin", "staff", "user"];
+const categoryOptions = ["Trang sức", "Đồng hồ", "Kiến thức"];
 
-export default function UpdateUser() {
+export default function UpdateBlog() {
   const [openError, setOpenError] = useState(false);
   const [openSuccess, setOpenSuccess] = useState(false);
   const [errorAlert, setErrorAlert] = useState("");
@@ -102,35 +103,33 @@ export default function UpdateUser() {
     }
     setOpenSuccess(false);
   };
+
   const theme = useTheme();
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
 
   const { user: userNow } = useSelector((state) => state.user);
-  const { loading, error, user } = useSelector((state) => state.userDetails);
+  const { error, blog } = useSelector((state) => state.blogDetails);
 
   const {
-    loading: updateLoading,
+    loading,
     error: updateError,
     isUpdated,
-  } = useSelector((state) => state.profile);
+  } = useSelector((state) => state.blog);
 
   let history = useHistory();
   const dispatch = useDispatch();
   let match = useParams();
 
   const [name, setName] = useState("");
-  // const [sex, setSex] = useState(sexOptions[0]);
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [country, setCountry] = useState("");
-  const [address, setAddress] = useState("");
-  const [phoneNo, setphoneNo] = useState("");
+  const [description, setDescription] = useState("");
+  const [detail, setDetail] = useState("");
+  const [image, setImage] = useState("");
+  const [oldImage, setOldImage] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
+  const [category, setCategory] = useState(categoryOptions[0]);
 
-  const [inputSexValue, setInputSexValue] = useState("");
-  const [inputRoleValue, setInputRoleValue] = useState(roleOptions[2]);
+  const [inputCategoryValue, setInputCategoryValue] = useState("");
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -144,22 +143,17 @@ export default function UpdateUser() {
     history.push(`/admin/${his}`);
   };
 
-  const userId = match.id;
+  const blogId = match.id;
 
   useEffect(() => {
-    if (user && user._id !== userId) {
-      dispatch(getUserDetails(userId));
+    if (blog && blog._id !== blogId) {
+      dispatch(getBlogDetails(blogId));
     } else {
-      setName(user.name);
-      setEmail(user.email);
-      setRole(user.role);
-    }
-    if (user && user.shippingInfo) {
-      setCity(user.shippingInfo.city);
-      setState(user.shippingInfo.state);
-      setCountry(user.shippingInfo.country);
-      setAddress(user.shippingInfo.address);
-      setphoneNo(user.shippingInfo.phoneNo);
+      setName(blog.name);
+      setDescription(blog.description);
+      setDetail(blog.detail);
+      setOldImage(blog.image);
+      setCategory(blog.category);
     }
     if (error) {
       setOpenError(true);
@@ -174,38 +168,52 @@ export default function UpdateUser() {
     }
 
     if (isUpdated) {
-      // alert("Cập nhật tài khoản thành công");
+      // alert("Cập nhật tin tức thành công");
       setOpenSuccess(true);
-      setSuccessAlert("Cập nhật tài khoản thành công");
-      history.push("/admin/users");
-      dispatch({ type: UPDATE_USER_RESET });
+      setSuccessAlert("Cập nhật tin tức thành công");
+      history.push("/admin/blogs");
+      dispatch({ type: UPDATE_BLOG_RESET });
     }
-  }, [dispatch, error, history, isUpdated, updateError, user, userId]);
+  }, [dispatch, error, history, isUpdated, updateError, blog, blogId]);
 
-  const updateUserSubmitHandler = (e) => {
+  const updateBlogSubmitHandler = (e) => {
     e.preventDefault();
-
-    const shippingInfo = {
-      city,
-      state,
-      country,
-      address,
-      phoneNo,
-    };
 
     const myForm = new FormData();
 
     myForm.set("name", name);
-    myForm.set("email", email);
-    myForm.set("role", role);
-    myForm.set("shippingInfo", shippingInfo);
+    myForm.set("description", description);
+    myForm.set("detail", detail);
+    myForm.set("category", category);
+    myForm.set("image", image);
 
-    dispatch(updateUser(userId, myForm));
+    // if (image !== imagePreview) {
+    //   alert("chưa giống lắm");
+    // }
+
+    dispatch(updateBlog(blogId, myForm));
+  };
+
+  const updateBlogImageChange = (e) => {
+    const reader = new FileReader();
+
+    setImage("");
+    setImagePreview("");
+    setOldImage("");
+
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImagePreview(reader.result);
+        setImage(reader.result);
+      }
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
   };
 
   return (
     <Box sx={{ display: "flex" }} className={classes.root}>
-      <MetaData title="Admin - Chỉnh sửa tài khoản" />;
+      <MetaData title="Admin - Chỉnh sửa danh mục" />;
       <CssBaseline />
       <Snackbar
         open={openError}
@@ -283,14 +291,13 @@ export default function UpdateUser() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        <h3 id="productListHeading">Chỉnh sửa tài khoản</h3>
+        <h3 id="productListHeading">Chỉnh sửa tin tức</h3>
         <form
           className="flexDiv"
           encType="multipart/form-data"
-          onSubmit={updateUserSubmitHandler}
+          onSubmit={updateBlogSubmitHandler}
         >
           <Grid container spacing={2}>
-            {/* <div className="flexDiv"> */}
             <Grid
               item
               xs={12}
@@ -298,12 +305,12 @@ export default function UpdateUser() {
               md={2}
               sx={{ display: "flex", alignItems: "center" }}
             >
-              <p>Họ và tên</p>
+              <p>Tiêu đề</p>
             </Grid>
             <Grid item xs={12} sm={8} md={10}>
               <TextField
                 type="text"
-                label="Họ và tên"
+                label="Tiêu đề"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -311,36 +318,6 @@ export default function UpdateUser() {
                 sx={{ width: "50%" }}
               />
             </Grid>
-            {/* </div> */}
-
-            {/* <Grid
-              item
-              xs={12}
-              sm={4}
-              md={2}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
-              <p>Giới tính</p>
-            </Grid>
-            <Grid item xs={12} sm={8} md={10}>
-              <Autocomplete
-                value={sex}
-                onChange={(event, newValue) => {
-                  setSex(newValue);
-                }}
-                inputValue={inputSexValue}
-                onInputChange={(event, newInputValue) => {
-                  setInputSexValue(newInputValue);
-                }}
-                id="controllable-sex"
-                options={sexOptions}
-                sx={{ width: 300 }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Giới tính" />
-                )}
-              />
-            </Grid> */}
-
             <Grid
               item
               xs={12}
@@ -348,20 +325,18 @@ export default function UpdateUser() {
               md={2}
               sx={{ display: "flex", alignItems: "center" }}
             >
-              <p>Email</p>
+              <p>Giới thiệu</p>
             </Grid>
             <Grid item xs={12} sm={8} md={10}>
-              <TextField
-                inputProps={{
-                  type: "email",
-                }}
-                label="Giới thiệu"
-                value={email}
+              <textarea
+                placeholder="Giới thiệu"
+                value={description}
                 required
-                onChange={(e) => setEmail(e.target.value)}
-                variant="outlined"
-                sx={{ width: "50%" }}
-              ></TextField>
+                onChange={(e) => setDescription(e.target.value)}
+                cols="100"
+                rows="7"
+                style={{ outline: "none" }}
+              ></textarea>
             </Grid>
 
             <Grid
@@ -371,23 +346,44 @@ export default function UpdateUser() {
               md={2}
               sx={{ display: "flex", alignItems: "center" }}
             >
-              <p>Quyền</p>
+              <p>Nội dung</p>
+            </Grid>
+            <Grid item xs={12} sm={8} md={10}>
+              <ReactQuill
+                theme="snow"
+                value={detail || ""}
+                onChange={(html) => setDetail(html)}
+                style={{
+                  marginBottom: "50px",
+                  height: "200px",
+                }}
+              />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={4}
+              md={2}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              <p>Danh mục</p>
             </Grid>
             <Grid item xs={12} sm={8} md={10}>
               <Autocomplete
-                value={role}
+                value={category}
                 onChange={(event, newValue) => {
-                  setRole(newValue);
+                  setCategory(newValue);
                 }}
-                inputValue={inputRoleValue}
+                inputValue={inputCategoryValue}
                 onInputChange={(event, newInputValue) => {
-                  setInputRoleValue(newInputValue);
+                  setInputCategoryValue(newInputValue);
                 }}
-                id="controllable-role"
-                options={roleOptions}
+                id="controllable-cate"
+                options={categoryOptions}
                 sx={{ width: 300 }}
                 renderInput={(params) => (
-                  <TextField {...params} label="Quyền" />
+                  <TextField {...params} label="Danh mục" />
                 )}
               />
             </Grid>
@@ -399,97 +395,53 @@ export default function UpdateUser() {
               md={2}
               sx={{ display: "flex", alignItems: "center" }}
             >
-              <p>Thành phố</p>
+              <p>Ảnh đại diện</p>
             </Grid>
-            <Grid item xs={12} sm={8} md={10}>
-              <TextField
-                type="text"
-                label="Thành phố"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                variant="outlined"
-                sx={{ width: "50%" }}
-              />
-            </Grid>
-
             <Grid
               item
               xs={12}
-              sm={4}
-              md={2}
-              sx={{ display: "flex", alignItems: "center" }}
+              sm={8}
+              md={10}
+              sx={{ display: "flex", alignItems: "center", gap: "1.2rem" }}
             >
-              <p>Quận / Huyện</p>
-            </Grid>
-            <Grid item xs={12} sm={8} md={10}>
-              <TextField
-                type="text"
-                label="Quận / Huyện"
-                value={state}
-                onChange={(e) => setState(e.target.value)}
-                variant="outlined"
-                sx={{ width: "50%" }}
+              {/* <img
+                src={imagePreview}
+                alt="Blog Preview"
+                // className={classes.avatarPreview}
               />
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              sm={4}
-              md={2}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
-              <p>Xã / Phường</p>
-            </Grid>
-            <Grid item xs={12} sm={8} md={10}>
-              <TextField
-                type="text"
-                label="Xã / Phường"
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-                variant="outlined"
-                sx={{ width: "50%" }}
+              <input
+                id="register-avatar"
+                // className={classes.avatarFile}
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={registerDataChange}
+              /> */}
+              <Button variant="contained" component="label">
+                Tải ảnh lên
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  onChange={updateBlogImageChange}
+                  hidden
+                />
+              </Button>
+              <img
+                src={oldImage.url}
+                alt="old blog Preview"
+                style={{
+                  maxHeight: "200px",
+                  maxWidth: "200px",
+                }}
               />
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              sm={4}
-              md={2}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
-              <p>Địa chỉ</p>
-            </Grid>
-            <Grid item xs={12} sm={8} md={10}>
-              <TextField
-                type="text"
-                label="Địa chỉ"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                variant="outlined"
-                sx={{ width: "50%" }}
-              />
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              sm={4}
-              md={2}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
-              <p>Số điện thoại</p>
-            </Grid>
-            <Grid item xs={12} sm={8} md={10}>
-              <TextField
-                type="text"
-                label="Số điện thoại"
-                required
-                value={phoneNo}
-                onChange={(e) => setphoneNo(e.target.value)}
-                variant="outlined"
-                sx={{ width: "50%" }}
+              <img
+                src={imagePreview}
+                alt="Blog Preview"
+                style={{
+                  maxHeight: "200px",
+                  maxWidth: "200px",
+                }}
               />
             </Grid>
 
@@ -503,7 +455,7 @@ export default function UpdateUser() {
                   marginBottom: "50px",
                 }}
               >
-                Cập nhật tài khoản
+                Cập nhật tin tức
               </Button>
             </Grid>
           </Grid>

@@ -10,13 +10,37 @@ import {
 } from "../../actions/cartAction";
 import Loader from "../../components/Common/Loader";
 import MetaData from "../../components/Layout/MetaData";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import {
   ADD_TO_CART_RESET,
   REMOVE_CART_ITEM_RESET,
 } from "../../constants/cartConstants";
 import formatPrice from "../../ultils/formatPrice";
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 function Cart() {
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
+
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const { cart, isDeleted, isUpdated, loading } = useSelector(
     (state) => state.cart
@@ -31,14 +55,15 @@ function Cart() {
     const newQty = quantity + 1;
     console.log(newQty);
     if (stock <= quantity) {
-      alert("Sản phẩm trong kho không còn đủ");
+      // alert("Sản phẩm trong kho không còn đủ");
+      setOpenError(true);
+      setErrorAlert("Sản phẩm trong kho không còn đủ");
       return;
     }
     dispatch(addToCart(id, 1));
   };
 
   const decreaseQuantity = (id, quantity) => {
-    console.log(id);
     const newQty = quantity - 1;
     if (newQty === 0) {
       dispatch(deleteFromCart(id));
@@ -72,7 +97,6 @@ function Cart() {
     if (stock <= quantity) {
       return;
     }
-    console.log("hello");
     dispatch(addItemsToCartLocal(id, 1));
   };
 
@@ -95,6 +119,32 @@ function Cart() {
       ) : (
         <main className="main">
           <MetaData title="Giỏ hàng" />;
+          <Snackbar
+            open={openError}
+            autoHideDuration={5000}
+            onClose={handleCloseError}
+          >
+            <Alert
+              onClose={handleCloseError}
+              severity="warning"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {errorAlert}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={openSuccess}
+            autoHideDuration={3000}
+            onClose={handleCloseSuccess}
+          >
+            <Alert
+              onClose={handleCloseSuccess}
+              severity="success"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {successAlert}
+            </Alert>
+          </Snackbar>
           <div
             className="page-header text-center"
             style={{

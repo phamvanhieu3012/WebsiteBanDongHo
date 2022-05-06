@@ -15,7 +15,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { makeStyles } from "@mui/styles";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { useDispatch, useSelector } from "react-redux";
@@ -25,6 +25,8 @@ import MetaData from "../../components/Layout/MetaData";
 import { DELETE_USER_RESET } from "../../constants/userConstants";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const drawerWidth = 240;
 
@@ -32,6 +34,10 @@ const useStyles = makeStyles({
   root: {
     fontSize: "100%",
   },
+});
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -80,6 +86,24 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function UserList() {
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
+
   const { user } = useSelector((state) => state.user);
   const { error, users } = useSelector((state) => state.allUsers);
   const {
@@ -112,17 +136,20 @@ export default function UserList() {
 
   React.useEffect(() => {
     if (error) {
-      alert(error);
+      setOpenError(true);
+      setErrorAlert(error);
       dispatch(clearErrors());
     }
 
     if (deleteError) {
-      alert(deleteError);
+      setOpenError(true);
+      setErrorAlert(deleteError);
       dispatch(clearErrors());
     }
 
     if (isDeleted) {
-      alert(message);
+      setOpenSuccess(true);
+      setSuccessAlert(message);
       history.push("/admin/users");
       dispatch({ type: DELETE_USER_RESET });
     }
@@ -221,6 +248,32 @@ export default function UserList() {
     <Box sx={{ display: "flex" }} className={classes.root}>
       <MetaData title="Admin - Tài khoản" />;
       <CssBaseline />
+      <Snackbar
+        open={openError}
+        autoHideDuration={5000}
+        onClose={handleCloseError}
+      >
+        <Alert
+          onClose={handleCloseError}
+          severity="warning"
+          sx={{ width: "100%", fontSize: "0.85em" }}
+        >
+          {errorAlert}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openSuccess}
+        autoHideDuration={3000}
+        onClose={handleCloseSuccess}
+      >
+        <Alert
+          onClose={handleCloseSuccess}
+          severity="success"
+          sx={{ width: "100%", fontSize: "0.85em" }}
+        >
+          {successAlert}
+        </Alert>
+      </Snackbar>
       <AppBar position="fixed" open={open} sx={{ backgroundColor: "#" }}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center" }}>

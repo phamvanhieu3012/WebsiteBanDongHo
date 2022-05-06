@@ -16,7 +16,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { makeStyles } from "@mui/styles";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +27,9 @@ import MetaData from "../../components/Layout/MetaData";
 import { DELETE_CATEGORY_RESET } from "../../constants/categoryConstants";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import Loader from "../../components/Common/Loader";
 
 const drawerWidth = 240;
 
@@ -34,6 +37,10 @@ const useStyles = makeStyles({
   root: {
     fontSize: "100%",
   },
+});
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -82,6 +89,23 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function ProductList() {
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
   const { user } = useSelector((state) => state.user);
   const theme = useTheme();
   const classes = useStyles();
@@ -116,17 +140,21 @@ export default function ProductList() {
 
   React.useEffect(() => {
     if (error) {
-      alert(error);
+      setOpenError(true);
+      setErrorAlert(error);
       dispatch(clearErrors());
     }
 
     if (deleteError) {
-      alert(deleteError);
+      setOpenError(true);
+      setErrorAlert(deleteError);
       dispatch(clearErrors);
     }
 
     if (isDeleted) {
-      alert("Xóa danh mục thành công");
+      // alert("Xóa danh mục thành công");
+      setOpenSuccess(true);
+      setSuccessAlert("Xóa danh mục thành công");
       history.push("/admin/categories");
       dispatch({ type: DELETE_CATEGORY_RESET });
     }
@@ -207,6 +235,32 @@ export default function ProductList() {
   return (
     <Box sx={{ display: "flex" }} className={classes.root}>
       <MetaData title="Admin - Danh mục" />;
+      <Snackbar
+        open={openError}
+        autoHideDuration={5000}
+        onClose={handleCloseError}
+      >
+        <Alert
+          onClose={handleCloseError}
+          severity="warning"
+          sx={{ width: "100%", fontSize: "0.85em" }}
+        >
+          {errorAlert}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openSuccess}
+        autoHideDuration={3000}
+        onClose={handleCloseSuccess}
+      >
+        <Alert
+          onClose={handleCloseSuccess}
+          severity="success"
+          sx={{ width: "100%", fontSize: "0.85em" }}
+        >
+          {successAlert}
+        </Alert>
+      </Snackbar>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -256,27 +310,31 @@ export default function ProductList() {
         <Sidebar handleHistory={handleHistory} />
         {/* <Divider /> */}
       </Drawer>
-      <Main open={open}>
-        <DrawerHeader />
-        <h3 id="productListHeading">Tất cả danh mục</h3>
-        <div dir="rtl" className="addButton">
-          <span>Thêm danh mục</span>
-          <IconButton href="/admin/newCategory">
-            <AddIcon />
-          </IconButton>
-        </div>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={10}
-          disableSelectionOnClick
-          className="productListTable"
-          autoHeight
-          components={{
-            Toolbar: GridToolbar,
-          }}
-        />
-      </Main>
+      {loading ? (
+        <Loader />
+      ) : (
+        <Main open={open}>
+          <DrawerHeader />
+          <h3 id="productListHeading">Tất cả danh mục</h3>
+          <div dir="rtl" className="addButton">
+            <span>Thêm danh mục</span>
+            <IconButton href="/admin/newCategory">
+              <AddIcon />
+            </IconButton>
+          </div>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            pageSize={10}
+            disableSelectionOnClick
+            className="productListTable"
+            autoHeight
+            components={{
+              Toolbar: GridToolbar,
+            }}
+          />
+        </Main>
+      )}
     </Box>
   );
 }

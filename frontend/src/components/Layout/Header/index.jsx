@@ -1,13 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory, useParams } from "react-router-dom";
-import { deleteFromCart, getCart } from "../../../actions/cartAction.js";
+import {
+  deleteFromCart,
+  getCart,
+  removeItemsFromCart,
+} from "../../../actions/cartAction.js";
 import { logout } from "../../../actions/userAction.js";
 import { REMOVE_CART_ITEM_RESET } from "../../../constants/cartConstants.js";
 import formatPrice from "../../../ultils/formatPrice.js";
 import Loader from "../../Common/Loader/index.jsx";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function Header() {
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
   const [keyword, setKeyword] = useState("");
 
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -25,7 +52,9 @@ function Header() {
 
   function logoutUser() {
     dispatch(logout());
-    alert("Đăng xuất thành công");
+    // alert("Đăng xuất thành công");
+    setOpenSuccess(true);
+    setSuccessAlert("Đăng xuất thành công");
     history.push("/");
   }
 
@@ -40,6 +69,10 @@ function Header() {
 
   const deleteCartItems = (id) => {
     dispatch(deleteFromCart(id));
+  };
+
+  const deleteCartItemsLocal = (id) => {
+    dispatch(removeItemsFromCart(id));
   };
 
   useEffect(() => {
@@ -70,6 +103,32 @@ function Header() {
         <Loader />
       ) : (
         <div className="page-wrapper">
+          <Snackbar
+            open={openError}
+            autoHideDuration={5000}
+            onClose={handleCloseError}
+          >
+            <Alert
+              onClose={handleCloseError}
+              severity="warning"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {errorAlert}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={openSuccess}
+            autoHideDuration={3000}
+            onClose={handleCloseSuccess}
+          >
+            <Alert
+              onClose={handleCloseSuccess}
+              severity="success"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {successAlert}
+            </Alert>
+          </Snackbar>
           <header className="header header-6">
             <div className="header-top">
               <div className="container">
@@ -157,9 +216,7 @@ function Header() {
                       <div className="header-menu">
                         <ul>
                           <li>
-                            <Link to="/my-account">
-                              Chỉnh sửa thông tin cá nhân
-                            </Link>
+                            <Link to="/my-account">Hồ sơ</Link>
                           </li>
                           {user.role === "staff" || user.role === "admin" ? (
                             <li>
@@ -372,7 +429,9 @@ function Header() {
                                   style={{
                                     cursor: "pointer",
                                   }}
-                                  onClick={() => deleteCartItems(item.product)}
+                                  onClick={() =>
+                                    deleteCartItemsLocal(item.product)
+                                  }
                                 >
                                   <i className="icon-close"></i>
                                 </p>

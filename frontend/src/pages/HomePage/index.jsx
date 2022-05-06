@@ -1,7 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getAdminProduct, getNProducts } from "../../actions/productAction";
+import {
+  clearErrors,
+  getAdminProduct,
+  getNProducts,
+} from "../../actions/productAction";
 import { loadUser } from "../../actions/userAction";
 import store from "../../store";
 import formatPrice from "../../ultils/formatPrice";
@@ -10,6 +14,13 @@ import Carousel from "react-multi-carousel";
 import "./Homepage.scss";
 import Loader from "../../components/Common/Loader";
 import MetaData from "../../components/Layout/MetaData";
+import { CLEAR_ERRORS } from "../../constants/blogConstants";
+import { getAllBlogs } from "../../actions/blogAction";
+import moment from "moment";
+import "moment/locale/vi";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+moment.locale("vi");
 
 const responsive = {
   desktop: {
@@ -29,8 +40,52 @@ const responsive = {
   },
 };
 
+const responsive2 = {
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 3,
+    slidesToSlide: 1, // optional, default to 1.
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 3,
+    slidesToSlide: 1, // optional, default to 1.
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+    slidesToSlide: 1, // optional, default to 1.
+  },
+};
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 function HomePage() {
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
   const { products, loading, error } = useSelector((state) => state.nProducts);
+  const {
+    blogs,
+    loading: blogLoading,
+    error: blogError,
+  } = useSelector((state) => state.blogs);
 
   const {
     loading: allProductsLoading,
@@ -40,10 +95,32 @@ function HomePage() {
 
   const dispatch = useDispatch();
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   useEffect(() => {
+    scrollToTop();
+  }, []);
+
+  useEffect(() => {
+    if (error) {
+      setOpenError(true);
+      setErrorAlert(error);
+      dispatch(clearErrors());
+    }
+    if (blogError) {
+      setOpenError(true);
+      setErrorAlert(blogError);
+      dispatch(CLEAR_ERRORS());
+    }
     dispatch(getNProducts());
     dispatch(getAdminProduct());
-  }, [dispatch]);
+    dispatch(getAllBlogs());
+  }, [dispatch, blogError, error]);
 
   return (
     <>
@@ -52,6 +129,32 @@ function HomePage() {
       ) : (
         <main className="main">
           <MetaData title="Đồng hồ PVH" />;
+          <Snackbar
+            open={openError}
+            autoHideDuration={5000}
+            onClose={handleCloseError}
+          >
+            <Alert
+              onClose={handleCloseError}
+              severity="warning"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {errorAlert}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={openSuccess}
+            autoHideDuration={3000}
+            onClose={handleCloseSuccess}
+          >
+            <Alert
+              onClose={handleCloseSuccess}
+              severity="success"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {successAlert}
+            </Alert>
+          </Snackbar>
           <div className="intro-slider-container">
             <Carousel
               swipeable={true}
@@ -267,9 +370,9 @@ function HomePage() {
                                         <span
                                           style={{ textTransform: "uppercase" }}
                                         >
-                                          T
+                                          C
                                         </span>
-                                        hêm vào giỏ hàng
+                                        lick để xem chi tiết
                                       </span>
                                     </a>
                                   </div>
@@ -377,9 +480,9 @@ function HomePage() {
                         <a href="#" className="btn-product btn-cart">
                           <span>
                             <span style={{ textTransform: "uppercase" }}>
-                              T
+                              C
                             </span>
-                            hêm vào giỏ hàng
+                            lick để xem chi tiết
                           </span>
                         </a>
                       </div>
@@ -474,9 +577,9 @@ function HomePage() {
                         <a href="#" className="btn-product btn-cart">
                           <span>
                             <span style={{ textTransform: "uppercase" }}>
-                              T
+                              C
                             </span>
-                            hêm vào giỏ hàng
+                            lick để xem chi tiết
                           </span>
                         </a>
                       </div>
@@ -637,9 +740,9 @@ function HomePage() {
                               <a href="#" className="btn-product btn-cart">
                                 <span>
                                   <span style={{ textTransform: "uppercase" }}>
-                                    T
+                                    C
                                   </span>
-                                  hêm vào giỏ hàng
+                                  lick để xem chi tiết
                                 </span>
                               </a>
                             </div>
@@ -827,62 +930,64 @@ function HomePage() {
           <div className="blog-posts mb-5">
             <div className="container">
               <h2 className="title text-center mb-4">Tin tức</h2>
-
-              <div
-                className="owl-carousel owl-simple mb-3"
-                data-toggle="owl"
-                data-owl-options='{
-                            "nav": false, 
-                            "dots": true,
-                            "items": 3,
-                            "margin": 20,
-                            "loop": false,
-                            "responsive": {
-                                "0": {
-                                    "items":1
-                                },
-                                "600": {
-                                    "items":2
-                                },
-                                "992": {
-                                    "items":3
-                                }
-                            }
-                        }'
+              <Carousel
+                swipeable={true}
+                draggable={true}
+                showDots={true}
+                responsive={responsive2}
+                ssr={true} // means to render carousel on server-side.
+                infinite={true}
+                autoPlay={false}
+                autoPlaySpeed={20000}
+                keyBoardControl={true}
+                customTransition="all .5"
+                transitionDuration={500}
+                containerClass="carousel-container"
+                removeArrowOnDeviceType={["tablet", "mobile"]}
+                // deviceType={this.props.deviceType}
+                dotListClass="custom-dot-list-style"
+                itemClass="carousel-item-padding-40-px"
               >
-                <article className="entry">
-                  <figure className="entry-media">
-                    <a href="single.html">
-                      <img
-                        src="assets/images/demos/demo-6/blog/post-1.jpg"
-                        alt="image desc"
-                      />
-                    </a>
-                  </figure>
-                  {/* End .entry-media */}
+                {blogs &&
+                  blogs.map((blog) => (
+                    <article className="entry">
+                      <figure className="entry-media">
+                        <Link to={`/blog/${blog._id}`}>
+                          <img
+                            src={blog.image && blog.image.url}
+                            alt={blog.name}
+                            style={{ maxHeight: "150px" }}
+                          />
+                        </Link>
+                      </figure>
+                      {/* End .entry-media */}
 
-                  <div className="entry-body text-center">
-                    <div className="entry-meta">
-                      <a href="#">Nov 22, 2018</a>, 1 Bình luận
-                    </div>
-                    {/* End .entry-meta */}
+                      <div className="entry-body text-center">
+                        <div className="entry-meta">
+                          <a href="#">
+                            {moment(blog.createdAt).format("DD/MM/YYYY")}
+                          </a>
+                          , {blog.numOfReviews} Bình luận
+                        </div>
+                        {/* End .entry-meta */}
 
-                    <h3 className="entry-title">
-                      <a href="single.html">Sed adipiscing ornare.</a>
-                    </h3>
-                    {/* End .entry-title */}
+                        <h3 className="entry-title">
+                          <Link to={`/blog/${blog._id}`}>{blog.name}</Link>
+                        </h3>
+                        {/* End .entry-title */}
 
-                    <div className="entry-content">
-                      <a href="single.html" className="read-more">
-                        Đọc thêm
-                      </a>
-                    </div>
-                    {/* End .entry-content */}
-                  </div>
-                  {/* End .entry-body */}
-                </article>
-                {/* End .entry */}
-              </div>
+                        <div className="entry-content">
+                          <Link to={`/blog/${blog._id}`} className="read-more">
+                            Đọc thêm
+                          </Link>
+                        </div>
+                        {/* End .entry-content */}
+                      </div>
+                      {/* End .entry-body */}
+                    </article>
+                  ))}
+              </Carousel>
+
               {/* End .owl-carousel */}
             </div>
             {/* End .container */}

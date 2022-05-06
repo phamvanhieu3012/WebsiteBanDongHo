@@ -16,7 +16,7 @@ import { styled, useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { makeStyles } from "@mui/styles";
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { Doughnut, Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,6 +28,8 @@ import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
 import formatPrice from "../../ultils/formatPrice";
 import MetaData from "../../components/Layout/MetaData";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const drawerWidth = 240;
 
@@ -41,6 +43,10 @@ const useStyles = makeStyles({
     gap: "1.5rem",
     padding: "10px 20px",
   },
+});
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -89,6 +95,23 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function Dashboard() {
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
   const theme = useTheme();
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -110,7 +133,7 @@ export default function Dashboard() {
       }
     });
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(getAdminProduct());
     dispatch(getAllOrders());
     dispatch(getAllUsers());
@@ -162,6 +185,32 @@ export default function Dashboard() {
   return (
     <Box sx={{ display: "flex" }} className={classes.root}>
       <MetaData title="Admin - Dashboard" />;
+      <Snackbar
+        open={openError}
+        autoHideDuration={5000}
+        onClose={handleCloseError}
+      >
+        <Alert
+          onClose={handleCloseError}
+          severity="warning"
+          sx={{ width: "100%", fontSize: "0.85em" }}
+        >
+          {errorAlert}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openSuccess}
+        autoHideDuration={3000}
+        onClose={handleCloseSuccess}
+      >
+        <Alert
+          onClose={handleCloseSuccess}
+          severity="success"
+          sx={{ width: "100%", fontSize: "0.85em" }}
+        >
+          {successAlert}
+        </Alert>
+      </Snackbar>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>

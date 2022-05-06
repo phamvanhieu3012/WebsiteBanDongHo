@@ -49,6 +49,8 @@ function Login() {
     setOpen(false);
   };
 
+  console.log(open);
+
   const dispatch = useDispatch();
   let history = useHistory();
 

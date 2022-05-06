@@ -7,6 +7,7 @@ import {
   logout,
   updatePassword,
   updateProfile,
+  updateShippingInfo,
 } from "../../actions/userAction";
 import Loader from "../../components/Common/Loader";
 import MetaData from "../../components/Layout/MetaData";
@@ -14,11 +15,38 @@ import MyOrder from "../../components/MyOrder";
 import {
   UPDATE_PASSWORD_RESET,
   UPDATE_PROFILE_RESET,
+  UPDATE_SHIP_RESET,
 } from "../../constants/userConstants";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function MyAccount() {
+  const [openError, setOpenError] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [errorAlert, setErrorAlert] = useState("");
+  const [successAlert, setSuccessAlert] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenError(false);
+  };
+  const handleCloseSuccess = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccess(false);
+  };
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
+  const { user, loading: userLoading } = useSelector((state) => state.user);
   const { error, isUpdated, loading } = useSelector((state) => state.profile);
 
   const [name, setName] = useState("");
@@ -27,11 +55,24 @@ function MyAccount() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("");
+  const [phoneNo, setPhoneNo] = useState("");
+
+  const [addressInfo, setAddressInfo] = useState("");
+  const [cityInfo, setCityInfo] = useState("");
+  const [stateInfo, setStateInfo] = useState("");
+  const [countryInfo, setCountryInfo] = useState("");
+  const [phoneNoInfo, setPhoneNoInfo] = useState("");
+
   let history = useHistory();
 
   function logoutUser() {
     dispatch(logout());
-    alert("Đăng xuất thành công");
+    setOpenSuccess(true);
+    setSuccessAlert("Đăng xuất thành công");
     history.push("/");
   }
 
@@ -42,6 +83,20 @@ function MyAccount() {
       email,
     };
     dispatch(updateProfile(myForm));
+  };
+
+  const updateShippingInfoSubmit = (e) => {
+    e.preventDefault();
+
+    const shippingInfo = {
+      city,
+      state,
+      country,
+      address,
+      phoneNo,
+    };
+
+    dispatch(updateShippingInfo(shippingInfo));
   };
 
   const updatePasswordSubmit = (e) => {
@@ -60,12 +115,34 @@ function MyAccount() {
       setName(user.name);
       setEmail(user.email);
     }
+    if (user && user.shippingInfo) {
+      setCity(user.shippingInfo.city);
+      setState(user.shippingInfo.state);
+      setCountry(user.shippingInfo.country);
+      setAddress(user.shippingInfo.address);
+      setPhoneNo(user.shippingInfo.phoneNo);
+
+      setCityInfo(user.shippingInfo.city);
+      setStateInfo(user.shippingInfo.state);
+      setCountryInfo(user.shippingInfo.country);
+      setAddressInfo(user.shippingInfo.address);
+      setPhoneNoInfo(user.shippingInfo.phoneNo);
+    }
     if (error) {
-      alert(error);
+      setOpenError(true);
+      setErrorAlert(error);
       dispatch(clearErrors());
     }
     if (isUpdated) {
-      alert("Cập nhật thành công");
+      // setOpenSuccess(true);
+      // setSuccessAlert("Cập nhật thành công");
+      Swal.fire({
+        // position: 'top-end',
+        icon: "success",
+        title: "Cập nhật thành công",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       dispatch(loadUser());
       history.push("/my-account");
       dispatch({
@@ -74,16 +151,47 @@ function MyAccount() {
       dispatch({
         type: UPDATE_PASSWORD_RESET,
       });
+      dispatch({
+        type: UPDATE_SHIP_RESET,
+      });
     }
   }, [dispatch, error, history, user, isUpdated]);
 
+  console.log(user);
+
   return (
     <>
-      {loading ? (
+      {userLoading ? (
         <Loader />
       ) : (
         <main className="main">
           <MetaData title="Thông tin cá nhân" />;
+          <Snackbar
+            open={openError}
+            autoHideDuration={5000}
+            onClose={handleCloseError}
+          >
+            <Alert
+              onClose={handleCloseError}
+              severity="warning"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {errorAlert}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={openSuccess}
+            autoHideDuration={3000}
+            onClose={handleCloseSuccess}
+          >
+            <Alert
+              onClose={handleCloseSuccess}
+              severity="success"
+              sx={{ width: "100%", fontSize: "0.85em" }}
+            >
+              {successAlert}
+            </Alert>
+          </Snackbar>
           <div
             className="page-header text-center"
             style={{
@@ -260,13 +368,14 @@ function MyAccount() {
                                   <br />
                                   Email của bạn: {user.email}
                                   <br />
-                                  Địa chỉ: New York, NY 10001
+                                  Địa chỉ: {addressInfo}, {countryInfo},{" "}
+                                  {stateInfo}, {cityInfo}
                                   <br />
-                                  Số điện thoại: 1-234-987-6543
+                                  Số điện thoại: {phoneNoInfo}
                                   <br />
-                                  <a href="#">
+                                  {/* <a href="#">
                                     Sửa <i className="icon-edit"></i>
-                                  </a>
+                                  </a> */}
                                 </p>
                               </div>
                               {/* End .card-body */}
@@ -281,15 +390,66 @@ function MyAccount() {
                                 <h3 className="card-title">
                                   Địa chỉ giao hàng
                                 </h3>
-                                {/* End .card-title */}
+                                <form
+                                  encType="multipart/form-data"
+                                  onSubmit={updateShippingInfoSubmit}
+                                >
+                                  <label>Số điện thoại *</label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    required
+                                    value={phoneNo}
+                                    onChange={(e) => setPhoneNo(e.target.value)}
+                                  />
 
-                                <p>
-                                  Bạn chưa nhập địa chỉ của bạn.
-                                  <br />
-                                  <a href="#">
-                                    Sửa <i className="icon-edit"></i>
-                                  </a>
-                                </p>
+                                  <label>Thành phố *</label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    required
+                                    value={city}
+                                    onChange={(e) => setCity(e.target.value)}
+                                  />
+
+                                  <label>Quận / Huyện *</label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    required
+                                    value={state}
+                                    onChange={(e) => setState(e.target.value)}
+                                  />
+
+                                  <label>Xã / Phường *</label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    required
+                                    value={country}
+                                    onChange={(e) => setCountry(e.target.value)}
+                                  />
+
+                                  <label>Địa chỉ *</label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    required
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                  />
+
+                                  <button
+                                    type="submit"
+                                    className="btn btn-outline-primary-2"
+                                  >
+                                    <span>LƯU THAY ĐỔI</span>
+                                    <i className="icon-long-arrow-right"></i>
+                                  </button>
+                                </form>
+                                {/* <a href="#">
+                                  Sửa <i className="icon-edit"></i>
+                                </a> */}
                               </div>
                               {/* End .card-body */}
                             </div>
