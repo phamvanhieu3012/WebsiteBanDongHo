@@ -17,14 +17,16 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     totalPrice,
   } = req.body;
 
-  if (req.user) {
-    let cart = await Cart.findOne({ user: req.user._id });
+  // console.log(req.body.user);
+
+  if (req.body.user) {
+    let cart = await Cart.findOne({ user: req.body.user });
     if (cart) {
       const data = await Cart.findByIdAndDelete({ _id: cart._id });
     }
   }
 
-  if (req.user) {
+  if (req.body.user) {
     const order = await Order.create({
       shippingInfo,
       orderItems,
@@ -35,7 +37,7 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
       shippingPrice,
       totalPrice,
       paidAt: Date.now(),
-      user: req.user._id,
+      user: req.body.user,
     });
 
     res.status(201).json({
