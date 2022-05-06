@@ -163,7 +163,7 @@ export const updateProfile = (userData) => async (dispatch) => {
 };
 
 // Update Profile
-export const updateShippingInfo = (userData) => async (dispatch) => {
+export const updateShippingInfo = (shippingInfo) => async (dispatch) => {
   try {
     dispatch({ type: UPDATE_SHIP_REQUEST });
 
@@ -178,7 +178,7 @@ export const updateShippingInfo = (userData) => async (dispatch) => {
     const { data } = await axios.put(
       `http://localhost:4000/api/v1/shippingInfo/update`,
       {
-        shippingInfo: userData,
+        shippingInfo,
       },
       config
     );

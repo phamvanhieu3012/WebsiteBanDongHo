@@ -18,8 +18,8 @@ router.route("/contact/new").post(createContact);
 
 router
   .route("/admin/contact/:id")
-  .get(isAuthenticatedUser, authorizeRoles("admin"), getContactDetails)
-  .put(isAuthenticatedUser, authorizeRoles("admin"), updateContact)
-  .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteContact);
+  .get(isAuthenticatedUser, authorizeRoles("admin staff"), getContactDetails)
+  .put(isAuthenticatedUser, authorizeRoles("admin staff"), updateContact)
+  .delete(isAuthenticatedUser, authorizeRoles("admin staff"), deleteContact);
 
 module.exports = router;

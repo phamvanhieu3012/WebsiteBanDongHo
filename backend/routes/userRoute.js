@@ -43,7 +43,7 @@ router
 
 router
   .route("/admin/users")
-  .get(isAuthenticatedUser, authorizeRoles("admin"), getAllUser);
+  .get(isAuthenticatedUser, authorizeRoles("admin staff"), getAllUser);
 
 router
   .route("/admin/user/:id")
