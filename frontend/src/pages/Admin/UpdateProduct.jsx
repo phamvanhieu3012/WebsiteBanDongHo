@@ -302,8 +302,6 @@ export default function UpdateProduct() {
     });
   };
 
-  console.log(oldImages);
-
   return (
     <>
       {categoryLoading ? (

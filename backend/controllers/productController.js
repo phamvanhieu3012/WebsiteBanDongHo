@@ -18,8 +18,6 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
 
   let filteredProductsCount = await products2.length;
 
-  console.log(filteredProductsCount);
-
   const apiFeature2 = new ApiFeatures(
     Product.find().populate("category"),
     req.query
@@ -74,8 +72,6 @@ exports.getMenProducts = catchAsyncErrors(async (req, res, next) => {
 
   let filteredProductsCount = await products2.length;
 
-  console.log(filteredProductsCount);
-
   const apiFeature2 = new ApiFeatures(
     Product.find({ sex: "Nam" }).populate("category"),
     req.query
@@ -110,8 +106,6 @@ exports.getWomenProducts = catchAsyncErrors(async (req, res, next) => {
 
   let filteredProductsCount = await products2.length;
 
-  console.log(filteredProductsCount);
-
   const apiFeature2 = new ApiFeatures(
     Product.find({ sex: "Nữ" }).populate("category"),
     req.query
@@ -137,7 +131,7 @@ exports.getProductDetails = catchAsyncErrors(async (req, res, next) => {
   const product = await Product.findById(req.params.id).populate("category");
 
   if (!product) {
-    return next(new ErrorHander("Product not found", 404));
+    return next(new ErrorHander("Không tìm thấy sản phẩm", 404));
   }
 
   res.status(200).json({

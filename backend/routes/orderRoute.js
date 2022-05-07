@@ -6,6 +6,7 @@ const {
   getAllOrders,
   updateOrder,
   deleteOrder,
+  getAllOrdersStatistical,
 } = require("../controllers/orderController");
 const router = express.Router();
 
@@ -20,6 +21,14 @@ router.route("/orders/me").get(isAuthenticatedUser, myOrders);
 router
   .route("/admin/orders")
   .get(isAuthenticatedUser, authorizeRoles("admin staff"), getAllOrders);
+
+router
+  .route("/admin/ordersStatistical")
+  .get(
+    isAuthenticatedUser,
+    authorizeRoles("admin staff"),
+    getAllOrdersStatistical
+  );
 
 router
   .route("/admin/order/:id")

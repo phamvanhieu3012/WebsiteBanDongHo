@@ -106,6 +106,32 @@ exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+// get all Orders -- Admin
+exports.getAllOrdersStatistical = catchAsyncErrors(async (req, res, next) => {
+  console.log(new Date(req.query.createdAt));
+  let d = new Date(req.query.createdAt);
+  d.setDate(d.getDate() - 1);
+  console.log(d);
+  const orders = await Order.find({
+    createdAt: {
+      $gte: new Date(d),
+      $lte: new Date(req.query.createdAt),
+    },
+  });
+
+  let totalAmount = 0;
+
+  orders.forEach((order) => {
+    totalAmount += order.totalPrice;
+  });
+
+  res.status(200).json({
+    success: true,
+    totalAmount,
+    orders,
+  });
+});
+
 // update Order Status -- Admin
 exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
   const order = await Order.findById(req.params.id);

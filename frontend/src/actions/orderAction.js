@@ -18,6 +18,9 @@ import {
   ORDER_DETAILS_SUCCESS,
   ORDER_DETAILS_FAIL,
   CLEAR_ERRORS,
+  ALL_ORDERS_DATE_REQUEST,
+  ALL_ORDERS_DATE_SUCCESS,
+  ALL_ORDERS_DATE_FAIL,
 } from "../constants/orderConstants";
 
 import axios from "axios";
@@ -73,6 +76,37 @@ export const getAllOrders = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ALL_ORDERS_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Xem tất cả đơn hàng để thống kê (admin)
+export const getAllOrdersStatistical = (dateData) => async (dispatch) => {
+  try {
+    dispatch({ type: ALL_ORDERS_DATE_REQUEST });
+
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        Authorization: `token ${token}`,
+      },
+    };
+
+    console.log(dateData);
+
+    let link = `http://localhost:4000/api/v1/admin/ordersStatistical`;
+
+    if (dateData) {
+      link = `http://localhost:4000/api/v1/admin/ordersStatistical?createdAt=${dateData}`;
+    }
+
+    const { data } = await axios.get(link, config);
+
+    dispatch({ type: ALL_ORDERS_DATE_SUCCESS, payload: data.orders });
+  } catch (error) {
+    dispatch({
+      type: ALL_ORDERS_DATE_FAIL,
       payload: error.response.data.message,
     });
   }

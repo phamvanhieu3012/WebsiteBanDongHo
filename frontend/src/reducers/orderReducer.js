@@ -21,6 +21,9 @@ import {
   ORDER_DETAILS_FAIL,
   CLEAR_ERRORS,
   CREATE_ORDER_RESET,
+  ALL_ORDERS_DATE_REQUEST,
+  ALL_ORDERS_DATE_SUCCESS,
+  ALL_ORDERS_DATE_FAIL,
 } from "../constants/orderConstants";
 
 export const newOrderReducer = (state = {}, action) => {
@@ -104,6 +107,35 @@ export const allOrdersReducer = (state = { orders: [] }, action) => {
       };
 
     case ALL_ORDERS_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const allOrdersStatisticalReducer = (state = { orders: [] }, action) => {
+  switch (action.type) {
+    case ALL_ORDERS_DATE_REQUEST:
+      return {
+        loading: true,
+      };
+
+    case ALL_ORDERS_DATE_SUCCESS:
+      return {
+        loading: false,
+        orders: action.payload,
+      };
+
+    case ALL_ORDERS_DATE_FAIL:
       return {
         loading: false,
         error: action.payload,
