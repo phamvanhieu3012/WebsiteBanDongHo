@@ -45,6 +45,7 @@ import Payment from "./pages/Payment";
 import Product from "./pages/Product";
 import ProductDetail from "./pages/ProductDetail";
 import ResetPassword from "./pages/ResetPassword";
+import Wishlist from "./pages/Wishlist";
 import WomenProducts from "./pages/WomenProducts";
 import store from "./store";
 
@@ -68,7 +69,6 @@ function App() {
       // config
     );
 
-    console.log(data.stripeApiKey);
     setStripeApiKey(data.stripeApiKey);
   }
 
@@ -213,15 +213,17 @@ function App() {
           />
           <ProtectedRoute exact path="/order/:id" component={MyOrderDetail} />
 
+          <ProtectedRoute exact path="/wishlist" component={Wishlist} />
+
           <PublicRoute exact path="/cart" component={Cart} />
           <PublicRoute exact path="/checkout" component={Checkout} />
 
-          <PublicRoute component={NotFound} />
           {stripeApiKey && (
             <Elements stripe={loadStripe(stripeApiKey)}>
               <PublicRoute exact path="/payment" component={Payment} />
             </Elements>
           )}
+          <PublicRoute component={NotFound} />
         </Switch>
         {/* <button id="scroll-top" title="Back to Top">
           <i className="icon-arrow-up"></i>

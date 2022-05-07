@@ -33,7 +33,13 @@ import {
 import { cartLocalReducer, cartReducer } from "./reducers/cartReducer";
 
 import {
+  wishlistLocalReducer,
+  wishlistReducer,
+} from "./reducers/wishlistReducer";
+
+import {
   allOrdersReducer,
+  allOrdersStatisticalReducer,
   myOrdersReducer,
   newOrderReducer,
   orderDetailsReducer,
@@ -89,6 +95,7 @@ const reducer = combineReducers({
   orderDetails: orderDetailsReducer,
   allOrders: allOrdersReducer,
   order: orderReducer,
+  allOrdersStatistical: allOrdersStatisticalReducer,
   //Contact
   contacts: contactsReducer,
   contactDetails: contactDetailsReducer,
@@ -102,6 +109,9 @@ const reducer = combineReducers({
   blogReviews: blogReviewsReducer,
   newReviewBlog: newReviewBlogReducer,
   reviewBlog: reviewBlogReducer,
+  //Wishlist
+  wishlist: wishlistReducer,
+  wishlistLocal: wishlistLocalReducer,
 });
 
 let initialState = {
@@ -112,6 +122,11 @@ let initialState = {
     shippingInfo: localStorage.getItem("shippingInfo")
       ? JSON.parse(localStorage.getItem("shippingInfo"))
       : {},
+  },
+  wishlistLocal: {
+    wishlistItems: localStorage.getItem("wishlistItems")
+      ? JSON.parse(localStorage.getItem("wishlistItems"))
+      : [],
   },
 };
 

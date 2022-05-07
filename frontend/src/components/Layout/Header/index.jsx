@@ -12,6 +12,7 @@ import formatPrice from "../../../ultils/formatPrice.js";
 import Loader from "../../Common/Loader/index.jsx";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { getWishlist } from "../../../actions/wishlistAction.js";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -40,6 +41,10 @@ function Header() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
 
   const { cart, isDeleted, loading } = useSelector((state) => state.cart);
+
+  const { wishlist, loading: wishlistLoading } = useSelector(
+    (state) => state.wishlist
+  );
 
   const { cartItems } = useSelector((state) => state.cartLocal);
 
@@ -77,6 +82,7 @@ function Header() {
 
   useEffect(() => {
     dispatch(getCart());
+    dispatch(getWishlist());
   }, [dispatch]);
 
   useEffect(() => {
@@ -275,11 +281,17 @@ function Header() {
                 </div>
 
                 <div className="header-right">
-                  {/* <a href="wishlist.html" className="wishlist-link">
-                <i className="icon-heart-o"></i>
-                <span className="wishlist-count">3</span>
-                <span className="wishlist-txt">My Wishlist</span>
-              </a> */}
+                  {isAuthenticated ? (
+                    <Link to="/wishlist" className="wishlist-link">
+                      <i className="icon-heart-o"></i>
+                      <span className="wishlist-count">
+                        {wishlist ? wishlist.wishlistItems.length : `0`}
+                      </span>
+                      <span className="wishlist-txt">Danh sách yêu thích</span>
+                    </Link>
+                  ) : (
+                    ""
+                  )}
 
                   {user ? (
                     <div className="dropdown cart-dropdown">
@@ -305,7 +317,7 @@ function Header() {
                         <div className="dropdown-cart-products">
                           {cart &&
                             cart.cartItems.map((item) => (
-                              <div className="product" key={item.product}>
+                              <div className="product" key={item._id}>
                                 <div className="product-cart-details">
                                   <h4 className="product-title">
                                     <Link to={`/product/${item.product}`}>
@@ -317,7 +329,10 @@ function Header() {
                                     <span className="cart-product-qty">
                                       {item.quantity}
                                     </span>{" "}
-                                    x {formatPrice(item.price)}
+                                    x{" "}
+                                    {item.discountActive
+                                      ? formatPrice(item.priceSale)
+                                      : formatPrice(item.price)}
                                   </span>
                                 </div>
 
@@ -335,7 +350,9 @@ function Header() {
                                   style={{
                                     cursor: "pointer",
                                   }}
-                                  onClick={() => deleteCartItems(item.product)}
+                                  onClick={() =>
+                                    deleteCartItems(item.product._id)
+                                  }
                                 >
                                   <i className="icon-close"></i>
                                 </p>
