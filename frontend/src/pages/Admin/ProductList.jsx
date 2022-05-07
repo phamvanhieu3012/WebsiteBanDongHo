@@ -196,6 +196,26 @@ export default function ProductList() {
       flex: 0.5,
     },
     {
+      field: "discountActive",
+      headerName: "Đang giảm giá",
+      minWidth: 150,
+      flex: 0.3,
+      renderCell: (params) =>
+        params.value ? (
+          <span className="greenColor">Có</span>
+        ) : (
+          <span className="redColor">Không</span>
+        ),
+    },
+    {
+      field: "discountPercent",
+      headerName: "Giảm giá",
+      type: "number",
+      minWidth: 130,
+      flex: 0.5,
+      renderCell: (params) => <span>{params.value}%</span>,
+    },
+    {
       field: "image",
       headerName: "Hình ảnh",
       minWidth: 200,
@@ -269,6 +289,8 @@ export default function ProductList() {
         id: item._id,
         stock: item.Stock,
         price: item.price,
+        discountActive: item.discountActive,
+        discountPercent: item.discountPercent,
         name: item.name,
         sex: item.sex,
         image: item.images[0].url,

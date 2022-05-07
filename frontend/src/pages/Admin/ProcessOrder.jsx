@@ -336,8 +336,10 @@ export default function ProcessOrder() {
                               {item.name}
                             </Link>{" "}
                             <span>
-                              {item.quantity} X {formatPrice(item.price)} ={" "}
-                              <b>{formatPrice(item.price * item.quantity)}</b>
+                              {item.quantity} X {formatPrice(item.priceSale)} ={" "}
+                              <b>
+                                {formatPrice(item.priceSale * item.quantity)}
+                              </b>
                             </span>
                           </div>
                         ))}

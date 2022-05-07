@@ -176,6 +176,7 @@ function Cart() {
                       <thead>
                         <tr>
                           <th>Sản phẩm</th>
+                          <th>Giảm giá</th>
                           <th>Giá</th>
                           <th>Số lượng</th>
                           <th>Tạm tính</th>
@@ -205,7 +206,25 @@ function Cart() {
                                   </div>
                                 </td>
                                 <td className="price-col">
-                                  {formatPrice(item.price)}
+                                  {item.product.discountActive ? (
+                                    <span className="in-stock">
+                                      Đang giảm giá
+                                    </span>
+                                  ) : (
+                                    <span className="out-of-stock">Không</span>
+                                  )}
+                                </td>
+                                <td className="price-col">
+                                  {item.discountActive ? (
+                                    <>
+                                      <b>{formatPrice(item.priceSale)}</b>
+                                      <br />
+                                      <del>{formatPrice(item.price)}</del>
+                                    </>
+                                  ) : (
+                                    <>{formatPrice(item.price)}</>
+                                  )}
+                                  {/* {formatPrice(item.price)} */}
                                 </td>
                                 <td className="quantity-col">
                                   <div className="cart-product-quantity">
@@ -270,7 +289,24 @@ function Cart() {
                                   </div>
                                 </td>
                                 <td className="total-col">
-                                  {formatPrice(item.quantity * item.price)}
+                                  {/* {item.product.discountActive ? (
+                                    <>
+                                      {formatPrice(
+                                        (item.product.price -
+                                          item.product.price *
+                                            (item.product.discountPercent /
+                                              100)) *
+                                          item.quantity
+                                      )}
+                                    </>
+                                  ) : (
+                                    <>
+                                      {formatPrice(
+                                        item.product.price * item.quantity
+                                      )}
+                                    </>
+                                  )} */}
+                                  {formatPrice(item.quantity * item.priceSale)}
                                 </td>
                                 <td className="remove-col">
                                   <button

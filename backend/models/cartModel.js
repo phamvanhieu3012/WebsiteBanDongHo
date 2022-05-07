@@ -10,7 +10,16 @@ const cartSchema = mongoose.Schema(
         price: {
           type: Number,
         },
+        priceSale: {
+          type: Number,
+        },
         quantity: {
+          type: Number,
+        },
+        discountActive: {
+          type: Boolean,
+        },
+        discountPercent: {
           type: Number,
         },
         image: {

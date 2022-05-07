@@ -34,9 +34,18 @@ const orderSchema = new mongoose.Schema(
           type: Number,
           required: true,
         },
+        priceSale: {
+          type: Number,
+        },
         quantity: {
           type: Number,
           required: true,
+        },
+        discountActive: {
+          type: Boolean,
+        },
+        discountPercent: {
+          type: Number,
         },
         image: {
           type: String,

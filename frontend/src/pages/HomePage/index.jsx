@@ -20,6 +20,9 @@ import moment from "moment";
 import "moment/locale/vi";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { addToWishlist, getWishlist } from "../../actions/wishlistAction";
+import { ADD_TO_CART_RESET } from "../../constants/cartConstants";
+import { ADD_TO_WISHLIST_RESET } from "../../constants/wishlistConstants";
 moment.locale("vi");
 
 const responsive = {
@@ -80,6 +83,9 @@ function HomePage() {
     }
     setOpenSuccess(false);
   };
+
+  const dispatch = useDispatch();
+
   const { products, loading, error } = useSelector((state) => state.nProducts);
   const {
     blogs,
@@ -93,7 +99,32 @@ function HomePage() {
     products: allProducts,
   } = useSelector((state) => state.productsAdmin);
 
-  const dispatch = useDispatch();
+  const { error: wishlistError, isUpdated: wishlistUpdated } = useSelector(
+    (state) => state.wishlist
+  );
+
+  const addToWishlistHandler = (id) => {
+    if (wishlistError) {
+      setOpenError(true);
+      setErrorAlert(wishlistError);
+      return;
+    }
+    dispatch(addToWishlist(id));
+    setOpenSuccess(true);
+    setSuccessAlert("Thêm sản phẩm vào danh sách yêu thích thành công");
+  };
+
+  useEffect(() => {
+    if (wishlistError) {
+      setOpenError(true);
+      setErrorAlert(wishlistError);
+      dispatch(clearErrors());
+    }
+    if (wishlistUpdated) {
+      dispatch(getWishlist());
+      dispatch({ type: ADD_TO_WISHLIST_RESET });
+    }
+  }, [dispatch, wishlistError, wishlistUpdated]);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -353,12 +384,18 @@ function HomePage() {
                                   </Link>
 
                                   <div className="product-action-vertical">
-                                    <a
-                                      href="#"
+                                    <p
+                                      onClick={() =>
+                                        addToWishlistHandler(product._id)
+                                      }
                                       className="btn-product-icon btn-wishlist btn-expandable"
+                                      style={{
+                                        cursor: "pointer",
+                                        transition: "all 0.25s linear",
+                                      }}
                                     >
                                       <span>Thêm vào danh sách yêu thích</span>
-                                    </a>
+                                    </p>
                                   </div>
 
                                   <div className="product-action">
@@ -728,12 +765,18 @@ function HomePage() {
                             </Link>
 
                             <div className="product-action-vertical">
-                              <a
-                                href="#"
+                              <p
+                                onClick={() =>
+                                  addToWishlistHandler(product._id)
+                                }
                                 className="btn-product-icon btn-wishlist btn-expandable"
+                                style={{
+                                  cursor: "pointer",
+                                  transition: "all 0.25s linear",
+                                }}
                               >
                                 <span>Thêm vào danh sách yêu thích</span>
-                              </a>
+                              </p>
                             </div>
 
                             <div className="product-action">
@@ -950,7 +993,7 @@ function HomePage() {
               >
                 {blogs &&
                   blogs.map((blog) => (
-                    <article className="entry">
+                    <article className="entry" key={blog._id}>
                       <figure className="entry-media">
                         <Link to={`/blog/${blog._id}`}>
                           <img

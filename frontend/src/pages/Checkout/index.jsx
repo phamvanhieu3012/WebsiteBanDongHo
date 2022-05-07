@@ -435,7 +435,7 @@ function Checkout() {
                         </label>
                       </div> */}
 
-                      <div className="custom-control custom-checkbox">
+                      {/* <div className="custom-control custom-checkbox">
                         <input
                           type="checkbox"
                           className="custom-control-input"
@@ -447,7 +447,7 @@ function Checkout() {
                         >
                           Giao hàng đến một địa chỉ khác?
                         </label>
-                      </div>
+                      </div> */}
 
                       <label>Thông tin bổ sung (Tùy chọn)</label>
                       <textarea
@@ -481,7 +481,13 @@ function Checkout() {
                                       </Link>
                                     </td>
                                     <td>
-                                      {formatPrice(item.quantity * item.price)}
+                                      {item.discountActive
+                                        ? formatPrice(
+                                            item.quantity * item.priceSale
+                                          )
+                                        : formatPrice(
+                                            item.quantity * item.price
+                                          )}
                                     </td>
                                   </tr>
                                 ))}
