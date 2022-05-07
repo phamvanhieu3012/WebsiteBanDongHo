@@ -23,6 +23,7 @@ import MuiAlert from "@mui/material/Alert";
 import { addToWishlist, getWishlist } from "../../actions/wishlistAction";
 import { ADD_TO_CART_RESET } from "../../constants/cartConstants";
 import { ADD_TO_WISHLIST_RESET } from "../../constants/wishlistConstants";
+import { getAllBanners } from "../../actions/bannerAction";
 moment.locale("vi");
 
 const responsive = {
@@ -87,6 +88,24 @@ function HomePage() {
   const dispatch = useDispatch();
 
   const { products, loading, error } = useSelector((state) => state.nProducts);
+
+  const {
+    banners,
+    error: bannerErrors,
+    loading: bannerLoading,
+  } = useSelector((state) => state.banners);
+
+  console.log(banners);
+
+  useEffect(() => {
+    if (bannerErrors) {
+      setOpenError(true);
+      setErrorAlert(bannerErrors);
+      dispatch(clearErrors());
+    }
+    dispatch(getAllBanners());
+  }, [dispatch, bannerErrors]);
+
   const {
     blogs,
     loading: blogLoading,
@@ -186,26 +205,34 @@ function HomePage() {
               {successAlert}
             </Alert>
           </Snackbar>
-          <div className="intro-slider-container">
-            <Carousel
-              swipeable={true}
-              draggable={true}
-              showDots={true}
-              responsive={responsive}
-              ssr={true} // means to render carousel on server-side.
-              infinite={true}
-              autoPlay={false}
-              autoPlaySpeed={20000}
-              keyBoardControl={true}
-              customTransition="all .5"
-              transitionDuration={500}
-              containerClass="carousel-container"
-              removeArrowOnDeviceType={["tablet", "mobile"]}
-              // deviceType={this.props.deviceType}
-              dotListClass="custom-dot-list-style"
-              itemClass="carousel-item-padding-40-px"
+          {bannerLoading ? (
+            <Loader />
+          ) : (
+            <div
+              className="intro-slider-container"
+              style={{
+                marginBottom: "100px",
+              }}
             >
-              <img
+              <Carousel
+                swipeable={true}
+                draggable={true}
+                showDots={true}
+                responsive={responsive}
+                ssr={true} // means to render carousel on server-side.
+                infinite={true}
+                autoPlay={false}
+                autoPlaySpeed={20000}
+                keyBoardControl={true}
+                customTransition="all .5"
+                transitionDuration={500}
+                containerClass="carousel-container1"
+                removeArrowOnDeviceType={["tablet", "mobile"]}
+                // deviceType={this.props.deviceType}
+                dotListClass="custom-dot-list-style"
+                itemClass="carousel-item-padding-40-px"
+              >
+                {/* <img
                 src="assets/images/banners/home/banner-dongho.png"
                 alt="banner 1"
               />
@@ -216,9 +243,24 @@ function HomePage() {
                   width: "85%",
                   margin: "0 auto",
                 }}
-              />
-            </Carousel>
-          </div>
+              /> */}
+                {banners &&
+                  banners[0] &&
+                  banners[0].images.map((image) => (
+                    <img
+                      src={image.url}
+                      alt="banner"
+                      key={image.public_id}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  ))}
+              </Carousel>
+            </div>
+          )}
           <div className="pt-2 pb-3">
             <div className="container">
               <div className="row">

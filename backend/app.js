@@ -51,6 +51,7 @@ const payment = require("./routes/paymentRoute");
 const blog = require("./routes/blogRoute");
 const contact = require("./routes/contactRoute");
 const wishlist = require("./routes/wishlistRoute");
+const banner = require("./routes/bannerRoute");
 
 app.use("/api/v1", product);
 app.use("/api/v1", category);
@@ -61,6 +62,7 @@ app.use("/api/v1", payment);
 app.use("/api/v1", blog);
 app.use("/api/v1", contact);
 app.use("/api/v1", wishlist);
+app.use("/api/v1", banner);
 
 // Middleware for Errors
 app.use(errorMiddleware);

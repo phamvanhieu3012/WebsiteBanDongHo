@@ -5,6 +5,7 @@ import ReviewsIcon from "@mui/icons-material/Reviews";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import ViewCarouselIcon from "@mui/icons-material/ViewCarousel";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import React from "react";
@@ -67,6 +68,12 @@ function Sidebar(props) {
           <NewspaperIcon />
         </ListItemIcon>
         <ListItemText primary="Tin tức" />
+      </ListItem>
+      <ListItem button onClick={() => handleHistory("banners")}>
+        <ListItemIcon>
+          <ViewCarouselIcon />
+        </ListItemIcon>
+        <ListItemText primary="Banner" />
       </ListItem>
     </List>
   );

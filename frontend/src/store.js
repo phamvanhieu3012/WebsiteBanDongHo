@@ -60,6 +60,12 @@ import {
   newReviewBlogReducer,
   reviewBlogReducer,
 } from "./reducers/blogReducer";
+import {
+  bannerDetailsReducer,
+  bannerReducer,
+  bannersReducer,
+  newBannerReducer,
+} from "./reducers/bannerReducer";
 
 const reducer = combineReducers({
   // Product
@@ -112,6 +118,11 @@ const reducer = combineReducers({
   //Wishlist
   wishlist: wishlistReducer,
   wishlistLocal: wishlistLocalReducer,
+  //Banner
+  banners: bannersReducer,
+  bannerDetails: bannerDetailsReducer,
+  newBanner: newBannerReducer,
+  banner: bannerReducer,
 });
 
 let initialState = {

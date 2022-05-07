@@ -13,10 +13,12 @@ import AdminRoute from "./components/Route/AdminRoute";
 import ProtectedRoute from "./components/Route/ProtectedRoute";
 import PublicRoute from "./components/Route/PublicRoute";
 import About from "./pages/About";
+import BannerList from "./pages/Admin/BannerList";
 import BlogList from "./pages/Admin/BlogList";
 import CategoryList from "./pages/Admin/CategoryList";
 import ContactList from "./pages/Admin/ContactList";
 import Dashboard from "./pages/Admin/Dashboard";
+import NewBanner from "./pages/Admin/NewBanner";
 import NewBlog from "./pages/Admin/NewBlog";
 import NewCategory from "./pages/Admin/NewCategory";
 import NewProduct from "./pages/Admin/NewProduct";
@@ -25,6 +27,7 @@ import ProcessOrder from "./pages/Admin/ProcessOrder";
 import ProductList from "./pages/Admin/ProductList";
 import ProductReviews from "./pages/Admin/ProductReviews";
 import ReplyContact from "./pages/Admin/ReplyContact";
+import UpdateBanner from "./pages/Admin/UpdateBanner";
 import UpdateBlog from "./pages/Admin/UpdateBlog";
 import UpdateCategory from "./pages/Admin/UpdateCategory";
 import UpdateProduct from "./pages/Admin/UpdateProduct";
@@ -145,6 +148,12 @@ function App() {
             component={BlogList}
           />
           <AdminRoute
+            exact
+            path="/admin/banners"
+            isAdmin={true}
+            component={BannerList}
+          />
+          <AdminRoute
             isAdmin={true}
             exact
             path="/admin/newProduct"
@@ -197,6 +206,18 @@ function App() {
             exact
             path="/admin/blog/:id"
             component={UpdateBlog}
+          />
+          <AdminRoute
+            isAdmin={true}
+            exact
+            path="/admin/newBanner"
+            component={NewBanner}
+          />
+          <AdminRoute
+            isAdmin={true}
+            exact
+            path="/admin/banner/:id"
+            component={UpdateBanner}
           />
 
           <PublicRoute exact path="/login" component={Login} />

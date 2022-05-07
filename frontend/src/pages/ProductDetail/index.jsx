@@ -47,6 +47,8 @@ import "moment/locale/vi";
 import MetaData from "../../components/Layout/MetaData";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import { addToWishlist, getWishlist } from "../../actions/wishlistAction";
+import { ADD_TO_WISHLIST_RESET } from "../../constants/wishlistConstants";
 moment.locale("vi");
 
 const responsive = {
@@ -138,6 +140,10 @@ function ProductDetail() {
   );
 
   const { error: cartError, isUpdated } = useSelector((state) => state.cart);
+
+  const { error: wishlistError, isUpdated: wishlistUpdated } = useSelector(
+    (state) => state.wishlist
+  );
 
   const { products } = useSelector((state) => state.productsAdmin);
 
@@ -232,6 +238,17 @@ function ProductDetail() {
     // dispatch(getProductDetails(match.id));
   };
 
+  const addToWishlistHandler = () => {
+    if (wishlistError) {
+      setOpenError(true);
+      setErrorAlert(wishlistError);
+      return;
+    }
+    dispatch(addToWishlist(product._id));
+    setOpenSuccess(true);
+    setSuccessAlert("Thêm sản phẩm vào danh sách yêu thích thành công");
+  };
+
   const addToCartLocalHandler = () => {
     dispatch(addItemsToCartLocal(match.id, quantity));
     // alert("Thêm sản phẩm vào giỏ hàng thành công");
@@ -244,7 +261,11 @@ function ProductDetail() {
       dispatch(getCart());
       dispatch({ type: ADD_TO_CART_RESET });
     }
-  }, [dispatch, isUpdated]);
+    if (wishlistUpdated) {
+      dispatch(getWishlist());
+      dispatch({ type: ADD_TO_WISHLIST_RESET });
+    }
+  }, [dispatch, isUpdated, wishlistUpdated]);
 
   return (
     <>
@@ -489,13 +510,17 @@ function ProductDetail() {
                             )}
 
                             <div className="details-action-wrapper">
-                              <a
-                                href="#"
+                              <p
                                 className="btn-product btn-wishlist"
                                 title="Wishlist"
+                                style={{
+                                  cursor: "pointer",
+                                  transition: "all 0.25s linear",
+                                }}
+                                onClick={addToWishlistHandler}
                               >
-                                <span>Thêm vào danh sách mong muốn</span>
-                              </a>
+                                <span>Thêm vào danh sách yêu thích</span>
+                              </p>
                             </div>
                           </div>
                         </>
@@ -843,99 +868,108 @@ function ProductDetail() {
               </div>
             </div>
           </div> */}
-              <Carousel
-                swipeable={false}
-                draggable={false}
-                showDots={true}
-                responsive={responsive}
-                ssr={true} // means to render carousel on server-side.
-                infinite={true}
-                autoPlay={false}
-                autoPlaySpeed={20000}
-                keyBoardControl={true}
-                customTransition="all .5"
-                transitionDuration={500}
-                containerClass="carousel-container"
-                removeArrowOnDeviceType={["tablet", "mobile"]}
-                // deviceType={this.props.deviceType}
-                dotListClass="custom-dot-list-style"
-                itemClass="carousel-item-padding-40-px"
-              >
-                {products &&
-                  products
-                    .filter(
-                      (prod) =>
-                        product.category._id === prod.category._id &&
-                        product._id !== prod._id
-                    )
-                    .map((prod) => (
-                      <div
-                        className="product product-7 text-center"
-                        key={prod._id}
-                      >
-                        <figure className="product-media">
-                          {prod.Stock <= 0 ? (
-                            <span className="product-label label-out">
-                              Hết hàng
-                            </span>
-                          ) : (
-                            ""
-                          )}
-                          <Link to={`/product/${prod._id}`}>
-                            <img
-                              src={prod.images[0].url}
-                              alt={prod.name}
-                              className="product-image"
-                            />
-                          </Link>
-
-                          <div className="product-action-vertical">
-                            <a
-                              href="#"
-                              className="btn-product-icon btn-wishlist btn-expandable"
-                            >
-                              <span>Thêm vào danh sách yêu thích</span>
-                            </a>
-                          </div>
-
-                          <div className="product-action">
-                            <a href="#" className="btn-product btn-cart">
-                              <span>
-                                <span style={{ textTransform: "uppercase" }}>
-                                  T
-                                </span>
-                                hêm vào giỏ hàng
+              {products ? (
+                <Carousel
+                  swipeable={false}
+                  draggable={false}
+                  showDots={true}
+                  responsive={responsive}
+                  ssr={true} // means to render carousel on server-side.
+                  infinite={true}
+                  autoPlay={false}
+                  autoPlaySpeed={20000}
+                  keyBoardControl={true}
+                  customTransition="all .5"
+                  transitionDuration={500}
+                  containerClass="carousel-container"
+                  removeArrowOnDeviceType={["tablet", "mobile"]}
+                  // deviceType={this.props.deviceType}
+                  dotListClass="custom-dot-list-style"
+                  itemClass="carousel-item-padding-40-px"
+                >
+                  {products &&
+                    products
+                      .filter((prod) => {
+                        if (product.category) {
+                          return (
+                            product.category._id === prod.category._id &&
+                            product._id !== prod._id
+                          );
+                        }
+                      })
+                      .map((prod) => (
+                        <div
+                          className="product product-7 text-center"
+                          key={prod._id}
+                        >
+                          <figure className="product-media">
+                            {prod.Stock <= 0 ? (
+                              <span className="product-label label-out">
+                                Hết hàng
                               </span>
-                            </a>
-                          </div>
-                        </figure>
+                            ) : (
+                              ""
+                            )}
+                            <Link to={`/product/${prod._id}`}>
+                              <img
+                                src={prod.images[0].url}
+                                alt={prod.name}
+                                className="product-image"
+                              />
+                            </Link>
 
-                        <div className="product-body">
-                          <div className="product-cat">
-                            <a href="#">{prod.category.name}</a>
-                          </div>
-                          <h3 className="product-title">
-                            <Link to={`/product/${prod._id}`}>{prod.name}</Link>
-                          </h3>
-                          <div className="product-price">
-                            <span className="out-price">
-                              {formatPrice(prod.price)}
-                            </span>
-                          </div>
-                          <div className="ratings-container">
-                            <Rating
-                              size="large"
-                              value={prod.ratings}
-                              readOnly
-                            />
-                            <span className="ratings-text">
-                              ( {prod.numOfReviews} Reviews )
-                            </span>
+                            <div className="product-action-vertical">
+                              <a
+                                href="#"
+                                className="btn-product-icon btn-wishlist btn-expandable"
+                              >
+                                <span>Thêm vào danh sách yêu thích</span>
+                              </a>
+                            </div>
+
+                            <div className="product-action">
+                              <a href="#" className="btn-product btn-cart">
+                                <span>
+                                  <span style={{ textTransform: "uppercase" }}>
+                                    Xem
+                                  </span>
+                                  chi tiết
+                                </span>
+                              </a>
+                            </div>
+                          </figure>
+
+                          <div className="product-body">
+                            <div className="product-cat">
+                              <a href="#">{prod.category.name}</a>
+                            </div>
+                            <h3 className="product-title">
+                              <Link to={`/product/${prod._id}`}>
+                                {prod.name}
+                              </Link>
+                            </h3>
+                            <div className="product-price">
+                              <span className="out-price">
+                                {formatPrice(prod.price)}
+                              </span>
+                            </div>
+                            <div className="ratings-container">
+                              <Rating
+                                size="large"
+                                value={prod.ratings}
+                                readOnly
+                              />
+                              <span className="ratings-text">
+                                ( {prod.numOfReviews} Reviews )
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-              </Carousel>
+                      ))}
+                </Carousel>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </main>
