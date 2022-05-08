@@ -24,6 +24,8 @@ import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
 
 const drawerWidth = 240;
 
@@ -132,9 +134,9 @@ export default function NewCategory() {
     }
 
     if (success) {
-      // alert("Tạo danh mục thành công");
-      setOpenSuccess(true);
-      setSuccessAlert("Tạo danh mục thành công");
+      // setOpenSuccess(true);
+      // setSuccessAlert("Tạo danh mục thành công");
+      Swal.fire("Thành công!", "Tạo danh mục thành công!", "success");
       history.push("/admin/categories");
       dispatch({ type: NEW_CATEGORY_RESET });
     }

@@ -85,6 +85,8 @@ function Cart() {
       dispatch({ type: ADD_TO_CART_RESET });
     }
     if (isDeleted) {
+      setOpenSuccess(true);
+      setSuccessAlert("Xóa thanh công khỏi giỏ hàng");
       dispatch(getCart());
       dispatch({ type: REMOVE_CART_ITEM_RESET });
     }
@@ -92,7 +94,6 @@ function Cart() {
 
   //cart local
   const increaseQuantityLocal = (id, quantity, stock) => {
-    console.log("hello world");
     const newQty = quantity + 1;
     if (stock <= quantity) {
       return;

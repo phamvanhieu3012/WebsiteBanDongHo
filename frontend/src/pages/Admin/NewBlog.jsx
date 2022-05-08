@@ -25,6 +25,8 @@ import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
 
 const drawerWidth = 240;
 
@@ -142,8 +144,9 @@ export default function NewBlog() {
 
     if (success) {
       // alert("Tạo tin tức thành công");
-      setOpenSuccess(true);
-      setSuccessAlert("Tạo tin tức thành công");
+      // setOpenSuccess(true);
+      // setSuccessAlert("Tạo tin tức thành công");
+      Swal.fire("Thành công!", "Tạo tin tức thành công!", "success");
       history.push("/admin/blogs");
       dispatch({ type: NEW_BLOG_RESET });
     }

@@ -24,17 +24,17 @@ import { makeStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { createCategory } from "../../actions/categoryAction";
 import { clearErrors } from "../../actions/productAction";
 import Loader from "../../components/Common/Loader";
 import MetaData from "../../components/Layout/MetaData";
-import { NEW_CATEGORY_RESET } from "../../constants/categoryConstants";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { NEW_BANNER_RESET } from "../../constants/bannerConstants";
 import { createBanner } from "../../actions/bannerAction";
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
 
 const drawerWidth = 240;
 
@@ -147,8 +147,9 @@ export default function NewBanner() {
     }
 
     if (success) {
-      setOpenSuccess(true);
-      setSuccessAlert("Tạo banner thành công");
+      // setOpenSuccess(true);
+      // setSuccessAlert("Tạo banner thành công");
+      Swal.fire("Thành công!", "Tạo banner thành công!", "success");
       history.push("/admin/banners");
       dispatch({ type: NEW_BANNER_RESET });
     }

@@ -36,6 +36,8 @@ import "react-quill/dist/quill.snow.css"; // ES6
 import MetaData from "../../components/Layout/MetaData";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
 
 const drawerWidth = 240;
 
@@ -183,8 +185,9 @@ export default function NewProduct() {
 
     if (success) {
       // alert("Tạo sản phẩm thành công");
-      setOpenSuccess(true);
-      setSuccessAlert("Tạo sản phẩm thành công");
+      // setOpenSuccess(true);
+      // setSuccessAlert("Tạo sản phẩm thành công");
+      Swal.fire("Thành công!", "Tạo sản phẩm thành công!", "success");
       history.push("/admin/dashboard");
       dispatch({ type: NEW_PRODUCT_RESET });
     }
