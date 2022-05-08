@@ -7,6 +7,7 @@ const {
   updateOrder,
   deleteOrder,
   getAllOrdersStatistical,
+  getAllStatusOrders,
 } = require("../controllers/orderController");
 const router = express.Router();
 
@@ -29,6 +30,10 @@ router
     authorizeRoles("admin staff"),
     getAllOrdersStatistical
   );
+
+router
+  .route("/admin/ordersStatus")
+  .get(isAuthenticatedUser, authorizeRoles("admin staff"), getAllStatusOrders);
 
 router
   .route("/admin/order/:id")

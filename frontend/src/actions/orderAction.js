@@ -21,6 +21,9 @@ import {
   ALL_ORDERS_DATE_REQUEST,
   ALL_ORDERS_DATE_SUCCESS,
   ALL_ORDERS_DATE_FAIL,
+  ALL_ORDERS_STATUS_REQUEST,
+  ALL_ORDERS_STATUS_SUCCESS,
+  ALL_ORDERS_STATUS_FAIL,
 } from "../constants/orderConstants";
 
 import axios from "axios";
@@ -82,31 +85,61 @@ export const getAllOrders = () => async (dispatch) => {
 };
 
 // Xem tất cả đơn hàng để thống kê (admin)
-export const getAllOrdersStatistical = (dateData) => async (dispatch) => {
-  try {
-    dispatch({ type: ALL_ORDERS_DATE_REQUEST });
+export const getAllOrdersStatistical =
+  (dateStart, dateEnd) => async (dispatch) => {
+    try {
+      dispatch({ type: ALL_ORDERS_DATE_REQUEST });
 
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: `token ${token}`,
+        },
+      };
+
+      let link = `http://localhost:4000/api/v1/admin/ordersStatistical`;
+
+      if (dateStart && dateEnd) {
+        link = `http://localhost:4000/api/v1/admin/ordersStatistical?dateStart=${dateStart}&dateEnd=${dateEnd}`;
+      }
+
+      const { data } = await axios.get(link, config);
+
+      dispatch({ type: ALL_ORDERS_DATE_SUCCESS, payload: data.orders });
+    } catch (error) {
+      dispatch({
+        type: ALL_ORDERS_DATE_FAIL,
+        payload: error.response.data.message,
+      });
+    }
+  };
+
+// Xem tất cả đơn hàng theo status (admin)
+export const getAllOrdersStatus = () => async (dispatch) => {
+  try {
+    dispatch({ type: ALL_ORDERS_STATUS_REQUEST });
     const token = localStorage.getItem("token");
     const config = {
       headers: {
+        "Content-Type": "application/json",
         Authorization: `token ${token}`,
       },
     };
+    const { data } = await axios.get(
+      "http://localhost:4000/api/v1/admin/ordersStatus",
+      config
+    );
 
-    console.log(dateData);
-
-    let link = `http://localhost:4000/api/v1/admin/ordersStatistical`;
-
-    if (dateData) {
-      link = `http://localhost:4000/api/v1/admin/ordersStatistical?createdAt=${dateData}`;
-    }
-
-    const { data } = await axios.get(link, config);
-
-    dispatch({ type: ALL_ORDERS_DATE_SUCCESS, payload: data.orders });
+    dispatch({
+      type: ALL_ORDERS_STATUS_SUCCESS,
+      payload1: data.ordersProssesing,
+      payload2: data.ordersShipped,
+      payload3: data.ordersDelivered,
+      payload4: data.ordersCancel,
+    });
   } catch (error) {
     dispatch({
-      type: ALL_ORDERS_DATE_FAIL,
+      type: ALL_ORDERS_STATUS_FAIL,
       payload: error.response.data.message,
     });
   }

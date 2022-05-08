@@ -3,7 +3,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MenuIcon from "@mui/icons-material/Menu";
 import Star from "@mui/icons-material/Star";
-import { Avatar, Button, TextField } from "@mui/material";
+import { Avatar, Button, Paper, TextField } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,13 +14,14 @@ import { styled, useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { makeStyles } from "@mui/styles";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import {
   clearErrors,
   deleteReviews,
+  getAllProductReviews,
   getAllReviews,
 } from "../../actions/productAction";
 import MetaData from "../../components/Layout/MetaData";
@@ -29,6 +30,7 @@ import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import Loader from "../../components/Common/Loader";
 
 const drawerWidth = 240;
 
@@ -118,6 +120,12 @@ export default function ProductReviews() {
     (state) => state.productReviews
   );
 
+  const {
+    error: allReviewsError,
+    products,
+    loading: allReviewsLoading,
+  } = useSelector((state) => state.allReviews);
+
   const [productId, setProductId] = React.useState("");
 
   let history = useHistory();
@@ -168,7 +176,10 @@ export default function ProductReviews() {
       history.push("/admin/reviews");
       dispatch({ type: DELETE_REVIEW_RESET });
     }
+    dispatch(getAllProductReviews());
   }, [dispatch, error, deleteError, history, isDeleted, productId]);
+
+  console.log(products);
 
   const columns = [
     { field: "id", headerName: "Review ID", minWidth: 200, flex: 0.5 },
@@ -347,19 +358,77 @@ export default function ProductReviews() {
           </Button>
         </form>
 
-        {reviews && reviews.length > 0 ? (
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={10}
-            disableSelectionOnClick
-            className="productListTable"
-            autoHeight
-          />
+        {productId ? (
+          <>
+            {reviews && reviews.length > 0 ? (
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                pageSize={10}
+                disableSelectionOnClick
+                className="productListTable"
+                autoHeight
+              />
+            ) : (
+              <h4 className="productReviewsFormHeading">
+                Không tìm thấy đánh giá nào
+              </h4>
+            )}
+          </>
         ) : (
-          <h3 className="productReviewsFormHeading">
-            Không tìm thấy đánh giá nào
-          </h3>
+          ""
+        )}
+        <br />
+        {allReviewsLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {products &&
+              products.map((product) => {
+                const rows = [];
+                product.reviews.forEach((item) => {
+                  rows.push({
+                    id: item._id,
+                    rating: item.rating,
+                    comment: item.comment,
+                    user: item.name,
+                  });
+                });
+                return (
+                  <>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "2rem",
+                      }}
+                    >
+                      <Typography variant="h5">
+                        <b>Tên sản phẩm:</b> {product.name}
+                      </Typography>
+                      <Avatar src={product.images[0].url} alt={product.name} />
+                    </Box>
+                    <Paper>
+                      <DataGrid
+                        components={{
+                          Toolbar: GridToolbar,
+                        }}
+                        rows={rows}
+                        columns={columns}
+                        pageSize={10}
+                        disableSelectionOnClick
+                        className="productListTable"
+                        autoHeight
+                        sx={{
+                          mt: 2,
+                          mb: 4,
+                        }}
+                      />
+                    </Paper>
+                  </>
+                );
+              })}
+          </>
         )}
       </Main>
     </Box>

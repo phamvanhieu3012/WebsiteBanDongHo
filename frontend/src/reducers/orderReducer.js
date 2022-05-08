@@ -24,6 +24,9 @@ import {
   ALL_ORDERS_DATE_REQUEST,
   ALL_ORDERS_DATE_SUCCESS,
   ALL_ORDERS_DATE_FAIL,
+  ALL_ORDERS_STATUS_REQUEST,
+  ALL_ORDERS_STATUS_SUCCESS,
+  ALL_ORDERS_STATUS_FAIL,
 } from "../constants/orderConstants";
 
 export const newOrderReducer = (state = {}, action) => {
@@ -136,6 +139,46 @@ export const allOrdersStatisticalReducer = (state = { orders: [] }, action) => {
       };
 
     case ALL_ORDERS_DATE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const allOrdersStatusReducer = (
+  state = {
+    ordersProssesing: [],
+    ordersShipped: [],
+    ordersDelivered: [],
+    ordersCancel: [],
+  },
+  action
+) => {
+  switch (action.type) {
+    case ALL_ORDERS_STATUS_REQUEST:
+      return {
+        loading: true,
+      };
+
+    case ALL_ORDERS_STATUS_SUCCESS:
+      return {
+        loading: false,
+        ordersProssesing: action.payload1,
+        ordersShipped: action.payload2,
+        ordersDelivered: action.payload3,
+        ordersCancel: action.payload4,
+      };
+
+    case ALL_ORDERS_STATUS_FAIL:
       return {
         loading: false,
         error: action.payload,

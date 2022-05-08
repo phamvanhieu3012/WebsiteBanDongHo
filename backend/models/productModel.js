@@ -22,6 +22,16 @@ const productSchema = mongoose.Schema(
       type: Number,
       required: [true, "Hãy nhập giá của sản phẩm"],
     },
+    priceImport: {
+      type: Number,
+      // required: [true, "Hãy nhập giá của sản phẩm"],
+      default: 0,
+    },
+    totalPriceImport: {
+      type: Number,
+      // required: [true, "Hãy nhập giá của sản phẩm"],
+      default: 0,
+    },
     unitPrice: {
       type: String,
       required: [true, "Hãy nhập đơn vị tính của sản phẩm"],
@@ -97,6 +107,10 @@ const productSchema = mongoose.Schema(
     discountActive: {
       type: Boolean,
       default: false,
+    },
+    sold: {
+      type: Number,
+      default: 0,
     },
     reviews: [
       {

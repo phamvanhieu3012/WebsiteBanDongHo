@@ -5,8 +5,24 @@ import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import FeedIcon from "@mui/icons-material/Feed";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import EditIcon from "@mui/icons-material/Edit";
+import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
+import CancelIcon from "@mui/icons-material/Cancel";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Avatar, Button, Grid, Paper } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Grid,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -25,8 +41,9 @@ import { Link, useHistory } from "react-router-dom";
 import {
   getAllOrders,
   getAllOrdersStatistical,
+  getAllOrdersStatus,
 } from "../../actions/orderAction";
-import { getAdminProduct } from "../../actions/productAction";
+import { getAdminProduct, getTopProducts } from "../../actions/productAction";
 import { getAllUsers } from "../../actions/userAction";
 import "./Admin.scss";
 import Sidebar from "./components/Sidebar";
@@ -55,6 +72,23 @@ const useStyles = makeStyles({
     alignItems: "center",
     gap: "1.5rem",
     padding: "10px 20px",
+  },
+  flexBox: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingTop: "2rem",
+    paddingBottom: "2rem",
+    "&:first-child h6": {
+      color: "red",
+    },
+  },
+  orderBox: {
+    textAlign: "center",
+    padding: "2rem",
+    "& h3": {
+      marginTop: "0.7rem",
+    },
   },
 });
 
@@ -130,12 +164,17 @@ export default function Dashboard() {
   const [open, setOpen] = React.useState(true);
   const dispatch = useDispatch();
 
-  const [datePicker, setDatePicker] = useState(null);
+  const [dateStart, setDateStart] = useState(null);
+  const [dateEnd, setDateEnd] = useState(null);
 
   const { user } = useSelector((state) => state.user);
   const { products } = useSelector((state) => state.productsAdmin);
+  const { products: topProducts } = useSelector((state) => state.topProducts);
 
   const { orders } = useSelector((state) => state.allOrders);
+
+  const { ordersProssesing, ordersShipped, ordersDelivered, ordersCancel } =
+    useSelector((state) => state.allOrdersStatus);
 
   const { blogs } = useSelector((state) => state.blogs);
 
@@ -146,11 +185,15 @@ export default function Dashboard() {
   const { users } = useSelector((state) => state.allUsers);
 
   let outOfStock = 0;
+  let lowStock = 0;
 
   products &&
     products.forEach((item) => {
       if (item.Stock === 0) {
         outOfStock += 1;
+      }
+      if (item.Stock <= 5) {
+        lowStock += 1;
       }
     });
 
@@ -159,6 +202,8 @@ export default function Dashboard() {
     dispatch(getAllOrders());
     dispatch(getAllUsers());
     dispatch(getAllBlogs());
+    dispatch(getTopProducts());
+    dispatch(getAllOrdersStatus());
   }, [dispatch]);
 
   let totalAmount = 0;
@@ -194,9 +239,9 @@ export default function Dashboard() {
   }, [totalAmount]);
 
   const handleStatistical = () => {
-    if (datePicker !== null) {
+    if (dateStart !== null && dateEnd !== null) {
       // let date = moment(datePicker).format("YYYY-MM-DD[T]HH:mm:ss");
-      dispatch(getAllOrdersStatistical(datePicker));
+      dispatch(getAllOrdersStatistical(dateStart, dateEnd));
       // totalAmount = 0;
       // ordersStatistical &&
       //   ordersStatistical.forEach((item) => {
@@ -219,12 +264,20 @@ export default function Dashboard() {
   };
 
   const doughnutState = {
-    labels: ["Hết hàng", "Còn hàng"],
+    labels: ["Hết hàng", "Còn hàng", "Sắp hết hàng"],
     datasets: [
       {
-        backgroundColor: ["#00A6B4", "#6800B4"],
-        hoverBackgroundColor: ["#4B5000", "#35014F"],
-        data: [outOfStock, products.length - outOfStock],
+        backgroundColor: [
+          "rgb(255, 61, 87)",
+          "rgb(25, 118, 210)",
+          "rgb(255, 175, 56)",
+        ],
+        hoverBackgroundColor: [
+          "rgba(255, 61, 87, 0.7)",
+          "rgba(25, 118, 210, 0.7)",
+          "rgb(255, 175, 56, 0.7)",
+        ],
+        data: [outOfStock, products.length - outOfStock, lowStock],
       },
     ],
   };
@@ -396,16 +449,32 @@ export default function Dashboard() {
             >
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
-                  label="Chọn ngày tính doanh thu"
-                  value={datePicker}
+                  label="Chọn ngày bắt đầu"
+                  value={dateStart}
                   onChange={(newValue) => {
-                    console.log(newValue);
-                    setDatePicker(newValue);
+                    setDateStart(newValue);
                   }}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
-              <Button onClick={handleStatistical} variant="contained">
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  label="Chọn ngày kết thúc"
+                  value={dateEnd}
+                  onChange={(newValue) => {
+                    setDateEnd(newValue);
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+              <Button
+                onClick={handleStatistical}
+                variant="contained"
+                sx={{
+                  fontSize: "1.3rem",
+                  padding: "10px 20px",
+                }}
+              >
                 Thống kê
               </Button>
             </div>
@@ -421,11 +490,11 @@ export default function Dashboard() {
                     <p className="statistical-number">
                       {formatPrice(totalAmount)}
                     </p>
-                    <p>Tổng tiền trong ngày</p>
+                    <p>Tổng tiền nhận được</p>
                   </div>
                 </Paper>
               </Grid>
-              <Grid item xs={6}>
+              {/* <Grid item xs={6}>
                 <Paper
                   className={classes.flexPaper}
                   style={{ borderLeft: "5px solid #FF8D29" }}
@@ -438,7 +507,7 @@ export default function Dashboard() {
                     <p>Tổng tiền</p>
                   </div>
                 </Paper>
-              </Grid>
+              </Grid> */}
             </Grid>
             {/* <Paper
               className={classes.flexPaper}
@@ -451,13 +520,182 @@ export default function Dashboard() {
               </div>
             </Paper> */}
           </Grid>
-          <Grid item xs={12} md={6} className="doughnutChart">
-            <Doughnut
-              data={doughnutState}
-              width={"500%"}
-              height={"500%"}
-              options={{ maintainAspectRatio: false }}
-            />
+          <Grid item xs={12} md={6} className="doughnutChart" sx={{ mt: 5 }}>
+            <Grid container spacing={5}>
+              <Grid item xs={12} sm={6}>
+                <Paper elevation={3} className={classes.orderBox}>
+                  <CardGiftcardIcon fontSize="large" />
+                  <Typography variant="h3">
+                    {ordersProssesing && ordersProssesing.length}
+                  </Typography>
+                  <p
+                    style={{
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Đang xử lý
+                  </p>
+                </Paper>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Paper elevation={3} className={classes.orderBox}>
+                  <LocalShippingIcon fontSize="large" />
+                  <Typography variant="h3">
+                    {ordersShipped && ordersShipped.length}
+                  </Typography>
+                  <p
+                    style={{
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Đang vận chuyển
+                  </p>
+                </Paper>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Paper elevation={3} className={classes.orderBox}>
+                  <AssignmentTurnedInIcon fontSize="large" />
+                  <Typography variant="h3">
+                    {ordersDelivered && ordersDelivered.length}
+                  </Typography>
+                  <p
+                    style={{
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Đã giao hàng
+                  </p>
+                </Paper>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Paper elevation={3} className={classes.orderBox}>
+                  <CancelIcon fontSize="large" />
+                  <Typography variant="h3">
+                    {ordersCancel && ordersCancel.length}
+                  </Typography>
+                  <p
+                    style={{
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Huỷ đơn hàng
+                  </p>
+                </Paper>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          spacing={2}
+          className="dashboardSummary"
+          sx={{
+            mt: 2,
+          }}
+        >
+          <Grid item xs={12} sm={6}>
+            <Paper elevation={3}>
+              <Box
+                sx={{
+                  pt: 1,
+                  ml: 1,
+                  mb: 1,
+                }}
+              >
+                <Typography
+                  variant="h4"
+                  sx={{
+                    mt: 2,
+                    ml: 2,
+                  }}
+                >
+                  Sản phẩm bán chạy
+                </Typography>
+              </Box>
+              <Box>
+                <TableContainer>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Tên sản phẩm</TableCell>
+                        <TableCell>Hình ảnh</TableCell>
+                        <TableCell>Đã bán</TableCell>
+                        <TableCell>Kho hàng</TableCell>
+                        <TableCell>Action</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {topProducts &&
+                        topProducts.map((item) => (
+                          <TableRow
+                            key={item._id}
+                            sx={{
+                              "& td, & th": { border: 0 },
+                            }}
+                          >
+                            <TableCell component="th" scope="row">
+                              {item.name}
+                            </TableCell>
+                            <TableCell>
+                              <Avatar
+                                src={item.images[0].url}
+                                alt={item.name}
+                              />
+                              {/* <img src={item.images[0].url} alt={item.name} /> */}
+                            </TableCell>
+                            <TableCell>{item.sold}</TableCell>
+                            <TableCell>{item.Stock}</TableCell>
+                            <TableCell>
+                              <Link
+                                to={`/admin/product/${item._id}`}
+                                sx={{ color: "rgb(25, 118, 210)" }}
+                              >
+                                <EditIcon
+                                  fontSize="large"
+                                  sx={{ color: "rgb(25, 118, 210)" }}
+                                />
+                              </Link>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
+            </Paper>
+          </Grid>
+          <Grid item sx={12} sm={6}>
+            <Paper
+              elevation={3}
+              sx={{
+                p: 2,
+              }}
+            >
+              <Grid container spacing={2} className="tableInventory">
+                <Grid item sx={12} sm={7}>
+                  <Box className={classes.flexBox}>
+                    <h6>Sản phẩm hết hàng</h6>
+                    <h6>{outOfStock}</h6>
+                  </Box>
+                  <Box className={classes.flexBox}>
+                    <h6>Sản phẩm sắp hết hàng</h6>
+                    <h6>{lowStock}</h6>
+                  </Box>
+                  <Box className={classes.flexBox}>
+                    <h6>Sản phẩm có sẵn</h6>
+                    <h6>{products && products.length - outOfStock}</h6>
+                  </Box>
+                </Grid>
+                <Grid item sx={12} sm={5}>
+                  <Doughnut
+                    data={doughnutState}
+                    width={"200%"}
+                    height={"200%"}
+                    options={{ maintainAspectRatio: false }}
+                  />
+                </Grid>
+              </Grid>
+            </Paper>
           </Grid>
         </Grid>
 

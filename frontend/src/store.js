@@ -14,6 +14,8 @@ import {
   menProductsReducer,
   womenProductsReducer,
   reviewReducer,
+  topProductsReducer,
+  allReviewsReducer,
 } from "./reducers/productReducer";
 
 import {
@@ -44,6 +46,7 @@ import {
   newOrderReducer,
   orderDetailsReducer,
   orderReducer,
+  allOrdersStatusReducer,
 } from "./reducers/orderReducer";
 import {
   contactDetailsReducer,
@@ -71,6 +74,7 @@ const reducer = combineReducers({
   // Product
   products: productsReducer,
   productsAdmin: productsAdminReducer,
+  topProducts: topProductsReducer,
   productDetails: productDetailsReducer,
   nProducts: nProductsReducer,
   menProducts: menProductsReducer,
@@ -92,6 +96,7 @@ const reducer = combineReducers({
   //Review
   newReview: newReviewReducer,
   review: reviewReducer,
+  allReviews: allReviewsReducer,
   //Cart
   cart: cartReducer,
   cartLocal: cartLocalReducer,
@@ -102,6 +107,7 @@ const reducer = combineReducers({
   allOrders: allOrdersReducer,
   order: orderReducer,
   allOrdersStatistical: allOrdersStatisticalReducer,
+  allOrdersStatus: allOrdersStatusReducer,
   //Contact
   contacts: contactsReducer,
   contactDetails: contactDetailsReducer,

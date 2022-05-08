@@ -41,6 +41,12 @@ import {
   WOMEN_PRODUCT_SUCCESS,
   WOMEN_PRODUCT_REQUEST,
   WOMEN_PRODUCT_FAIL,
+  TOP_PRODUCT_REQUEST,
+  TOP_PRODUCT_SUCCESS,
+  TOP_PRODUCT_FAIL,
+  ALL_PRODUCT_REVIEW_REQUEST,
+  ALL_PRODUCT_REVIEW_SUCCESS,
+  ALL_PRODUCT_REVIEW_FAIL,
 } from "../constants/productConstants";
 
 export const productsReducer = (state = { products: [] }, action) => {
@@ -89,6 +95,35 @@ export const productsAdminReducer = (state = { products: [] }, action) => {
         products: action.payload,
       };
     case ADMIN_PRODUCT_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+export const topProductsReducer = (state = { products: [] }, action) => {
+  switch (action.type) {
+    case TOP_PRODUCT_REQUEST:
+      return {
+        loading: true,
+        products: [],
+      };
+
+    case TOP_PRODUCT_SUCCESS:
+      return {
+        loading: false,
+        products: action.payload,
+      };
+    case TOP_PRODUCT_FAIL:
       return {
         loading: false,
         error: action.payload,
@@ -393,6 +428,35 @@ export const reviewReducer = (state = {}, action) => {
         ...state,
         isDeleted: false,
       };
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+    default:
+      return state;
+  }
+};
+
+export const allReviewsReducer = (state = { products: [] }, action) => {
+  switch (action.type) {
+    case ALL_PRODUCT_REVIEW_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case ALL_PRODUCT_REVIEW_SUCCESS:
+      return {
+        loading: false,
+        products: action.payload,
+      };
+    case ALL_PRODUCT_REVIEW_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
     case CLEAR_ERRORS:
       return {
         ...state,

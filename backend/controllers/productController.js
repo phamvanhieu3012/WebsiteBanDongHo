@@ -38,6 +38,16 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+// Get Top Product (Admin)
+exports.getTopProducts = catchAsyncErrors(async (req, res, next) => {
+  const products = await Product.find().sort({ sold: -1 }).limit(5);
+
+  res.status(200).json({
+    success: true,
+    products,
+  });
+});
+
 // Get All Product (Admin)
 exports.getAdminProducts = catchAsyncErrors(async (req, res, next) => {
   const products = await Product.find().populate("category");
@@ -300,6 +310,20 @@ exports.getProductReviews = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     success: true,
     reviews: product.reviews,
+  });
+});
+
+// Lấy tất cả reviews
+exports.getAllReviews = catchAsyncErrors(async (req, res, next) => {
+  const products = await Product.find({
+    numOfReviews: {
+      $gt: 0,
+    },
+  });
+
+  res.status(200).json({
+    success: true,
+    products,
   });
 });
 

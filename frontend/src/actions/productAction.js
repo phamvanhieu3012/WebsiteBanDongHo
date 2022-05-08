@@ -39,6 +39,12 @@ import {
   WOMEN_PRODUCT_REQUEST,
   WOMEN_PRODUCT_SUCCESS,
   WOMEN_PRODUCT_FAIL,
+  TOP_PRODUCT_REQUEST,
+  TOP_PRODUCT_SUCCESS,
+  TOP_PRODUCT_FAIL,
+  ALL_PRODUCT_REVIEW_REQUEST,
+  ALL_PRODUCT_REVIEW_SUCCESS,
+  ALL_PRODUCT_REVIEW_FAIL,
 } from "../constants/productConstants";
 
 // Get All Products
@@ -110,6 +116,33 @@ export const getAdminProduct = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ADMIN_PRODUCT_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Get Top Products For Admin
+export const getTopProducts = () => async (dispatch) => {
+  try {
+    dispatch({ type: TOP_PRODUCT_REQUEST });
+
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `token ${token}`,
+      },
+    };
+
+    const data = await axiosClient.get("/api/v1/admin/topProducts", config);
+
+    dispatch({
+      type: TOP_PRODUCT_SUCCESS,
+      payload: data.products,
+    });
+  } catch (error) {
+    dispatch({
+      type: TOP_PRODUCT_FAIL,
       payload: error.response.data.message,
     });
   }
@@ -402,6 +435,37 @@ export const getAllReviews = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ALL_REVIEW_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// Get All Products Reviews
+export const getAllProductReviews = () => async (dispatch) => {
+  try {
+    dispatch({ type: ALL_PRODUCT_REVIEW_REQUEST });
+
+    const token = localStorage.getItem("token");
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `token ${token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      `http://localhost:4000/api/v1/allReviews`,
+      config
+    );
+
+    dispatch({
+      type: ALL_PRODUCT_REVIEW_SUCCESS,
+      payload: data.products,
+    });
+  } catch (error) {
+    dispatch({
+      type: ALL_PRODUCT_REVIEW_FAIL,
       payload: error.response.data.message,
     });
   }

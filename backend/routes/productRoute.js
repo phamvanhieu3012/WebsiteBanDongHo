@@ -13,12 +13,16 @@ const {
   get8Products,
   getMenProducts,
   getWomenProducts,
+  getTopProducts,
+  getAllReviews,
 } = require("../controllers/productController");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 
 const router = express.Router();
 
 router.route("/products").get(getAllProducts);
+
+router.route("/admin/topProducts").get(isAuthenticatedUser, getTopProducts);
 
 router.route("/nProducts").get(get8Products);
 
@@ -40,6 +44,10 @@ router
 router.route("/product/:id").get(getProductDetails);
 
 router.route("/review").put(isAuthenticatedUser, createProductReview);
+
+router
+  .route("/allReviews")
+  .get(isAuthenticatedUser, authorizeRoles("admin staff"), getAllReviews);
 
 router
   .route("/reviews")

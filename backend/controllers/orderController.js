@@ -108,14 +108,13 @@ exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
 
 // get all Orders -- Admin
 exports.getAllOrdersStatistical = catchAsyncErrors(async (req, res, next) => {
-  console.log(new Date(req.query.createdAt));
-  let d = new Date(req.query.createdAt);
-  d.setDate(d.getDate() - 1);
-  console.log(d);
+  // let d = new Date(req.query.dateStart);
+  // d.setDate(d.getDate() - 1);
+  // console.log(d);
   const orders = await Order.find({
     createdAt: {
-      $gte: new Date(d),
-      $lte: new Date(req.query.createdAt),
+      $gte: new Date(req.query.dateStart),
+      $lte: new Date(req.query.dateEnd),
     },
   });
 
@@ -129,6 +128,22 @@ exports.getAllOrdersStatistical = catchAsyncErrors(async (req, res, next) => {
     success: true,
     totalAmount,
     orders,
+  });
+});
+
+// get all status Orders -- Admin
+exports.getAllStatusOrders = catchAsyncErrors(async (req, res, next) => {
+  const ordersProssesing = await Order.find({ orderStatus: "Processing" });
+  const ordersShipped = await Order.find({ orderStatus: "Shipped" });
+  const ordersDelivered = await Order.find({ orderStatus: "Delivered" });
+  const ordersCancel = await Order.find({ orderStatus: "Cancel" });
+
+  res.status(200).json({
+    success: true,
+    ordersProssesing,
+    ordersShipped,
+    ordersDelivered,
+    ordersCancel,
   });
 });
 
@@ -147,6 +162,7 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
   if (req.body.status === "Shipped") {
     order.orderItems.forEach(async (o) => {
       await updateStock(o.product, o.quantity);
+      await updateSold(o.product, o.quantity);
     });
   }
   order.orderStatus = req.body.status;
@@ -165,6 +181,14 @@ async function updateStock(id, quantity) {
   const product = await Product.findById(id);
 
   product.Stock -= quantity;
+
+  await product.save({ validateBeforeSave: false });
+}
+
+async function updateSold(id, quantity) {
+  const product = await Product.findById(id);
+
+  product.sold += quantity;
 
   await product.save({ validateBeforeSave: false });
 }
