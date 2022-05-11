@@ -78,8 +78,6 @@ function MenProducts() {
 
   let match = useParams();
 
-  console.log(match);
-
   const data = useSelector((state) => state.products);
   const keyword = match && match.keyword;
 

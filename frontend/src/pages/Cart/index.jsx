@@ -53,7 +53,6 @@ function Cart() {
 
   const increaseQuantity = (id, quantity, stock) => {
     const newQty = quantity + 1;
-    console.log(newQty);
     if (stock <= quantity) {
       // alert("Sản phẩm trong kho không còn đủ");
       setOpenError(true);
@@ -193,7 +192,6 @@ function Cart() {
                                 <td className="product-col">
                                   <div className="product">
                                     <figure className="product-media">
-                                      {console.log(item.product)}
                                       <Link to={`/product/${item.product._id}`}>
                                         <img src={item.image} alt={item.name} />
                                       </Link>

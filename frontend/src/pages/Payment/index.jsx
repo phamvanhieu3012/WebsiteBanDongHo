@@ -64,7 +64,6 @@ function Payment() {
   const { user } = useSelector((state) => state.user);
   const { error, isSubmit } = useSelector((state) => state.newOrder);
 
-  console.log(orderInfo);
   const paymentData = {
     amount: Math.round(orderInfo.totalPrice / 299),
   };
@@ -123,7 +122,6 @@ function Payment() {
           dispatch(createOrder(orderInfo));
 
           // history.push("/");
-          // console.log(orderInfo);
         } else {
           // alert("Có vấn đề khi thanh toán ");
           setOpenError(true);

@@ -209,11 +209,8 @@ export default function UpdateProduct() {
       setDiscountPercent(product.discountPercent);
       setDiscountActive(product.discountActive);
 
-      // console.log(category);
       // const cate = categories.filter((cate) => cate._id === category._id);
-      // console.log(cate);
       // // setCategoryName(cate[0].name);
-      // console.log(categoryName);
     }
     if (product && product.category) {
       setCategory(product.category._id);
@@ -256,7 +253,6 @@ export default function UpdateProduct() {
     //   percent: discountPercent,
     //   discountActive: discountActive,
     // };
-    // console.log(discount);
 
     const myForm = new FormData();
 
@@ -623,13 +619,11 @@ export default function UpdateProduct() {
                 >
                   <p>Thương hiệu</p>
                 </Grid>
-                {console.log(category)}
                 <Grid item xs={12} sm={8} md={10}>
                   <Autocomplete
                     value={categoryName}
                     onChange={(event, newValue) => {
                       // setCategory(newValue);
-                      console.log(newValue);
                       const categoryId = categories.filter(
                         (cate) => cate.name === newValue
                       );

@@ -157,8 +157,6 @@ function MyAccount() {
     }
   }, [dispatch, error, history, user, isUpdated]);
 
-  console.log(user);
-
   return (
     <>
       {userLoading ? (

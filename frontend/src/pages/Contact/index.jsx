@@ -54,7 +54,6 @@ function Contact() {
       )
       .then(
         (result) => {
-          console.log(name, email, title, detail);
           const myForm = {
             name,
             email,

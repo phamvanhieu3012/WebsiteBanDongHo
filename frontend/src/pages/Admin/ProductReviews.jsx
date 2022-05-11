@@ -179,8 +179,6 @@ export default function ProductReviews() {
     dispatch(getAllProductReviews());
   }, [dispatch, error, deleteError, history, isDeleted, productId]);
 
-  console.log(products);
-
   const columns = [
     { field: "id", headerName: "Review ID", minWidth: 200, flex: 0.5 },
 

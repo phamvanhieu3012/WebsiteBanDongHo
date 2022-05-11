@@ -1050,7 +1050,6 @@ function Product() {
                                     dialSize[0] === 0 && dialSize[1] === 30
                                   }
                                 />
-                                {console.log(dialSize[0] === 0)}
                                 <label
                                   className="custom-control-label"
                                   htmlFor="dial-1"

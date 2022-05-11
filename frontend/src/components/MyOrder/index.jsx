@@ -70,8 +70,6 @@ function MyOrder() {
       });
     });
 
-  console.log(orders);
-
   useEffect(() => {
     if (error) {
       alert(error);

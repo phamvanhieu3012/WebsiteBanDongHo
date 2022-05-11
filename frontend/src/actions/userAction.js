@@ -60,8 +60,6 @@ export const login = (email, password) => async (dispatch) => {
       config
     );
 
-    console.log(data);
-
     localStorage.setItem("token", data.token);
 
     dispatch({ type: LOGIN_SUCCESS, payload: data });
@@ -88,7 +86,6 @@ export const register = (userData) => async (dispatch) => {
       userData,
       config
     );
-    console.log("hello world");
 
     dispatch({ type: REGISTER_USER_SUCCESS, payload: data.user });
   } catch (error) {

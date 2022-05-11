@@ -42,7 +42,6 @@ export const createOrder = (order) => async (dispatch) => {
       },
     };
 
-    console.log(order);
     const { data } = await axios.post(
       "http://localhost:4000/api/v1/order/new",
       order,

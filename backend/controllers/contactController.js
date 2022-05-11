@@ -28,7 +28,6 @@ exports.getContactDetails = catchAsyncErrors(async (req, res, next) => {
 
 // Create Contact (User)
 exports.createContact = catchAsyncErrors(async (req, res, next) => {
-  console.log("hello world");
   const contact = await Contact.create(req.body);
 
   res.status(201).json({

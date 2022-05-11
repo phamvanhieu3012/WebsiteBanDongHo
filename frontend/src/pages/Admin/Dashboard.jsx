@@ -248,7 +248,6 @@ export default function Dashboard() {
       //     totalAmount += item.totalPrice;
       //   });
 
-      // console.log(totalAmount);
       setLineState({
         labels: ["Số tiền ban đầu", "Tổng tiền nhận được"],
         datasets: [

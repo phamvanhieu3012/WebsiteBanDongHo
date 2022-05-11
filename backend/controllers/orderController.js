@@ -17,8 +17,6 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     totalPrice,
   } = req.body;
 
-  // console.log(req.body.user);
-
   if (req.body.user) {
     let cart = await Cart.findOne({ user: req.body.user });
     if (cart) {
@@ -110,7 +108,6 @@ exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
 exports.getAllOrdersStatistical = catchAsyncErrors(async (req, res, next) => {
   // let d = new Date(req.query.dateStart);
   // d.setDate(d.getDate() - 1);
-  // console.log(d);
   const orders = await Order.find({
     createdAt: {
       $gte: new Date(req.query.dateStart),

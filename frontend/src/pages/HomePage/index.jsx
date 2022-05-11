@@ -95,8 +95,6 @@ function HomePage() {
     loading: bannerLoading,
   } = useSelector((state) => state.banners);
 
-  console.log(banners);
-
   useEffect(() => {
     if (bannerErrors) {
       setOpenError(true);

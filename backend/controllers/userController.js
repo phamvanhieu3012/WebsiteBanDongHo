@@ -14,8 +14,6 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     crop: "scale",
   });
 
-  console.log(myCloud);
-
   const { name, email, password, shippingInfo } = req.body;
 
   const user = await User.create({
@@ -116,7 +114,6 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 // Reset Password
 exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
   // creating token hash
-  console.log("Hello world");
   const resetPasswordToken = crypto
     .createHash("sha256")
     .update(req.params.token)

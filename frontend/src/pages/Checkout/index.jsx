@@ -156,7 +156,6 @@ function Checkout() {
         orderComments: comments,
         // user: user,
       };
-      console.log(order);
 
       if (order.paymentInfo.type === "Chuyển khoản bằng Stripe") {
         sessionStorage.setItem("order", JSON.stringify(order));
@@ -209,7 +208,6 @@ function Checkout() {
         },
         orderComments: comments,
       };
-      console.log(order);
 
       if (order.paymentInfo.type === "Chuyển khoản bằng Stripe") {
         //Lưu thông tin ship vào user nếu đã đăng nhập
@@ -275,8 +273,6 @@ function Checkout() {
       });
     }
   }, [dispatch, error, history, isSubmit]);
-
-  console.log(user);
 
   return (
     <>

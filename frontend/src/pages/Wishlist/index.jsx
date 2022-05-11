@@ -48,8 +48,6 @@ function Wishlist() {
     }
   }, [wishlist]);
 
-  console.log(close);
-
   let history = useHistory();
   const dispatch = useDispatch();
 
@@ -120,7 +118,6 @@ function Wishlist() {
                   </thead>
 
                   <tbody>
-                    {/* {console.log(wishlist.wishlistItems)} */}
                     {wishlist &&
                       wishlist.wishlistItems.map((item) => (
                         <tr key={item.product._id}>

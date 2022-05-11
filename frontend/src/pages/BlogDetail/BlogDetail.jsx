@@ -61,8 +61,6 @@ function BlogDetail() {
 
   const [comment, setComment] = useState("");
 
-  console.log(blog);
-
   useEffect(() => {
     if (error) {
       setOpenError(true);

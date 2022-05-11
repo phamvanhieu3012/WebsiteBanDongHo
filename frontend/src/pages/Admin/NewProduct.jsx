@@ -560,7 +560,6 @@ export default function NewProduct() {
                   <Autocomplete
                     value={categoryName}
                     onChange={(event, newValue) => {
-                      console.log(newValue);
                       const categoryId = categories.filter(
                         (cate) => cate.name === newValue
                       );
@@ -569,7 +568,6 @@ export default function NewProduct() {
                     }}
                     inputValue={inputCategoryValue}
                     onInputChange={(event, newInputValue) => {
-                      // console.log(newInputValue);
                       setCategoryValue(newInputValue);
                     }}
                     id="controllable-category"

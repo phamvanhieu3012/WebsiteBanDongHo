@@ -103,7 +103,6 @@ exports.updateBlog = catchAsyncErrors(async (req, res, next) => {
 
     await cloudinary.v2.uploader.destroy(imageId);
 
-    console.log("two");
     const myCloud = await cloudinary.v2.uploader.upload(req.body.image, {
       folder: "blogs",
       // width: 150,

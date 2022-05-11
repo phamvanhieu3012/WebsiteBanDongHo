@@ -30,8 +30,6 @@ exports.getCategoryDetails = catchAsyncErrors(async (req, res, next) => {
 exports.createCategory = catchAsyncErrors(async (req, res, next) => {
   const { name, description } = req.body;
 
-  console.log(name, description);
-
   const category = await Category.create({
     name,
     description,
