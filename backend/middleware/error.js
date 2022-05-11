@@ -18,13 +18,13 @@ module.exports = (err, req, res, next) => {
 
   // Wrong JWT error
   if (err.name === "JsonWebTokenError") {
-    const message = `Lỗi JsonWebToken, Hãy thử lại `;
+    const message = `Đăng nhập `;
     err = new ErrorHandler(message, 400);
   }
 
   // JWT EXPIRE error
   if (err.name === "TokenExpiredError") {
-    const message = `Json Web Token đã hết hạn, Hãy thử lại `;
+    const message = `Hết hạn đăng nhập `;
     err = new ErrorHandler(message, 400);
   }
 
