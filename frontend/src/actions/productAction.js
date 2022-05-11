@@ -74,6 +74,8 @@ export const getProduct =
       let priceSort1 = price[1] * 1000000;
       console.log("Category", category);
 
+      console.log(priceSort0, priceSort1);
+
       let link = `http://localhost:4000/api/v1/products?keyword=${keyword}&price[gte]=${priceSort0}&price[lte]=${priceSort1}&page=${currentPage}&${sort}&dialSize[gte]=${dialSize[0]}&dialSize[lte]=${dialSize[1]}`;
 
       if (category) {

@@ -409,10 +409,14 @@ export default function Dashboard() {
               style={{ borderLeft: "5px solid red" }}
             >
               <FeedIcon />
-              <div>
+              {/* <div>
                 <p className="statistical-number">{blogs && blogs.length}</p>
                 <p>Tin tức</p>
-              </div>
+              </div> */}
+              <Link to="/admin/blogs">
+                <p className="statistical-number">{blogs && blogs.length}</p>
+                <p>Tin tức</p>
+              </Link>
             </Paper>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>

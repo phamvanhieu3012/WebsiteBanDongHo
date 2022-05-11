@@ -301,7 +301,7 @@ export default function UpdateBanner() {
           </Drawer>
           <Main open={open}>
             <DrawerHeader />
-            <h3 id="productListHeading">Thêm banner</h3>
+            <h3 id="productListHeading">Chỉnh sửa banner</h3>
             <form
               className="flexDiv"
               encType="multipart/form-data"

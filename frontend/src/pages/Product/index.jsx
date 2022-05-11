@@ -378,9 +378,9 @@ function Product() {
                   <div className="sidebar sidebar-shop">
                     <div className="widget widget-clean">
                       <label>Bộ lọc:</label>
-                      <a href="#" className="sidebar-filter-clear">
+                      {/* <a href="#" className="sidebar-filter-clear">
                         Xóa trường
-                      </a>
+                      </a> */}
                     </div>
                     {/* End .widget widget-clean */}
 
@@ -432,6 +432,10 @@ function Product() {
                                         onClick={(e) => {
                                           if (e.target.checked) {
                                             setCategory(cat._id);
+                                            setPrice([0, 40]);
+                                            setRopeMaterial("");
+                                            setGlassMaterial("");
+                                            setDialSize([0, 43]);
                                           } else {
                                             setCategory("");
                                           }
@@ -502,10 +506,15 @@ function Product() {
                                   onClick={(e) => {
                                     if (e.target.checked) {
                                       setPrice([0, 2]);
+                                      setCategory("");
+                                      setRopeMaterial("");
+                                      setGlassMaterial("");
+                                      setDialSize([0, 43]);
                                     } else {
                                       setPrice([0, 40]);
                                     }
                                   }}
+                                  checked={price[0] === 0 && price[1] === 2}
                                 />
                                 <label
                                   className="custom-control-label"
@@ -527,10 +536,15 @@ function Product() {
                                   onClick={(e) => {
                                     if (e.target.checked) {
                                       setPrice([5, 10]);
+                                      setCategory("");
+                                      setRopeMaterial("");
+                                      setGlassMaterial("");
+                                      setDialSize([0, 43]);
                                     } else {
                                       setPrice([0, 40]);
                                     }
                                   }}
+                                  checked={price[0] === 5 && price[1] === 10}
                                 />
                                 <label
                                   className="custom-control-label"
@@ -552,10 +566,15 @@ function Product() {
                                   onClick={(e) => {
                                     if (e.target.checked) {
                                       setPrice([10, 20]);
+                                      setCategory("");
+                                      setRopeMaterial("");
+                                      setGlassMaterial("");
+                                      setDialSize([0, 43]);
                                     } else {
                                       setPrice([0, 40]);
                                     }
                                   }}
+                                  checked={price[0] === 10 && price[1] === 20}
                                 />
                                 <label
                                   className="custom-control-label"
@@ -577,10 +596,15 @@ function Product() {
                                   onClick={(e) => {
                                     if (e.target.checked) {
                                       setPrice([20, 40]);
+                                      setCategory("");
+                                      setRopeMaterial("");
+                                      setGlassMaterial("");
+                                      setDialSize([0, 43]);
                                     } else {
                                       setPrice([0, 40]);
                                     }
                                   }}
+                                  checked={price[0] === 20 && price[1] === 40}
                                 />
                                 <label
                                   className="custom-control-label"
@@ -599,6 +623,18 @@ function Product() {
                                   type="checkbox"
                                   className="custom-control-input"
                                   id="price-6"
+                                  onClick={(e) => {
+                                    if (e.target.checked) {
+                                      setPrice([40, 100]);
+                                      setCategory("");
+                                      setRopeMaterial("");
+                                      setGlassMaterial("");
+                                      setDialSize([0, 43]);
+                                    } else {
+                                      setPrice([0, 40]);
+                                    }
+                                  }}
+                                  checked={price[0] === 40 && price[1] === 100}
                                 />
                                 <label
                                   className="custom-control-label"
@@ -658,10 +694,15 @@ function Product() {
                                   onClick={(e) => {
                                     if (e.target.checked) {
                                       setRopeMaterial("Thép không gỉ");
+                                      setPrice([0, 40]);
+                                      setCategory("");
+                                      setGlassMaterial("");
+                                      setDialSize([0, 43]);
                                     } else {
                                       setRopeMaterial("");
                                     }
                                   }}
+                                  checked={ropeMaterial === "Thép không gỉ"}
                                 />
                                 <label
                                   className="custom-control-label"
@@ -683,10 +724,15 @@ function Product() {
                                   onClick={(e) => {
                                     if (e.target.checked) {
                                       setRopeMaterial("Dây da");
+                                      setPrice([0, 40]);
+                                      setCategory("");
+                                      setGlassMaterial("");
+                                      setDialSize([0, 43]);
                                     } else {
                                       setRopeMaterial("");
                                     }
                                   }}
+                                  checked={ropeMaterial === "Dây da"}
                                 />
                                 <label
                                   className="custom-control-label"
@@ -708,10 +754,15 @@ function Product() {
                                   onClick={(e) => {
                                     if (e.target.checked) {
                                       setRopeMaterial("Dây vải");
+                                      setPrice([0, 40]);
+                                      setCategory("");
+                                      setGlassMaterial("");
+                                      setDialSize([0, 43]);
                                     } else {
                                       setRopeMaterial("");
                                     }
                                   }}
+                                  checked={ropeMaterial === "Dây vải"}
                                 />
                                 <label
                                   className="custom-control-label"
@@ -733,10 +784,15 @@ function Product() {
                                   onClick={(e) => {
                                     if (e.target.checked) {
                                       setRopeMaterial("Dây cao su");
+                                      setPrice([0, 40]);
+                                      setCategory("");
+                                      setGlassMaterial("");
+                                      setDialSize([0, 43]);
                                     } else {
                                       setRopeMaterial("");
                                     }
                                   }}
+                                  checked={ropeMaterial === "Dây cao su"}
                                 />
                                 <label
                                   className="custom-control-label"
@@ -758,10 +814,15 @@ function Product() {
                                   onClick={(e) => {
                                     if (e.target.checked) {
                                       setRopeMaterial("Dây nhựa");
+                                      setPrice([0, 40]);
+                                      setCategory("");
+                                      setGlassMaterial("");
+                                      setDialSize([0, 43]);
                                     } else {
                                       setRopeMaterial("");
                                     }
                                   }}
+                                  checked={ropeMaterial === "Dây nhựa"}
                                 />
                                 <label
                                   className="custom-control-label"
@@ -783,10 +844,15 @@ function Product() {
                                   onClick={(e) => {
                                     if (e.target.checked) {
                                       setRopeMaterial("Titanium");
+                                      setPrice([0, 40]);
+                                      setCategory("");
+                                      setGlassMaterial("");
+                                      setDialSize([0, 43]);
                                     } else {
                                       setRopeMaterial("");
                                     }
                                   }}
+                                  checked={ropeMaterial === "Titanium"}
                                 />
                                 <label
                                   className="custom-control-label"
@@ -844,10 +910,15 @@ function Product() {
                                   onClick={(e) => {
                                     if (e.target.checked) {
                                       setGlassMaterial("Kính cứng");
+                                      setPrice([0, 40]);
+                                      setCategory("");
+                                      setRopeMaterial("");
+                                      setDialSize([0, 43]);
                                     } else {
                                       setGlassMaterial("");
                                     }
                                   }}
+                                  checked={glassMaterial === "Kính cứng"}
                                 />
                                 <label
                                   className="custom-control-label"
@@ -868,10 +939,15 @@ function Product() {
                                   onClick={(e) => {
                                     if (e.target.checked) {
                                       setGlassMaterial("Kính Sapphire");
+                                      setPrice([0, 40]);
+                                      setCategory("");
+                                      setRopeMaterial("");
+                                      setDialSize([0, 43]);
                                     } else {
                                       setGlassMaterial("");
                                     }
                                   }}
+                                  checked={glassMaterial === "Kính Sapphire"}
                                 />
                                 <label
                                   className="custom-control-label"
@@ -892,10 +968,15 @@ function Product() {
                                   onClick={(e) => {
                                     if (e.target.checked) {
                                       setGlassMaterial("Kính nhựa");
+                                      setPrice([0, 40]);
+                                      setCategory("");
+                                      setRopeMaterial("");
+                                      setDialSize([0, 43]);
                                     } else {
                                       setGlassMaterial("");
                                     }
                                   }}
+                                  checked={glassMaterial === "Kính nhựa"}
                                 />
                                 <label
                                   className="custom-control-label"
@@ -957,11 +1038,19 @@ function Product() {
                                   onClick={(e) => {
                                     if (e.target.checked) {
                                       setDialSize([0, 30]);
+                                      setPrice([0, 40]);
+                                      setCategory("");
+                                      setRopeMaterial("");
+                                      setGlassMaterial("");
                                     } else {
                                       setDialSize([0, 43]);
                                     }
                                   }}
+                                  checked={
+                                    dialSize[0] === 0 && dialSize[1] === 30
+                                  }
                                 />
+                                {console.log(dialSize[0] === 0)}
                                 <label
                                   className="custom-control-label"
                                   htmlFor="dial-1"
@@ -981,10 +1070,17 @@ function Product() {
                                   onClick={(e) => {
                                     if (e.target.checked) {
                                       setDialSize([30, 34]);
+                                      setPrice([0, 40]);
+                                      setCategory("");
+                                      setRopeMaterial("");
+                                      setGlassMaterial("");
                                     } else {
                                       setDialSize([0, 43]);
                                     }
                                   }}
+                                  checked={
+                                    dialSize[0] === 30 && dialSize[1] === 34
+                                  }
                                 />
                                 <label
                                   className="custom-control-label"
@@ -1005,10 +1101,17 @@ function Product() {
                                   onClick={(e) => {
                                     if (e.target.checked) {
                                       setDialSize([34, 39]);
+                                      setPrice([0, 40]);
+                                      setCategory("");
+                                      setRopeMaterial("");
+                                      setGlassMaterial("");
                                     } else {
                                       setDialSize([0, 43]);
                                     }
                                   }}
+                                  checked={
+                                    dialSize[0] === 34 && dialSize[1] === 39
+                                  }
                                 />
                                 <label
                                   className="custom-control-label"
@@ -1029,10 +1132,17 @@ function Product() {
                                   onClick={(e) => {
                                     if (e.target.checked) {
                                       setDialSize([40, 43]);
+                                      setPrice([0, 40]);
+                                      setCategory("");
+                                      setRopeMaterial("");
+                                      setGlassMaterial("");
                                     } else {
                                       setDialSize([0, 43]);
                                     }
                                   }}
+                                  checked={
+                                    dialSize[0] === 40 && dialSize[1] === 43
+                                  }
                                 />
                                 <label
                                   className="custom-control-label"
@@ -1050,6 +1160,20 @@ function Product() {
                                   type="checkbox"
                                   className="custom-control-input"
                                   id="dial-5"
+                                  onClick={(e) => {
+                                    if (e.target.checked) {
+                                      setDialSize([43, 100]);
+                                      setPrice([0, 40]);
+                                      setCategory("");
+                                      setRopeMaterial("");
+                                      setGlassMaterial("");
+                                    } else {
+                                      setDialSize([0, 43]);
+                                    }
+                                  }}
+                                  checked={
+                                    dialSize[0] === 43 && dialSize[1] === 100
+                                  }
                                 />
                                 <label
                                   className="custom-control-label"
