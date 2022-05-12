@@ -1,0 +1,73 @@
+[{
+  "_id": {
+    "$oid": "6272d13a4b3109e9170ccc6d"
+  },
+  "name": "GIÚP BẠN TRẢ LỜI CÂU HỎI: MỆNH THỦY HỢP MÀU GÌ?",
+  "description": "Mệnh Thủy là một mệnh quan trọng trong Ngũ hành. Ngũ hành là 5 hành tố cơ bản: Kim, Mộc, Thủy, Hỏa, Thổ. Theo thuyết ngũ hành, vạn vật trên vũ trụ này đều được tạo ra từ 5 hành tố này. Các yếu tố này đều có sự tác động qua lại lẫn nhau và có những tính chất riêng. Mệnh Thủy không nằm ngoài quy luật đó.",
+  "detail": "<h2><strong>1. Mệnh Thủy sinh năm nào?</strong></h2><p>Những người mệnh Thủy sinh vào những năm sau:</p><ul><li>Năm Bính Tý: 1936, 1996</li><li>Năm Quý Tỵ: 1953, 2013</li><li>Năm Nhâm Tuất: 1982, 1922</li><li>Năm Đinh Sửu: 1937, 1997</li><li>Năm Bính Ngọ: 1966, 2026</li><li>Năm Quý Hợi: 1983, 1923</li><li>Năm Giáp Thân: 1944, 2004</li><li>Năm Đinh Mùi: 1967, 2027</li><li>Năm Ất Dậu: 1945, 2005</li><li>Năm Giáp Dần: 1974, 2034</li><li>Năm Nhâm Thìn: 1952, 2012</li><li>Năm Ất Mão: 1975, 2035</li></ul><h2><strong>2. Mệnh Thủy hợp màu gì?</strong></h2><p>Quy luật tương sinh sẽ tốt cho mệnh của bạn. Đối với mệnh Thủy, ta có kim loại tan chảy ra sẽ thành chất dạng lỏng (sinh thủy).</p><p>Hành Thuỷ tương sinh với những gam màu từ trắng đến xanh dương và màu tương sinh của mệnh Thuỷ là gam màu trắng, bạch kim, hay những gam màu có ánh bạc. Màu tương hợp là màu đen màu xanh nước biển. Các màu này sẽ giúp người mệnh Thuỷ gia tăng nhiều may mắn, công việc thuận lợi.</p>",
+  "image": {
+    "public_id": "blogs/eksieb2xt0bozu0c5ibn",
+    "url": "https://res.cloudinary.com/dmffitric/image/upload/v1651926749/blogs/eksieb2xt0bozu0c5ibn.jpg"
+  },
+  "user": {
+    "$oid": "625cfe6c2bdf267ecb4dcdac"
+  },
+  "category": "Kiến thức",
+  "numOfReviews": 1,
+  "reviews": [
+    {
+      "user": {
+        "$oid": "625cfe6c2bdf267ecb4dcdac"
+      },
+      "name": "Hieu",
+      "comment": "Bài viết hay",
+      "createAt": {
+        "$date": {
+          "$numberLong": "1651775625587"
+        }
+      },
+      "_id": {
+        "$oid": "627418a6984b39b2c1b63414"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1651691834382"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1651926750370"
+    }
+  },
+  "__v": 1
+},{
+  "_id": {
+    "$oid": "6273b5ae558e89522d3aecf1"
+  },
+  "name": "CÁCH PHÂN BIỆT ĐỒNG HỒ OP THẬT - GIẢ CHỈ VỚI 5 BƯỚC",
+  "description": "Đồng hồ OP được biết đến là một thương hiệu được ưa chuộng tại Châu Á với hai dòng sản phẩm Olympia Star và Olym Pianus. Thực tế, OP cũng bị làm giả rất nhiều trên thị trường.",
+  "detail": "<p class=\"ql-align-justify\">Vậy, làm thế nào để nhận biết được đồng hồ OP thật - giả? Cây trả lời sẽ có ngay trong bài viết này.</p><p class=\"ql-align-justify\"><br></p><h2 class=\"ql-align-justify\"><strong>Bước 1: Kiểm tra độ hoàn thiện</strong></h2><p class=\"ql-align-justify\">Nếu một chiếc đồng hồ được làm bằng công nghệ lạc hậu, các công đoạn không được đầu tư tỉ mỉ thì ở những góc khuất như mắt xích, núm, khóa... sẽ lộ rõ các điểm sần sùi và kém thẩm mĩ.. Vì vậy, khi cầm trên tay một sản phẩm fake, bạn có thể cảm nhận ngay độ gợn, thô do chưa được đánh bóng kỹ phần khóa buckle.</p><p class=\"ql-align-center\"><img src=\"https://www.xwatch.vn/wp-content/uploads/2016/12/Kiem-tra-dong-ho-olympianus.jpg\" alt=\"Cách phân biệt đồng hồ OP Thật Giả với 5 bước\" height=\"514\" width=\"1024\"></p><p class=\"ql-align-center\"><em>Khóa đồng hồ không được gọt giũa, đánh bóng kĩ</em></p><p class=\"ql-align-center\"><br></p><h2 class=\"ql-align-justify\"><strong>Bước 2: Kiểm tra logo, thương hiệu</strong></h2><p>Mặc dù cố gắng viết với kiểu chữ cách điệu, gần sát nhau và khó nhìn nhưng chỉ cần để ý một chút bạn có thể phát hiện ngay một cái tên khác: Olym Precious hoặc Oasis Pacifier mặc dù vẫn giữ logo của Olym Pianus.</p><p class=\"ql-align-center\"><img src=\"https://www.xwatch.vn/wp-content/uploads/2016/12/logo-thuong-hieu-dong-ho-olympinus-e1501751768506.jpg\" alt=\"Cách phân biệt đồng hồ OP Thật Giả với 5 bước\" height=\"419\" width=\"700\"></p><p class=\"ql-align-center\"><em>Một chiếc đồng hồ fake có tên thương hiệu là Olym Precious</em></p><p class=\"ql-align-center\"><img src=\"https://www.xwatch.vn/wp-content/uploads/2016/12/cach-chon-dong-ho-olympianus-e1501752319530.jpg\" height=\"523\" width=\"719\"></p><p class=\"ql-align-center\"><em>Một đồng hồ fake có khắc logo Oasis Pacifier</em></p><p class=\"ql-align-center\"><br></p><h2 class=\"ql-align-justify\"><strong>Bước 3: Kiểm tra giá sản phẩm</strong></h2><p>Đồng hồ OP chính hãng có mức giá không dưới 2 triệu. Tuy nhiên, có nhiều nơi bán OP chỉ với giá dưới 2 triệu, có những chiếc chỉ hơn 500 ngàn.</p><p class=\"ql-align-center\"><img src=\"https://www.xwatch.vn/wp-content/uploads/2016/12/gia-dong-ho-Olympianus.png\" alt=\"Cách phân biệt đồng hồ OP Thật Giả với 5 bước\" height=\"377\" width=\"700\"></p><p class=\"ql-align-center\"><em>Một số sản phẩm OP&nbsp;được bán với giá dưới 2 triệu.</em></p><p class=\"ql-align-justify\">Bên cạnh đó, nhiều trang web bán đồng hồ và các cửa hàng dùng chiêu trò giảm giá để câu khách nhưng thực ra đây là hàng kém chất lượng. Nào là khuyến mãi 25 - 50%, nào là giảm giá sốc, tất cả đều khiến khách hàng lao đầu vào với cái lợi trước mắt mà quên đi rằng, đồng hồ OP vốn có mức giá khá bình dân, nếu giảm giá nhiều, chắc chắn chất lượng không đảm bảo.</p><p class=\"ql-align-center\"><img src=\"https://www.xwatch.vn/wp-content/uploads/2016/12/phan-biet-gia-dong-ho-olympianus.png\" alt=\"Cách phân biệt đồng hồ OP Thật Giả với 5 bước\" height=\"379\" width=\"700\"></p><p class=\"ql-align-center\"><em>Cẩn thận với các chương trình giảm giá sốc, có thể đó chỉ là chiêu trò</em></p><p class=\"ql-align-center\"><br></p><h2 class=\"ql-align-justify\"><strong>Bước 4: Kiểm tra độ tinh xảo</strong></h2><p class=\"ql-align-justify\"><strong><em>** Phần đáy</em></strong>: Ở đồng hồ Olym Pianus fake, chữ khắc trên đáy khá nông và dại vì sử dụng công nghệ laser đã lỗi thời. Còn OP chính hãng áp dụng công nghệ laser in chìm trên phần đáy, được đánh bóng rất kỹ với nét chữ sắc nét.</p><p class=\"ql-align-center\"><img src=\"https://www.xwatch.vn/wp-content/uploads/2016/12/chat-luong-dong-ho-olympia-1024x514.jpg\" alt=\"Cách phân biệt đồng hồ OP Thật Giả với 5 bước\" height=\"514\" width=\"1024\"></p><p class=\"ql-align-center\"><em>Đồng hồ fake (trái) có chữ mờ, dại còn đồng hồ chính hãng (phải) sắc nét, rõ ràng hơn</em></p><p class=\"ql-align-justify\"><strong><em>** Phần mặt đồng hồ</em></strong>: sự khác biệt lớn nhất giữa đồng hồ OP thật giả được thể hiện rõ nhất ở đây.</p><p class=\"ql-align-justify\">Đồng hồ chính hãng thường sử dụng công nghệ mực in chuyên dụng để in mặt số, giúp các chi tiết có màu sắc đều tăm tắp, không nhòe và lem.</p><p class=\"ql-align-justify\">Với đồng hồ fake, các chi tiết logo, tên thương hiệu thường chỉ là một miếng kim loại dán lên mặt số. Chất liệu sử dụng không phải là mực in mà là mảnh kim loại như nhôm, kẽm… Đây là lý do vì sao đồng hồ fake thường bị rối tên logo hay thương hiệu. Nếu dùng kính lúp, bạn còn có thể nhìn thấy cả những chi tiết thừa do không được mài dũa kĩ càng trên những logo bé xíu.</p><p class=\"ql-align-center\"><img src=\"https://www.xwatch.vn/wp-content/uploads/2016/12/mat-dong-ho-olympianus-1024x436.jpg\" alt=\"Cách phân biệt đồng hồ OP Thật Giả với 5 bước\" height=\"436\" width=\"1024\"></p><p class=\"ql-align-center\"><em>Đồng hồ fake (trái) có logo bằng miếng kim loại dán lên mặt số&nbsp;Đồng hồ chính hãng (phải) có logo in bằng mực chuyên dụng</em></p>",
+  "image": {
+    "public_id": "blogs/p7pi53dsihw2xomnlwhl",
+    "url": "https://res.cloudinary.com/dmffitric/image/upload/v1651750318/blogs/p7pi53dsihw2xomnlwhl.jpg"
+  },
+  "user": {
+    "$oid": "625cfe6c2bdf267ecb4dcdac"
+  },
+  "category": "Kiến thức",
+  "numOfReviews": 0,
+  "reviews": [],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1651750318245"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1651750318245"
+    }
+  },
+  "__v": 0
+}]

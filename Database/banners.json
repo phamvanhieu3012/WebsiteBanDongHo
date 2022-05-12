@@ -1,0 +1,35 @@
+[{
+  "_id": {
+    "$oid": "627635b4ed601b9d2efe3010"
+  },
+  "title": "Banner Home",
+  "description": "Banner cho trang chủ",
+  "status": true,
+  "images": [
+    {
+      "public_id": "banners/kp4vdkes2d8zxq8vkueo",
+      "url": "https://res.cloudinary.com/dmffitric/image/upload/v1651919376/banners/kp4vdkes2d8zxq8vkueo.webp",
+      "_id": {
+        "$oid": "62764a1332cc4eed85431664"
+      }
+    },
+    {
+      "public_id": "banners/susmxj8caeva4r8qoopl",
+      "url": "https://res.cloudinary.com/dmffitric/image/upload/v1651919378/banners/susmxj8caeva4r8qoopl.webp",
+      "_id": {
+        "$oid": "62764a1332cc4eed85431665"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1651914164543"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1651919379770"
+    }
+  },
+  "__v": 0
+}]

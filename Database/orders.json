@@ -1,0 +1,238 @@
+[{
+  "_id": {
+    "$oid": "62755ec03c3c0a1258570eec"
+  },
+  "shippingInfo": {
+    "address": "Số nhà 101",
+    "city": "Hà Nội",
+    "state": "Cầu Giấy",
+    "country": "Mai Dịch",
+    "phoneNo": 937283232
+  },
+  "orderItems": [
+    {
+      "name": "ĐỒNG HỒ BULOVA 97D115 CHÍNH HÃNG",
+      "price": 9600000,
+      "priceSale": 7680000,
+      "quantity": 2,
+      "discountActive": true,
+      "discountPercent": 20,
+      "image": "https://res.cloudinary.com/dmffitric/image/upload/v1651655177/products/o6vehhnam4pf3lyuxknm.jpg",
+      "product": {
+        "$oid": "62723edb50a3675875aa6371"
+      },
+      "_id": {
+        "$oid": "62755eb93c3c0a1258570eda"
+      }
+    }
+  ],
+  "name": "Hieu",
+  "email": "phamvanhieu74123@gmail.com",
+  "user": {
+    "$oid": "625cfe6c2bdf267ecb4dcdac"
+  },
+  "paymentInfo": {
+    "id": "abc",
+    "type": "Chuyển khoản ngân hàng",
+    "status": "Chưa thanh toán"
+  },
+  "paidAt": {
+    "$date": {
+      "$numberLong": "1651859136528"
+    }
+  },
+  "itemsPrice": 15360000,
+  "shippingPrice": 0,
+  "totalPrice": 15360000,
+  "orderStatus": "Processing",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1651859136533"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1651859136533"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "627615358cb881eb3897e4d0"
+  },
+  "shippingInfo": {
+    "address": "Số nhà 101",
+    "city": "Hà Nội",
+    "state": "Cầu Giấy",
+    "country": "Mai Dịch",
+    "phoneNo": 937283232
+  },
+  "orderItems": [
+    {
+      "name": "ĐỒNG HỒ SEIKO SRPD41J1",
+      "price": 7260000,
+      "priceSale": 7260000,
+      "quantity": 1,
+      "discountActive": false,
+      "discountPercent": 0,
+      "image": "https://res.cloudinary.com/dmffitric/image/upload/v1651581964/products/o9eqy3bufm6hzeth1h3p.jpg",
+      "product": {
+        "$oid": "62654cb242f3069221a31c34"
+      },
+      "_id": {
+        "$oid": "627615308cb881eb3897e4be"
+      }
+    }
+  ],
+  "name": "Hieu",
+  "email": "phamvanhieu74123@gmail.com",
+  "user": {
+    "$oid": "625cfe6c2bdf267ecb4dcdac"
+  },
+  "paymentInfo": {
+    "id": "abc",
+    "type": "Chuyển khoản ngân hàng",
+    "status": "Chưa thanh toán"
+  },
+  "paidAt": {
+    "$date": {
+      "$numberLong": "1651905845048"
+    }
+  },
+  "itemsPrice": 7260000,
+  "shippingPrice": 0,
+  "totalPrice": 7260000,
+  "orderStatus": "Delivered",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1651905845052"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1651944481771"
+    }
+  },
+  "__v": 0,
+  "deliveredAt": {
+    "$date": {
+      "$numberLong": "1651944481771"
+    }
+  }
+},{
+  "_id": {
+    "$oid": "62761dc83e04ec132ea624a6"
+  },
+  "shippingInfo": {
+    "address": "Số nhà 101",
+    "city": "Hà Nội",
+    "state": "Cầu Giấy",
+    "country": "Mai Dịch",
+    "phoneNo": 937283232
+  },
+  "orderItems": [
+    {
+      "name": "ĐỒNG HỒ SEIKO SRPA87K1",
+      "price": 5595500,
+      "priceSale": 5595500,
+      "quantity": 1,
+      "discountActive": false,
+      "discountPercent": 0,
+      "image": "https://res.cloudinary.com/dmffitric/image/upload/v1651582026/products/zdu5bhmaa03dd6xwo8ow.jpg",
+      "product": {
+        "$oid": "6263aa6f8352844c9279bcc7"
+      },
+      "_id": {
+        "$oid": "62761dc43e04ec132ea62495"
+      }
+    }
+  ],
+  "name": "Hieu",
+  "email": "phamvanhieu74123@gmail.com",
+  "user": {
+    "$oid": "625cfe6c2bdf267ecb4dcdac"
+  },
+  "paymentInfo": {
+    "id": "abc",
+    "type": "Chuyển khoản ngân hàng",
+    "status": "Chưa thanh toán"
+  },
+  "paidAt": {
+    "$date": {
+      "$numberLong": "1651908040895"
+    }
+  },
+  "itemsPrice": 5595500,
+  "shippingPrice": 0,
+  "totalPrice": 5595500,
+  "orderStatus": "Processing",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1651908040900"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1651908040900"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6276abfef101bab30b7df310"
+  },
+  "shippingInfo": {
+    "address": "Số nhà 101",
+    "city": "Hà Nội",
+    "state": "Cầu Giấy",
+    "country": "Mai Dịch",
+    "phoneNo": 937283232
+  },
+  "orderItems": [
+    {
+      "name": "ĐỒNG HỒ SEIKO SRPD41J1",
+      "price": 7260000,
+      "priceSale": 7260000,
+      "quantity": 1,
+      "discountActive": false,
+      "discountPercent": 0,
+      "image": "https://res.cloudinary.com/dmffitric/image/upload/v1651581964/products/o9eqy3bufm6hzeth1h3p.jpg",
+      "product": {
+        "$oid": "62654cb242f3069221a31c34"
+      },
+      "_id": {
+        "$oid": "6276abf6f101bab30b7df2ff"
+      }
+    }
+  ],
+  "name": "Hieu",
+  "email": "phamvanhieu74123@gmail.com",
+  "user": {
+    "$oid": "625cfe6c2bdf267ecb4dcdac"
+  },
+  "paymentInfo": {
+    "id": "abc",
+    "type": "Trả tiền mặt khi nhận hàng",
+    "status": "Chưa thanh toán"
+  },
+  "paidAt": {
+    "$date": {
+      "$numberLong": "1651944446340"
+    }
+  },
+  "itemsPrice": 7260000,
+  "shippingPrice": 0,
+  "totalPrice": 7260000,
+  "orderStatus": "Processing",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1651944446344"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1651944446344"
+    }
+  },
+  "__v": 0
+}]

@@ -1,0 +1,59 @@
+[{
+  "_id": {
+    "$oid": "625d240a66272c9186970d7c"
+  },
+  "name": "Đồng hồ Rolex",
+  "description": "Đồng hồ xịn",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6263a8d68352844c9279bcad"
+  },
+  "name": "Đồng hồ Orient",
+  "description": "Đồng hồ thương hiệu Nhật Bản",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1650698454322"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1650698454322"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6263a9088352844c9279bcb0"
+  },
+  "name": "Đồng hồ Seiko",
+  "description": "Đồng hồ thương hiệu Nhật Bản",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1650698504269"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1650698504269"
+    }
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6263a91b8352844c9279bcb3"
+  },
+  "name": "Đồng hồ Bulova",
+  "description": "Đồng hồ thương hiệu Thụy Sĩ",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1650698523168"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1650698523168"
+    }
+  },
+  "__v": 0
+}]

@@ -1,0 +1,21 @@
+[{
+  "_id": {
+    "$oid": "62777a3e7bb82e2bd98d6868"
+  },
+  "cartItems": [],
+  "totalPrice": 0,
+  "user": {
+    "$oid": "625cfe6c2bdf267ecb4dcdac"
+  },
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1651997246853"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1651997252691"
+    }
+  },
+  "__v": 1
+}]

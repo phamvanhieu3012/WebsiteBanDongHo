@@ -1,0 +1,41 @@
+[{
+  "_id": {
+    "$oid": "6274d4ff16df3c2da71c2869"
+  },
+  "wishlistItems": [
+    {
+      "name": "ĐỒNG HỒ BULOVA 97D115 CHÍNH HÃNG",
+      "image": "https://res.cloudinary.com/dmffitric/image/upload/v1651655177/products/o6vehhnam4pf3lyuxknm.jpg",
+      "product": {
+        "$oid": "62723edb50a3675875aa6371"
+      },
+      "_id": {
+        "$oid": "627514b493837a8b5137b0c7"
+      }
+    },
+    {
+      "name": "ĐỒNG HỒ ORIENT FAG02003W0",
+      "image": "https://res.cloudinary.com/dmffitric/image/upload/v1651581651/products/ekbw1twsghfpwx02nr6z.jpg",
+      "product": {
+        "$oid": "6263a9848352844c9279bcb7"
+      },
+      "_id": {
+        "$oid": "6275151993837a8b5137b10e"
+      }
+    }
+  ],
+  "user": {
+    "$oid": "625cfe6c2bdf267ecb4dcdac"
+  },
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1651823871155"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1651840281436"
+    }
+  },
+  "__v": 7
+}]
