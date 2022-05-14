@@ -8,7 +8,9 @@ const fileUpload = require("express-fileupload");
 const errorMiddleware = require("./middleware/error");
 
 // Config
-require("dotenv").config({ path: "./config/config.env" });
+if (process.env.NODE_ENV !== "PRODUCTION") {
+  require("dotenv").config({ path: "./config/config.env" });
+}
 
 app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
