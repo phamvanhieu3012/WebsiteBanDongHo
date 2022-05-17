@@ -8,7 +8,9 @@ const fileUpload = require("express-fileupload");
 const errorMiddleware = require("./middleware/error");
 
 // Config
-require("dotenv").config({ path: "./config/config.env" });
+if (process.env.NODE_ENV !== "PRODUCTION") {
+  require("dotenv").config({ path: "config/config.env" });
+}
 
 app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
@@ -63,6 +65,12 @@ app.use("/api/v1", blog);
 app.use("/api/v1", contact);
 app.use("/api/v1", wishlist);
 app.use("/api/v1", banner);
+
+app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
+});
 
 // Middleware for Errors
 app.use(errorMiddleware);
